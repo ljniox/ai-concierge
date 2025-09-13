@@ -68,7 +68,8 @@ class AutoReplyConfig:
 
             # Parse working hours
             start_time = datetime.strptime(self.working_hours_start, '%H:%M').time()
-            end_time = datetime.strptime(self.working_hours_end, '%H:%H').time()
+            # NOTE: fix format string for minutes (was %H:%H)
+            end_time = datetime.strptime(self.working_hours_end, '%H:%M').time()
             current_time = now.time()
 
             return start_time <= current_time <= end_time
@@ -85,23 +86,30 @@ class AutoReplyConfig:
             return False
 
         # Don't reply to own messages
-        from_me = message_data.get('fromMe', False)
+        payload = message_data.get('payload', {}) or message_data.get('data', {})
+        from_me = (
+            message_data.get('fromMe')
+            or payload.get('fromMe')
+            or (payload.get('media', {}).get('key', {}).get('fromMe') if isinstance(payload.get('media', {}), dict) else None)
+            or False
+        )
         logger.info(f"DEBUG - fromMe check: {from_me}")
         if from_me:
             logger.info("DEBUG - Skipping own message")
             return False
 
         # Check if contact is blacklisted
-        payload = message_data.get('payload', {})
         raw_from = payload.get('from', '')
         media = payload.get('media', {})
         remote_jid = media.get('key', {}).get('remoteJid', '') if isinstance(media, dict) else ''
 
         # Use remoteJid if available, otherwise fall back to from field
         if remote_jid:
+            source_jid = remote_jid
             from_number = remote_jid.replace('@c.us', '').replace('@s.whatsapp.net', '')
             logger.info(f"DEBUG - Using remoteJid: '{remote_jid}'")
         else:
+            source_jid = raw_from
             from_number = raw_from.replace('@c.us', '').replace('@s.whatsapp.net', '')
             logger.info(f"DEBUG - Using from field: '{raw_from}'")
 
@@ -112,7 +120,7 @@ class AutoReplyConfig:
             return False
 
         # Don't reply to group messages (optional)
-        if '@g.us' in from_number:
+        if isinstance(source_jid, str) and source_jid.endswith('@g.us'):
             logger.info("DEBUG - Group message detected")
             group_reply_enabled = os.getenv('GROUP_AUTO_REPLY', 'false').lower() == 'true'
             logger.info(f"DEBUG - Group reply enabled: {group_reply_enabled}")

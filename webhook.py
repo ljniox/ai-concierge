@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel
 import uvicorn
 import logging
 import os
@@ -54,20 +55,19 @@ async def receive_message(request: Request):
         # WAHA message format typically includes:
         # - session: session identifier
         # - event: event type (message, etc.)
-        # - data: message details
+        # - payload: message details (preferred key) or 'data' in some variants
 
         if isinstance(data, dict):
             # Handle different event types
             event_type = data.get('event', 'unknown')
             session_id = data.get('session', 'unknown')
-            message_data = data.get('data', {})
 
             if event_type == 'message':
-                # Process incoming message
-                await process_message(message_data, session_id)
+                # Process incoming message (pass full event for robust parsing downstream)
+                await process_message(data, session_id)
             elif event_type == 'session.status':
                 # Handle session status updates
-                logger.info(f"Session status update for {session_id}: {message_data}")
+                logger.info(f"Session status update for {session_id}: {data.get('payload') or data.get('data')}")
             else:
                 logger.info(f"Received {event_type} event for session {session_id}")
 
@@ -77,66 +77,29 @@ async def receive_message(request: Request):
         logger.error(f"Error processing webhook: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-async def process_message(message_data: Dict[str, Any], session_id: str):
-    """Process incoming WhatsApp message"""
+async def process_message(event_data: Dict[str, Any], session_id: str):
+    """Process incoming WhatsApp message (log details and trigger auto-reply)"""
     try:
-        # Extract message details
-        message_type = message_data.get('type', 'text')
+        payload = event_data.get('payload') or event_data.get('data') or {}
 
-        if message_type == 'text':
-            # Handle text messages
-            text_data = message_data.get('text', {})
-            message_body = text_data.get('body', '')
-            from_number = message_data.get('from', '')
+        # Extract message body for logging
+        message_body = (
+            (payload.get('text') or {}).get('body')
+            or payload.get('body')
+            or ((payload.get('media') or {}).get('message') or {}).get('conversation')
+            or ''
+        )
 
-            logger.info(f"Text message from {from_number}: {message_body}")
+        # Extract sender for logging
+        from_number = payload.get('from', '')
+        if not from_number:
+            rjid = ((payload.get('media') or {}).get('key') or {}).get('remoteJid', '')
+            from_number = rjid
 
-            # Send auto-reply (async, non-blocking)
-            asyncio.create_task(send_auto_reply_if_needed(message_data))
+        logger.info(f"Incoming message from {from_number}: {message_body}")
 
-        elif message_type == 'image':
-            # Handle image messages
-            image_data = message_data.get('image', {})
-            caption = image_data.get('caption', '')
-            mime_type = image_data.get('mime_type', '')
-            from_number = message_data.get('from', '')
-
-            logger.info(f"Image message from {from_number}: {mime_type} - {caption}")
-
-            # Send auto-reply for images too (based on caption)
-            if caption:
-                message_data_for_reply = message_data.copy()
-                message_data_for_reply['text'] = {'body': caption}
-                asyncio.create_task(send_auto_reply_if_needed(message_data_for_reply))
-
-        elif message_type == 'document':
-            # Handle document messages
-            document_data = message_data.get('document', {})
-            filename = document_data.get('filename', '')
-            mime_type = document_data.get('mime_type', '')
-            from_number = message_data.get('from', '')
-
-            logger.info(f"Document message from {from_number}: {filename} ({mime_type})")
-
-        elif message_type == 'audio':
-            # Handle audio messages
-            audio_data = message_data.get('audio', {})
-            mime_type = audio_data.get('mime_type', '')
-            from_number = message_data.get('from', '')
-
-            logger.info(f"Audio message from {from_number}: {mime_type}")
-
-        elif message_type == 'video':
-            # Handle video messages
-            video_data = message_data.get('video', {})
-            mime_type = video_data.get('mime_type', '')
-            from_number = message_data.get('from', '')
-
-            logger.info(f"Video message from {from_number}: {mime_type}")
-
-        else:
-            logger.info(f"Unknown message type: {message_type}")
-            logger.debug(f"Full message data: {message_data}")
+        # Send auto-reply (async, non-blocking) with full event
+        asyncio.create_task(send_auto_reply_if_needed(event_data))
 
     except Exception as e:
         logger.error(f"Error processing message: {e}")
@@ -182,16 +145,20 @@ async def get_auto_reply_status():
         logger.error(f"Error getting auto-reply status: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+class ToggleRequest(BaseModel):
+    enabled: bool = True
+
+
 @app.post("/auto-reply/toggle")
-async def toggle_auto_reply(enabled: bool = True):
+async def toggle_auto_reply(req: ToggleRequest):
     """Toggle auto-reply on/off"""
     try:
         from auto_reply_config import auto_reply_config
 
-        auto_reply_config.enabled = enabled
-        logger.info(f"Auto-reply {'enabled' if enabled else 'disabled'}")
+        auto_reply_config.enabled = req.enabled
+        logger.info(f"Auto-reply {'enabled' if req.enabled else 'disabled'}")
 
-        return {"success": True, "enabled": enabled}
+        return {"success": True, "enabled": req.enabled}
     except Exception as e:
         logger.error(f"Error toggling auto-reply: {e}")
         raise HTTPException(status_code=500, detail=str(e))

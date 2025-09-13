@@ -27,7 +27,8 @@ class AutoReplyService:
 
             # Extract message content and sender info
             message_text = self._extract_message_text(message_data)
-            payload = message_data.get('payload', {})
+            # Support both event wrapper with 'payload' and direct payload
+            payload = message_data.get('payload', {}) or message_data.get('data', {}) or message_data
 
             # Try to get phone number from different possible locations
             raw_from = payload.get('from', '')
@@ -49,6 +50,10 @@ class AutoReplyService:
             if isinstance(media, dict):
                 logger.info(f"DEBUG - Media keys: {list(media.keys())}")
 
+            if not from_number:
+                logger.error("DEBUG - Could not extract sender number; skipping send")
+                return False
+
             # Get appropriate reply
             reply_text = auto_reply_config.get_reply_message(message_text)
 
@@ -69,13 +74,29 @@ class AutoReplyService:
     def _extract_message_text(self, message_data: Dict[str, Any]) -> str:
         """Extract text content from message"""
         try:
-            # Handle different message types
-            if 'text' in message_data:
-                return message_data['text'].get('body', '')
-            elif 'conversation' in message_data:
-                return message_data['conversation']
-            elif 'caption' in message_data:
-                return message_data['caption']
+            # WAHA webhook wraps details in 'payload' (preferred) or sometimes 'data'
+            payload = message_data.get('payload', {}) or message_data.get('data', {}) or message_data
+
+            # Common places for text content
+            # 1) payload.text.body
+            if isinstance(payload.get('text'), dict) and 'body' in payload.get('text', {}):
+                return payload['text'].get('body', '')
+
+            # 2) payload.body
+            if isinstance(payload.get('body'), str) and payload.get('body'):
+                return payload.get('body', '')
+
+            # 3) payload.media.message.conversation
+            media = payload.get('media', {})
+            if isinstance(media, dict):
+                message = media.get('message', {})
+                if isinstance(message, dict) and 'conversation' in message:
+                    return message.get('conversation', '')
+
+            # 4) payload.caption
+            if isinstance(payload.get('caption'), str) and payload.get('caption'):
+                return payload.get('caption', '')
+
             return ''
         except Exception as e:
             logger.error(f"Error extracting message text: {e}")
@@ -102,7 +123,8 @@ class AutoReplyService:
                 verify=False
             )
 
-            if response.status_code == 200:
+            # WAHA returns 201 Created on success; accept any 2xx
+            if 200 <= response.status_code < 300:
                 result = response.json()
                 logger.info(f"Message sent successfully: {result}")
                 return True
