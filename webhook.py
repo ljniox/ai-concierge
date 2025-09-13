@@ -5,6 +5,8 @@ import logging
 import os
 from datetime import datetime
 from typing import Optional, Dict, Any
+import asyncio
+from auto_reply_service import auto_reply_service
 
 app = FastAPI(title="WhatsApp Webhook", description="Webhook for receiving WhatsApp messages from WAHA")
 
@@ -89,8 +91,8 @@ async def process_message(message_data: Dict[str, Any], session_id: str):
 
             logger.info(f"Text message from {from_number}: {message_body}")
 
-            # Add your custom logic here
-            # For example: save to database, send auto-reply, etc.
+            # Send auto-reply (async, non-blocking)
+            asyncio.create_task(send_auto_reply_if_needed(message_data))
 
         elif message_type == 'image':
             # Handle image messages
@@ -100,6 +102,12 @@ async def process_message(message_data: Dict[str, Any], session_id: str):
             from_number = message_data.get('from', '')
 
             logger.info(f"Image message from {from_number}: {mime_type} - {caption}")
+
+            # Send auto-reply for images too (based on caption)
+            if caption:
+                message_data_for_reply = message_data.copy()
+                message_data_for_reply['text'] = {'body': caption}
+                asyncio.create_task(send_auto_reply_if_needed(message_data_for_reply))
 
         elif message_type == 'document':
             # Handle document messages
@@ -133,6 +141,17 @@ async def process_message(message_data: Dict[str, Any], session_id: str):
     except Exception as e:
         logger.error(f"Error processing message: {e}")
 
+async def send_auto_reply_if_needed(message_data: Dict[str, Any]):
+    """Send auto-reply if configured"""
+    try:
+        success = await auto_reply_service.send_reply(message_data)
+        if success:
+            logger.info("Auto-reply sent successfully")
+        else:
+            logger.info("Auto-reply not sent (based on configuration)")
+    except Exception as e:
+        logger.error(f"Error sending auto-reply: {e}")
+
 @app.get("/sessions")
 async def list_sessions():
     """List active WhatsApp sessions"""
@@ -142,6 +161,68 @@ async def list_sessions():
         return {"sessions": []}
     except Exception as e:
         logger.error(f"Error listing sessions: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/auto-reply/status")
+async def get_auto_reply_status():
+    """Get auto-reply configuration status"""
+    try:
+        from auto_reply_config import auto_reply_config
+
+        return {
+            "enabled": auto_reply_config.enabled,
+            "working_hours_start": auto_reply_config.working_hours_start,
+            "working_hours_end": auto_reply_config.working_hours_end,
+            "weekend_enabled": auto_reply_config.weekend_enabled,
+            "is_working_hours": auto_reply_config.is_working_hours(),
+            "custom_replies_count": len(auto_reply_config.custom_replies),
+            "blacklisted_contacts": list(auto_reply_config.blacklisted_contacts)
+        }
+    except Exception as e:
+        logger.error(f"Error getting auto-reply status: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/auto-reply/toggle")
+async def toggle_auto_reply(enabled: bool = True):
+    """Toggle auto-reply on/off"""
+    try:
+        from auto_reply_config import auto_reply_config
+
+        auto_reply_config.enabled = enabled
+        logger.info(f"Auto-reply {'enabled' if enabled else 'disabled'}")
+
+        return {"success": True, "enabled": enabled}
+    except Exception as e:
+        logger.error(f"Error toggling auto-reply: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/auto-reply/test")
+async def test_auto_reply():
+    """Send a test auto-reply message"""
+    try:
+        success = await auto_reply_service.send_custom_reply(
+            "221773387902",
+            "🧪 Test d'auto-réponse - le système fonctionne parfaitement!"
+        )
+
+        return {"success": success, "message": "Test message sent to your number"}
+    except Exception as e:
+        logger.error(f"Error testing auto-reply: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/auto-reply/custom-replies")
+async def update_custom_replies(replies: dict):
+    """Update custom keyword replies"""
+    try:
+        from auto_reply_config import auto_reply_config
+
+        success = auto_reply_config.save_custom_replies(replies)
+        if success:
+            return {"success": True, "message": "Custom replies updated"}
+        else:
+            raise HTTPException(status_code=500, detail="Failed to save custom replies")
+    except Exception as e:
+        logger.error(f"Error updating custom replies: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
