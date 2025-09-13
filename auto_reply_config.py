@@ -78,24 +78,36 @@ class AutoReplyConfig:
 
     def should_reply(self, message_data: Dict[str, Any]) -> bool:
         """Determine if auto-reply should be sent"""
+        logger.info(f"DEBUG - should_reply checks starting")
+
         if not self.enabled:
+            logger.info("DEBUG - Auto-reply disabled")
             return False
 
         # Don't reply to own messages
-        if message_data.get('fromMe', False):
+        from_me = message_data.get('fromMe', False)
+        logger.info(f"DEBUG - fromMe check: {from_me}")
+        if from_me:
+            logger.info("DEBUG - Skipping own message")
             return False
 
         # Check if contact is blacklisted
         payload = message_data.get('payload', {})
         from_number = payload.get('from', '')
+        logger.info(f"DEBUG - from_number: '{from_number}'")
+
         if any(contact in from_number for contact in self.blacklisted_contacts if contact):
+            logger.info("DEBUG - Contact blacklisted")
             return False
 
         # Don't reply to group messages (optional)
         if '@g.us' in from_number:
+            logger.info("DEBUG - Group message detected")
             group_reply_enabled = os.getenv('GROUP_AUTO_REPLY', 'false').lower() == 'true'
+            logger.info(f"DEBUG - Group reply enabled: {group_reply_enabled}")
             return group_reply_enabled
 
+        logger.info("DEBUG - All checks passed, should reply")
         return True
 
     def get_reply_message(self, message_text: str) -> str:

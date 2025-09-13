@@ -18,7 +18,10 @@ class AutoReplyService:
         """Send auto-reply to a received message"""
         try:
             # Check if we should reply
-            if not auto_reply_config.should_reply(message_data):
+            should_reply_result = auto_reply_config.should_reply(message_data)
+            logger.info(f"DEBUG - Should reply result: {should_reply_result}")
+
+            if not should_reply_result:
                 logger.info("Auto-reply skipped based on configuration")
                 return False
 
