@@ -25,6 +25,8 @@ class SessionManager:
             session = created or {"id": None, "phone": phone, "status": "active", "context": {"state": "awaiting_selection"}}
             if created is None:
                 logger.warning("Supabase unavailable: falling back to stateless menu")
+                # Immediate menu on first contact
+                return self._menu()
 
         ctx = session.get("context") or {}
         state = ctx.get("state") or ("awaiting_selection" if not session.get("service_code") else "in_service")

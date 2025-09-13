@@ -24,9 +24,9 @@ def send_text(to_number: str, text: str) -> bool:
     try:
         r = requests.post(f"{base_url}/sendText", headers=headers, json=payload, verify=False, timeout=20)
         if 200 <= r.status_code < 300:
+            logger.info(f"WA send ok -> {to_number}: {text[:80]}...")
             return True
         logger.error(f"WA send failed: {r.status_code} {r.text}")
     except Exception as e:
         logger.error(f"WA send error: {e}")
     return False
-

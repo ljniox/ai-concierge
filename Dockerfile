@@ -37,6 +37,7 @@ COPY orchestrator.py .
 COPY session_manager.py .
 COPY supabase_schema.sql .
 COPY seed_supabase_services.py .
+COPY version_info.py .
 
 # Create non-root user
 RUN useradd --create-home --shell /bin/bash app && \

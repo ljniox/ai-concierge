@@ -8,6 +8,9 @@ from datetime import datetime
 from typing import Optional, Dict, Any
 import asyncio
 from auto_reply_service import auto_reply_service
+from session_manager import session_manager
+from wa_service import send_text as wa_send_text
+from version_info import get_version_info
 
 app = FastAPI(title="WhatsApp Webhook", description="Webhook for receiving WhatsApp messages from WAHA")
 
@@ -77,29 +80,39 @@ async def receive_message(request: Request):
         logger.error(f"Error processing webhook: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+def _extract_phone_and_text(event_data: Dict[str, Any]) -> (str, str):
+    payload = event_data.get('payload') or event_data.get('data') or {}
+    # Text
+    message_body = (
+        (payload.get('text') or {}).get('body')
+        or payload.get('body')
+        or ((payload.get('media') or {}).get('message') or {}).get('conversation')
+        or ''
+    )
+    # Phone
+    raw_from = payload.get('from', '')
+    if not raw_from:
+        rjid = ((payload.get('media') or {}).get('key') or {}).get('remoteJid', '')
+        raw_from = rjid
+    phone = raw_from.replace('@c.us', '').replace('@s.whatsapp.net', '')
+    return phone, message_body
+
+
 async def process_message(event_data: Dict[str, Any], session_id: str):
     """Process incoming WhatsApp message (log details and trigger auto-reply)"""
     try:
-        payload = event_data.get('payload') or event_data.get('data') or {}
+        phone, message_body = _extract_phone_and_text(event_data)
+        logger.info(f"Incoming message from {phone}: {message_body}")
 
-        # Extract message body for logging
-        message_body = (
-            (payload.get('text') or {}).get('body')
-            or payload.get('body')
-            or ((payload.get('media') or {}).get('message') or {}).get('conversation')
-            or ''
-        )
+        # New: route via session manager (Service Catalog)
+        replies = session_manager.handle_incoming(phone, message_body)
+        for r in replies:
+            if r:
+                logger.info(f"Sending reply to {phone}: {r[:80]}...")
+                wa_send_text(phone, r)
 
-        # Extract sender for logging
-        from_number = payload.get('from', '')
-        if not from_number:
-            rjid = ((payload.get('media') or {}).get('key') or {}).get('remoteJid', '')
-            from_number = rjid
-
-        logger.info(f"Incoming message from {from_number}: {message_body}")
-
-        # Send auto-reply (async, non-blocking) with full event
-        asyncio.create_task(send_auto_reply_if_needed(event_data))
+        # Optionally, keep legacy auto-reply as fallback (disabled by default)
+        # asyncio.create_task(send_auto_reply_if_needed(event_data))
 
     except Exception as e:
         logger.error(f"Error processing message: {e}")
@@ -144,6 +157,22 @@ async def get_auto_reply_status():
     except Exception as e:
         logger.error(f"Error getting auto-reply status: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/version")
+async def version():
+    try:
+        info = get_version_info()
+        # Basic connectivity checks (best-effort)
+        from supabase_client import supabase_client
+        try:
+            services = supabase_client.list_services()
+            info["supabase_services_count"] = len(services)
+        except Exception:
+            info["supabase_services_count"] = -1
+        return info
+    except Exception as e:
+        logger.error(f"Error building version info: {e}")
+        return {"app": "ai-concierge-webhook", "version": "unknown"}
 
 class ToggleRequest(BaseModel):
     enabled: bool = True
