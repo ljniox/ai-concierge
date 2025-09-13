@@ -4,7 +4,10 @@ import os
 from typing import List, Optional
 
 import requests
-from anthropic import Anthropic
+try:
+    from anthropic import Anthropic  # type: ignore
+except Exception:  # pragma: no cover
+    Anthropic = None  # type: ignore
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +31,8 @@ class EmbeddingsClient:
 
         # Anthropic client for fallback (supports custom base_url)
         try:
-            self.anthropic = Anthropic(api_key=self.api_key, base_url=self.base_url) if self.api_key else None
+            # Construct client if library and key are available
+            self.anthropic = Anthropic(api_key=self.api_key, base_url=self.base_url) if (self.api_key and Anthropic) else None
         except Exception as e:
             logger.warning(f"Anthropic client init failed: {e}")
             self.anthropic = None
@@ -88,4 +92,3 @@ class EmbeddingsClient:
 
 
 embeddings_client = EmbeddingsClient()
-
