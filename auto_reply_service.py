@@ -22,9 +22,10 @@ class AutoReplyService:
                 logger.info("Auto-reply skipped based on configuration")
                 return False
 
-            # Extract message content
+            # Extract message content and sender info
             message_text = self._extract_message_text(message_data)
-            from_number = message_data.get('from', '').replace('@c.us', '').replace('@s.whatsapp.net', '')
+            payload = message_data.get('payload', {})
+            from_number = payload.get('from', '').replace('@c.us', '').replace('@s.whatsapp.net', '')
 
             # Get appropriate reply
             reply_text = auto_reply_config.get_reply_message(message_text)

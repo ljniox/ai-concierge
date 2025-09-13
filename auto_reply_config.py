@@ -86,7 +86,8 @@ class AutoReplyConfig:
             return False
 
         # Check if contact is blacklisted
-        from_number = message_data.get('from', '')
+        payload = message_data.get('payload', {})
+        from_number = payload.get('from', '')
         if any(contact in from_number for contact in self.blacklisted_contacts if contact):
             return False
 
