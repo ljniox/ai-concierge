@@ -22,6 +22,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY webhook.py .
 COPY webhook_config.py .
+COPY auto_reply_config.py .
+COPY auto_reply_service.py .
 
 # Create non-root user
 RUN useradd --create-home --shell /bin/bash app && \
