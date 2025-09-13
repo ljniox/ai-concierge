@@ -25,8 +25,8 @@ services:
       - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
       - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
 
-    ports:
-      - "${PORT:-8000}:8000"
+    expose:
+      - "8000"
 
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/"]

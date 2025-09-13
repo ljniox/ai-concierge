@@ -58,7 +58,7 @@ If you prefer manual Docker deployment:
    docker build -t whatsapp-webhook .
    ```
 
-2. **Run Container**
+2. **Run Container (with port exposure for local testing)**
    ```bash
    docker run -d \
      --name whatsapp-webhook \
@@ -70,6 +70,8 @@ If you prefer manual Docker deployment:
      -e PORT=8000 \
      whatsapp-webhook
    ```
+
+   **Note**: The Coolify deployment uses `expose` instead of `ports` since it's behind a Traefik reverse proxy. Use `-p` only for local testing.
 
 ### WAHA Configuration
 
