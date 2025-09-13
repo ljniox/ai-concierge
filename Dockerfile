@@ -24,6 +24,14 @@ COPY webhook.py .
 COPY webhook_config.py .
 COPY auto_reply_config.py .
 COPY auto_reply_service.py .
+COPY supabase_client.py .
+COPY catalog_repository.py .
+COPY wa_service.py .
+COPY embeddings.py .
+COPY orchestrator.py .
+COPY session_manager.py .
+COPY supabase_schema.sql .
+COPY seed_supabase_services.py .
 
 # Create non-root user
 RUN useradd --create-home --shell /bin/bash app && \
