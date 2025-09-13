@@ -3,7 +3,10 @@ version: "3.8"
 
 services:
   webhook:
-    image: ${IMAGE_NAME:-whatsapp-webhook:latest}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: whatsapp-webhook:latest
     container_name: whatsapp-webhook
     restart: unless-stopped
     environment:

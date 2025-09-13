@@ -22,9 +22,6 @@ PORT=8000
 
 # Domain Configuration
 DOMAIN=your-domain.com
-
-# Image Configuration
-IMAGE_NAME=whatsapp-webhook
 ```
 
 ### Deployment Steps
