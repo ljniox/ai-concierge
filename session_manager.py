@@ -25,7 +25,8 @@ class SessionManager:
             logger.error("Failed to init session")
             return ["Désolé, le service est temporairement indisponible."]
 
-        state = (session.get("context") or {}).get("state") or ("awaiting_selection" if not session.get("service_code") else "in_service")
+        ctx = session.get("context") or {}
+        state = ctx.get("state") or ("awaiting_selection" if not session.get("service_code") else "in_service")
         text_norm = (text or "").strip()
 
         # Menu shortcuts
@@ -33,20 +34,33 @@ class SessionManager:
             return self._menu()
 
         if state == "awaiting_selection" or not session.get("service_code"):
-            # Try match selection
-            services = list_services()
+            # Always show menu first if not yet shown in this session
+            if not ctx.get("menu_shown"):
+                supabase_client.update_session(session["id"], {"context": {"state": "awaiting_selection", "menu_shown": True}})
+                return self._menu()
+
+            # Try match selection on subsequent message
+            services = self._services_with_james()
             selected = match_service(text_norm, services)
             if not selected:
-                # Return menu
                 return self._menu()
-            # Update session -> in_service
+
+            # Special: human handoff to James
+            if (selected.get("code") or "").upper() == "HUMAIN_JAMES":
+                # Keep session active but mark handoff
+                supabase_client.update_session(session["id"], {"context": {"state": "human_handoff"}})
+                if not self._is_james_available_by_time():
+                    return ["James est indisponible pour le moment, mais il repondra des que possible"]
+                # Within availability window
+                return ["Nous vous mettons en relation avec James. Décrivez votre demande, s'il vous plaît."]
+
+            # Normal service selection
             updates = {
                 "service_code": selected.get("code"),
                 "status": "in_service",
                 "context": {"state": "in_service"},
             }
             session = supabase_client.update_session(session["id"], updates) or session
-            # Acknowledge + hand to orchestrator
             reply = orchestrator.run(session, text_norm)
             title = selected.get("title") or selected.get("code")
             return [f"Service sélectionné: {title}", reply]
@@ -56,9 +70,25 @@ class SessionManager:
         return [reply]
 
     def _menu(self) -> List[str]:
-        services = list_services()
+        services = self._services_with_james()
         return [build_menu_message(services)]
+
+    def _services_with_james(self) -> List[Dict[str, Any]]:
+        services = list_services()
+        # Append pseudo-service for human handoff to James as the last option
+        services = list(services) + [{
+            "code": "HUMAIN_JAMES",
+            "title": "Parler directement à James",
+            "keywords": ["james", "humain", "conseiller", "agent", "parler"],
+            "enabled": True,
+        }]
+        return services
+
+    def _is_james_available_by_time(self) -> bool:
+        from datetime import datetime
+        now = datetime.now().time()
+        # Available between 07:00 and 23:00
+        return (now.hour >= 7) and (now.hour < 23)
 
 
 session_manager = SessionManager()
-
