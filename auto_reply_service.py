@@ -34,6 +34,7 @@ class AutoReplyService:
             # Debug logging
             logger.info(f"DEBUG - Raw from field: '{raw_from}'")
             logger.info(f"DEBUG - Extracted phone number: '{from_number}'")
+            logger.info(f"DEBUG - Full payload keys: {list(payload.keys())}")
 
             # Get appropriate reply
             reply_text = auto_reply_config.get_reply_message(message_text)
