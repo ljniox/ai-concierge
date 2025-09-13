@@ -93,8 +93,19 @@ class AutoReplyConfig:
 
         # Check if contact is blacklisted
         payload = message_data.get('payload', {})
-        from_number = payload.get('from', '')
-        logger.info(f"DEBUG - from_number: '{from_number}'")
+        raw_from = payload.get('from', '')
+        media = payload.get('media', {})
+        remote_jid = media.get('key', {}).get('remoteJid', '') if isinstance(media, dict) else ''
+
+        # Use remoteJid if available, otherwise fall back to from field
+        if remote_jid:
+            from_number = remote_jid.replace('@c.us', '').replace('@s.whatsapp.net', '')
+            logger.info(f"DEBUG - Using remoteJid: '{remote_jid}'")
+        else:
+            from_number = raw_from.replace('@c.us', '').replace('@s.whatsapp.net', '')
+            logger.info(f"DEBUG - Using from field: '{raw_from}'")
+
+        logger.info(f"DEBUG - from_number for blacklist: '{from_number}'")
 
         if any(contact in from_number for contact in self.blacklisted_contacts if contact):
             logger.info("DEBUG - Contact blacklisted")

@@ -28,13 +28,26 @@ class AutoReplyService:
             # Extract message content and sender info
             message_text = self._extract_message_text(message_data)
             payload = message_data.get('payload', {})
+
+            # Try to get phone number from different possible locations
             raw_from = payload.get('from', '')
-            from_number = raw_from.replace('@c.us', '').replace('@s.whatsapp.net', '')
+            media = payload.get('media', {})
+            remote_jid = media.get('key', {}).get('remoteJid', '') if isinstance(media, dict) else ''
+
+            # Use remoteJid if available, otherwise fall back to from field
+            if remote_jid:
+                from_number = remote_jid.replace('@c.us', '').replace('@s.whatsapp.net', '')
+                logger.info(f"DEBUG - Using remoteJid: '{remote_jid}'")
+            else:
+                from_number = raw_from.replace('@c.us', '').replace('@s.whatsapp.net', '')
+                logger.info(f"DEBUG - Using from field: '{raw_from}'")
 
             # Debug logging
-            logger.info(f"DEBUG - Raw from field: '{raw_from}'")
             logger.info(f"DEBUG - Extracted phone number: '{from_number}'")
             logger.info(f"DEBUG - Full payload keys: {list(payload.keys())}")
+            logger.info(f"DEBUG - Media object type: {type(media)}")
+            if isinstance(media, dict):
+                logger.info(f"DEBUG - Media keys: {list(media.keys())}")
 
             # Get appropriate reply
             reply_text = auto_reply_config.get_reply_message(message_text)
