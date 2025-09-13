@@ -31,15 +31,20 @@ class SessionManager:
         ctx = session.get("context") or {}
         state = ctx.get("state") or ("awaiting_selection" if not session.get("service_code") else "in_service")
         text_norm = (text or "").strip()
+        text_lc = text_norm.lower()
 
         # Menu shortcuts
-        if text_norm.lower() in {"menu", "catalogue", "catalog", "help", "aide"}:
+        if self._is_greeting(text_lc) or text_lc in {"menu", "catalogue", "catalog", "help", "aide", "start"}:
+            # Reset to selection state and show welcome+menu
+            if session.get("id"):
+                supabase_client.update_session(session["id"], {"status": "active", "service_code": None, "context": {"state": "awaiting_selection", "menu_shown": True}})
             return self._menu()
 
         if state == "awaiting_selection" or not session.get("service_code"):
             # Always show menu first if not yet shown in this session
             if not ctx.get("menu_shown"):
-                supabase_client.update_session(session["id"], {"context": {"state": "awaiting_selection", "menu_shown": True}})
+                if session.get("id"):
+                    supabase_client.update_session(session["id"], {"context": {"state": "awaiting_selection", "menu_shown": True}})
                 return self._menu()
 
             # Try match selection on subsequent message
@@ -72,6 +77,13 @@ class SessionManager:
         # Already in service -> hand over to orchestrator
         reply = orchestrator.run(session, text_norm)
         return [reply]
+
+    def _is_greeting(self, text_lc: str) -> bool:
+        if not text_lc:
+            return False
+        greeting_keywords = {"bonjour", "bsr", "bonsoir", "salut", "hello", "hi", "hey", "coucou"}
+        # Simple token or contains keyword
+        return any(k in text_lc for k in greeting_keywords)
 
     def _menu(self) -> List[str]:
         services = self._services_with_james()
