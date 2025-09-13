@@ -20,10 +20,11 @@ class SessionManager:
         # Get or create session
         session = supabase_client.get_active_session_by_phone(phone)
         if not session:
-            session = supabase_client.create_session(phone, status="active", context={"state": "awaiting_selection"})
-        if not session:
-            logger.error("Failed to init session")
-            return ["Désolé, le service est temporairement indisponible."]
+            # Best-effort create; if Supabase is not configured, still return menu
+            created = supabase_client.create_session(phone, status="active", context={"state": "awaiting_selection"})
+            session = created or {"id": None, "phone": phone, "status": "active", "context": {"state": "awaiting_selection"}}
+            if created is None:
+                logger.warning("Supabase unavailable: falling back to stateless menu")
 
         ctx = session.get("context") or {}
         state = ctx.get("state") or ("awaiting_selection" if not session.get("service_code") else "in_service")
@@ -60,7 +61,8 @@ class SessionManager:
                 "status": "in_service",
                 "context": {"state": "in_service"},
             }
-            session = supabase_client.update_session(session["id"], updates) or session
+            if session.get("id"):
+                session = supabase_client.update_session(session["id"], updates) or session
             reply = orchestrator.run(session, text_norm)
             title = selected.get("title") or selected.get("code")
             return [f"Service sélectionné: {title}", reply]
