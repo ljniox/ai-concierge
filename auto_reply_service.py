@@ -25,7 +25,12 @@ class AutoReplyService:
             # Extract message content and sender info
             message_text = self._extract_message_text(message_data)
             payload = message_data.get('payload', {})
-            from_number = payload.get('from', '').replace('@c.us', '').replace('@s.whatsapp.net', '')
+            raw_from = payload.get('from', '')
+            from_number = raw_from.replace('@c.us', '').replace('@s.whatsapp.net', '')
+
+            # Debug logging
+            logger.info(f"DEBUG - Raw from field: '{raw_from}'")
+            logger.info(f"DEBUG - Extracted phone number: '{from_number}'")
 
             # Get appropriate reply
             reply_text = auto_reply_config.get_reply_message(message_text)
