@@ -7,6 +7,7 @@
 - Docker registry (Coolify built-in or external)
 - Domain name for webhook endpoint
 - SSL certificate (Coolify can auto-generate with Let's Encrypt)
+- **Important**: Compose file must be named `docker-compose.yaml` (Coolify requirement)
 
 ### Environment Variables for Coolify
 
