@@ -11,6 +11,8 @@ services:
       - WEBHOOK_URL=${WEBHOOK_URL}
       - WEBHOOK_VERIFY_TOKEN=${WEBHOOK_VERIFY_TOKEN}
       - SESSION_NAME=${SESSION_NAME:-default}
+      - AUTO_REPLY_ENABLED=${AUTO_REPLY_ENABLED:-false}
+      - TZ=${TZ:-Africa/Dakar}
 
       # Baserow Settings
       - BASEROW_URL=${BASEROW_URL}

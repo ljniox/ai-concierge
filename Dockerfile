@@ -8,10 +8,15 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Install system dependencies
+# Install system dependencies (include tzdata for timezone support)
+ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y \
     curl \
+    tzdata \
     && rm -rf /var/lib/apt/lists/*
+
+# Default timezone (can be overridden by TZ env at runtime)
+ENV TZ=UTC
 
 # Copy requirements first for better caching
 COPY requirements.txt .
