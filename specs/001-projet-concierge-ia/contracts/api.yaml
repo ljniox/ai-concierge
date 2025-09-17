@@ -1,0 +1,767 @@
+openapi: 3.0.0
+info:
+  title: WhatsApp AI Concierge API
+  description: API for WhatsApp AI concierge service with multi-service routing and AI orchestration
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@example.com
+
+servers:
+  - url: https://api.example.com/v1
+    description: Production server
+  - url: https://staging-api.example.com/v1
+    description: Staging server
+
+paths:
+  /webhook:
+    post:
+      summary: WhatsApp webhook endpoint
+      description: Receives incoming WhatsApp messages from WAHA
+      operationId: receiveWebhook
+      tags:
+        - webhook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookRequest'
+      responses:
+        '200':
+          description: Webhook received successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /orchestrate:
+    post:
+      summary: Orchestrate AI response
+      description: Process user message and generate AI response with service routing
+      operationId: orchestrateResponse
+      tags:
+        - orchestration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrchestrationRequest'
+      responses:
+        '200':
+          description: Orchestration completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrchestrationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /sessions/{session_id}:
+    get:
+      summary: Get session details
+      description: Retrieve session information and conversation history
+      operationId: getSession
+      tags:
+        - sessions
+      parameters:
+        - $ref: '#/components/parameters/SessionId'
+      responses:
+        '200':
+          description: Session retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    put:
+      summary: Update session
+      description: Update session state or metadata
+      operationId: updateSession
+      tags:
+        - sessions
+      parameters:
+        - $ref: '#/components/parameters/SessionId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionUpdateRequest'
+      responses:
+        '200':
+          description: Session updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    delete:
+      summary: Delete session
+      description: Terminate and delete a session
+      operationId: deleteSession
+      tags:
+        - sessions
+      parameters:
+        - $ref: '#/components/parameters/SessionId'
+      responses:
+        '204':
+          description: Session deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /admin/services:
+    get:
+      summary: List services
+      description: Get list of all available services
+      operationId: listServices
+      tags:
+        - admin
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Services retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  services:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Service'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    post:
+      summary: Create service
+      description: Create a new service
+      operationId: createService
+      tags:
+        - admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceCreateRequest'
+      responses:
+        '201':
+          description: Service created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /admin/services/{service_id}:
+    get:
+      summary: Get service
+      description: Get service details
+      operationId: getService
+      tags:
+        - admin
+      parameters:
+        - $ref: '#/components/parameters/ServiceId'
+      responses:
+        '200':
+          description: Service retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    put:
+      summary: Update service
+      description: Update service configuration
+      operationId: updateService
+      tags:
+        - admin
+      parameters:
+        - $ref: '#/components/parameters/ServiceId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceUpdateRequest'
+      responses:
+        '200':
+          description: Service updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    delete:
+      summary: Delete service
+      description: Delete a service
+      operationId: deleteService
+      tags:
+        - admin
+      parameters:
+        - $ref: '#/components/parameters/ServiceId'
+      responses:
+        '204':
+          description: Service deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /admin/users/{user_id}/services:
+    get:
+      summary: Get user services
+      description: Get services accessible to a user
+      operationId: getUserServices
+      tags:
+        - admin
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: User services retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserService'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /health:
+    get:
+      summary: Health check
+      description: Check system health status
+      operationId: healthCheck
+      tags:
+        - system
+      responses:
+        '200':
+          description: System is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+components:
+  parameters:
+    SessionId:
+      name: session_id
+      in: path
+      required: true
+      description: Session identifier
+      schema:
+        type: string
+        format: uuid
+
+    ServiceId:
+      name: service_id
+      in: path
+      required: true
+      description: Service identifier
+      schema:
+        type: string
+        format: uuid
+
+    UserId:
+      name: user_id
+      in: path
+      required: true
+      description: User identifier
+      schema:
+        type: string
+        format: uuid
+
+    Page:
+      name: page
+      in: query
+      required: false
+      description: Page number
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: Items per page
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+
+  schemas:
+    WebhookRequest:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          $ref: '#/components/schemas/WhatsAppMessage'
+        timestamp:
+          type: string
+          format: date-time
+
+    WhatsAppMessage:
+      type: object
+      required:
+        - from
+        - content
+        - message_type
+      properties:
+        from:
+          type: string
+          description: Sender phone number in E.164 format
+        content:
+          type: string
+          description: Message content
+        message_type:
+          type: string
+          enum: [text, image, document, audio, video]
+        media_url:
+          type: string
+          description: URL for media content
+        message_id:
+          type: string
+          description: WhatsApp message ID
+
+    WebhookResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [received, processed, error]
+        session_id:
+          type: string
+          format: uuid
+          description: Associated session ID
+        message:
+          type: string
+          description: Response message
+
+    OrchestrationRequest:
+      type: object
+      required:
+        - user_id
+        - message
+        - service_context
+      properties:
+        user_id:
+          type: string
+          format: uuid
+        message:
+          type: string
+        service_context:
+          $ref: '#/components/schemas/ServiceContext'
+        session_id:
+          type: string
+          format: uuid
+
+    ServiceContext:
+      type: object
+      properties:
+        service_id:
+          type: string
+          format: uuid
+        trigger_type:
+          type: string
+          enum: [KEYWORD, PHONE_ROLE, INTRINSIC_ID]
+        intrinsic_id:
+          type: string
+        metadata:
+          type: object
+
+    OrchestrationResponse:
+      type: object
+      required:
+        - response
+        - action
+      properties:
+        response:
+          type: string
+        action:
+          type: string
+          enum: [reply, route, handoff, complete]
+        session_id:
+          type: string
+          format: uuid
+        service_id:
+          type: string
+          format: uuid
+        artifacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Artifact'
+        next_step:
+          type: string
+
+    Session:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        service_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [ACTIVE, COMPLETED, EXPIRED, HANDED_OFF]
+        state:
+          type: object
+        metadata:
+          type: object
+        expires_at:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        completed_at:
+          type: string
+          format: date-time
+        interactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Interaction'
+
+    SessionUpdateRequest:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [ACTIVE, COMPLETED, EXPIRED, HANDED_OFF]
+        state:
+          type: object
+        metadata:
+          type: object
+        expires_at:
+          type: string
+          format: date-time
+
+    Interaction:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        session_id:
+          type: string
+          format: uuid
+        message_type:
+          type: string
+          enum: [USER, SYSTEM, AI]
+        content:
+          type: string
+        media_url:
+          type: string
+        media_type:
+          type: string
+        metadata:
+          type: object
+        created_at:
+          type: string
+          format: date-time
+
+    Artifact:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        session_id:
+          type: string
+          format: uuid
+        service_id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum: [response, link, document, ticket]
+        content:
+          type: string
+        file_url:
+          type: string
+        metadata:
+          type: object
+        created_at:
+          type: string
+          format: date-time
+
+    Service:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        display_name:
+          type: string
+        description:
+          type: string
+        trigger_keywords:
+          type: array
+          items:
+            type: string
+        trigger_type:
+          type: string
+          enum: [KEYWORD, PHONE_ROLE, INTRINSIC_ID]
+        processing_type:
+          type: string
+          enum: [AI, HUMAN, HYBRID]
+        artifact_types:
+          type: array
+          items:
+            type: string
+        intrinsic_id_field:
+          type: string
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    ServiceCreateRequest:
+      type: object
+      required:
+        - name
+        - display_name
+        - trigger_keywords
+        - trigger_type
+        - processing_type
+        - artifact_types
+      properties:
+        name:
+          type: string
+        display_name:
+          type: string
+        description:
+          type: string
+        trigger_keywords:
+          type: array
+          items:
+            type: string
+        trigger_type:
+          type: string
+          enum: [KEYWORD, PHONE_ROLE, INTRINSIC_ID]
+        processing_type:
+          type: string
+          enum: [AI, HUMAN, HYBRID]
+        artifact_types:
+          type: array
+          items:
+            type: string
+        intrinsic_id_field:
+          type: string
+
+    ServiceUpdateRequest:
+      type: object
+      properties:
+        display_name:
+          type: string
+        description:
+          type: string
+        trigger_keywords:
+          type: array
+          items:
+            type: string
+        processing_type:
+          type: string
+          enum: [AI, HUMAN, HYBRID]
+        artifact_types:
+          type: array
+          items:
+            type: string
+        intrinsic_id_field:
+          type: string
+        is_active:
+          type: boolean
+
+    UserService:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        service_id:
+          type: string
+          format: uuid
+        role:
+          type: string
+          enum: [CLIENT, ADMIN, SUPER_ADMIN]
+        intrinsic_id:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+        pages:
+          type: integer
+
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+        timestamp:
+          type: string
+          format: date-time
+        services:
+          type: object
+          additionalProperties:
+            type: string
+            enum: [healthy, degraded, unhealthy]
+        uptime:
+          type: number
+          description: System uptime in seconds
+
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+              details:
+                type: object
+
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+              details:
+                type: object
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+              details:
+                type: object
+
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+              details:
+                type: object
+
+security:
+  - BearerAuth: []
+
+securitySchemes:
+  BearerAuth:
+    type: http
+    scheme: bearer
+    bearerFormat: JWT
+
+tags:
+  - name: webhook
+    description: WhatsApp webhook endpoints
+  - name: orchestration
+    description: AI orchestration endpoints
+  - name: sessions
+    description: Session management endpoints
+  - name: admin
+    description: Administrative endpoints
+  - name: system
+    description: System endpoints
