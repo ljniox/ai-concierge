@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Documentation du Projet sdb-public-fastapi</title>
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            padding-top: 20px;
+            padding-bottom: 50px;
+        }
+        h1, h2, h3 {
+            color: #0056b3;
+            margin-top: 1.5em;
+        }
+        .mermaid-container {
+            margin: 25px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .diagram-title {
+            font-weight: 600;
+            color: #495057;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .card {
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .table-of-contents {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        .table-of-contents ul {
+            list-style-type: none;
+            padding-left: 15px;
+        }
+        .table-of-contents > ul {
+            padding-left: 0;
+        }
+        pre.mermaid-code {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+        }
+        .svg-container {
+            max-width: 100%;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+<h1 class="text-center mb-4">Documentation du Projet sdb-public-fastapi</h1>
+<div class="card">
+<div class="card-body">
+<p class="lead">
+                    Cette application FastAPI a été développée pour gérer un système d'inscription et de suivi de catéchumènes. 
+                    Elle utilise Baserow comme backend de données et fournit à la fois une API REST et une interface utilisateur web.
+                </p>
+</div>
+</div>
+<div class="table-of-contents">
+<h3>Table des matières</h3>
+<ul>
+<li><a href="#architecture">Architecture du système</a></li>
+<li><a href="#modeles">Principaux modèles de données</a></li>
+<li><a href="#flux">Flux principaux</a>
+<ul>
+<li><a href="#auth">Authentification des administrateurs</a></li>
+<li><a href="#inscription">Inscription d'un nouveau catéchumène</a></li>
+<li><a href="#reinscription">Réinscription d'un catéchumène</a></li>
+</ul>
+</li>
+<li><a href="#structure">Structure technique</a></li>
+<li><a href="#deploiement">Déploiement</a></li>
+</ul>
+</div>
+<section id="architecture">
+<h2>Architecture du système</h2>
+<p>
+                L'application est construite sur l'architecture suivante :
+            </p>
+<ul>
+<li><strong>Frontend</strong> : Templates Jinja2 avec des fichiers statiques CSS/JS</li>
+<li><strong>Backend</strong> : FastAPI (Python)</li>
+<li><strong>Base de données</strong> : Baserow (API externe)</li>
+<li><strong>Authentification</strong> : JWT (JSON Web Tokens)</li>
+<li><strong>Déploiement</strong> : Google Cloud Platform App Engine</li>
+</ul>
+<div class="card"><div class="card-header"><h5 class="diagram-title">Schéma d'Architecture du Projet FastAPI</h5></div><div class="card-body"><pre class="mermaid">graph TB
+    subgraph Architecture_Système
+        Client[Client Web]
+        FastAPI[FastAPI Application]
+        Baserow[Système Baserow]
+        Auth[Authentification JWT]
+    end
+
+    Client --&gt;|Requêtes HTTP| FastAPI
+    FastAPI --&gt;|Auth Token| Auth
+    FastAPI --&gt;|API Calls| Baserow
+    
+    subgraph Structure_Projet
+        Main[main.py] --&gt;|Importe| Models[models.py]
+        Main --&gt;|Utilise| Templates[Templates Jinja2]
+        Main --&gt;|Implémente| APIRoutes[Routes API]
+        Main --&gt;|Implémente| HTMLRoutes[Routes HTML]
+        Main --&gt;|Implémente| AdminRoutes[Routes Admin]
+    end
+    
+    subgraph Tables_Données
+        Parents[Table Parents]
+        Catechumenes[Table Catéchumènes]
+        Inscriptions[Table Inscriptions]
+        Notes[Table Notes]
+        Utilisateurs[Table Utilisateurs]
+    end
+    
+    FastAPI --&gt;|CRUD| Parents
+    FastAPI --&gt;|CRUD| Catechumenes
+    FastAPI --&gt;|CRUD| Inscriptions
+    FastAPI --&gt;|CRUD| Notes
+    FastAPI --&gt;|Auth| Utilisateurs
+    
+    subgraph Fonctionnalités
+        Gestion_Parents[Gestion des Parents]
+        Gestion_Catechumenes[Gestion des Catéchumènes]
+        Gestion_Inscriptions[Gestion des Inscriptions]
+        Gestion_Notes[Gestion des Notes]
+        Authentification[Authentification d'Admin]
+    end
+    
+    AdminRoutes --&gt;|Implémente| Gestion_Parents
+    AdminRoutes --&gt;|Implémente| Gestion_Catechumenes
+    AdminRoutes --&gt;|Implémente| Gestion_Inscriptions
+    AdminRoutes --&gt;|Implémente| Gestion_Notes
+    AdminRoutes --&gt;|Utilise| Authentification
+</pre></div></div>
+</section>
+<section id="modeles">
+<h2>Principaux modèles de données</h2>
+<p>
+                L'application gère plusieurs entités liées :
+            </p>
+<ol>
+<li><strong>Parents</strong> : Informations sur les parents des catéchumènes</li>
+<li><strong>Catéchumènes</strong> : Personnes suivant la catéchèse</li>
+<li><strong>Inscriptions</strong> : Enregistrements d'inscription annuelle des catéchumènes</li>
+<li><strong>Notes</strong> : Évaluations des catéchumènes</li>
+<li><strong>Utilisateurs</strong> : Administrateurs du système</li>
+</ol>
+<div class="card"><div class="card-header"><h5 class="diagram-title">Diagramme Entité-Relation</h5></div><div class="card-body"><pre class="mermaid">erDiagram
+    PARENTS ||--o{ CATECHUMENES : "a"
+    CATECHUMENES ||--o{ INSCRIPTIONS : "possède"
+    INSCRIPTIONS ||--o{ NOTES : "contient"
+    UTILISATEURS }|..|{ INSCRIPTIONS : "gère"
+    
+    PARENTS {
+        int id
+        string Prenoms
+        string Nom
+        string Telephone
+        string Telephone_2
+        string Email
+        boolean Actif
+        string Code_Parent
+    }
+    
+    CATECHUMENES {
+        int id
+        string ID_Catechumene
+        string Prenoms
+        string Nom
+        dict Baptisee
+        dict Extrait_De_Bapteme_Fourni
+        string LieuBapteme
+        string Commentaire
+        string Annee_De_Naissance
+        dict Attestation_De_Transfert_Fournie
+        string operateur
+        string Code_Parent
+        dict Extrait_De_Naissance_Fourni
+    }
+    
+    INSCRIPTIONS {
+        int id
+        string ID_Inscription
+        string ID_Catechumene
+        string Prenoms
+        string Nom
+        string AnneePrecedente
+        string ParoisseAnneePrecedente
+        string AnneeInscription
+        int Montant
+        int Paye
+        string DateInscription
+        string Commentaire
+        string sms
+        string action
+        string AttestationDeTransfert
+        string operateur
+        string Annee_Inscription
+        string Resultat_Final
+        float Note_Finale
+        string Moyen_Paiement
+        string Infos_Paiement
+        string Choix_Paiement
+        string Annee_Suivante
+        string Etat
+    }
+    
+    NOTES {
+        int id
+        string Id_Inscription
+        string Type
+        float Note
+        string Commentaire
+    }
+    
+    UTILISATEURS {
+        int id
+        string Courriel
+        boolean Actif
+        dict Liste_deroulante
+        string Prenoms_et_Nom
+        string Code_Parent
+        string Mot_de_passe
+    }
+</pre></div></div>
+</section>
+<section id="flux">
+<h2>Flux principaux</h2>
+<section id="auth">
+<h3>Authentification des administrateurs</h3>
+<p>
+                    Un système d'authentification sécurisé avec JWT permet de protéger les routes administratives. 
+                    La vérification des identifiants se fait contre la table Utilisateurs dans Baserow.
+                </p>
+<div class="card"><div class="card-header"><h5 class="diagram-title">Flux d'Authentification</h5></div><div class="card-body"><pre class="mermaid">sequenceDiagram
+    participant U as Utilisateur
+    participant F as FastAPI
+    participant B as Baserow
+    participant J as JWT
+    
+    U-&gt;&gt;F: Accès à /admin-login
+    F-&gt;&gt;U: Affiche formulaire de connexion
+    U-&gt;&gt;F: Soumission des identifiants
+    
+    F-&gt;&gt;B: Vérification des identifiants
+    B-&gt;&gt;F: Résultat de la vérification
+    
+    alt Authentification réussie
+        F-&gt;&gt;J: Création du token JWT
+        J-&gt;&gt;F: Token JWT
+        F-&gt;&gt;U: Redirection vers /admin avec cookie token
+    else Authentification échouée
+        F-&gt;&gt;U: Affiche erreur d'authentification
+    end
+    
+    U-&gt;&gt;F: Accès à une route protégée
+    F-&gt;&gt;J: Validation du token JWT
+    
+    alt Token valide
+        J-&gt;&gt;F: Token valide
+        F-&gt;&gt;B: Vérification utilisateur toujours actif
+        B-&gt;&gt;F: Statut de l'utilisateur
+        alt Utilisateur actif
+            F-&gt;&gt;U: Accès accordé, affichage de la page
+        else Utilisateur inactif ou expiré
+            F-&gt;&gt;U: Redirection vers /admin-login
+        end
+    else Token invalide ou expiré
+        J-&gt;&gt;F: Token invalide
+        F-&gt;&gt;U: Redirection vers /admin-login
+    end
+</pre></div></div>
+</section>
+<section id="inscription">
+<h3>Inscription d'un nouveau catéchumène</h3>
+<p>
+                    Processus en plusieurs étapes :
+                </p>
+<ul>
+<li>Enregistrement des informations du parent</li>
+<li>Enregistrement des informations du catéchumène</li>
+<li>Création d'une inscription pour l'année en cours</li>
+</ul>
+<div class="card"><div class="card-header"><h5 class="diagram-title">Flux d'Inscription d'un Catéchumène</h5></div><div class="card-body"><pre class="mermaid">sequenceDiagram
+    participant U as Utilisateur Admin
+    participant F as FastAPI
+    participant B as Baserow
+    
+    U-&gt;&gt;F: Accès à /admin-inscription/nouvelle
+    F-&gt;&gt;U: Formulaire d'inscription parent
+    
+    U-&gt;&gt;F: Soumission données parent
+    F-&gt;&gt;B: Création parent (POST)
+    B-&gt;&gt;F: ID parent créé
+    F-&gt;&gt;U: Redirection vers /admin-parents/{code_parent}
+    
+    U-&gt;&gt;F: Accès à /admin-inscriptioncatechumene/{code_parent}
+    F-&gt;&gt;U: Formulaire inscription catéchumène
+    
+    U-&gt;&gt;F: Soumission données catéchumène
+    F-&gt;&gt;B: Validation des données (Age, baptême, etc.)
+    
+    alt Données valides
+        F-&gt;&gt;B: Création catéchumène (POST)
+        B-&gt;&gt;F: ID catéchumène créé
+        F-&gt;&gt;B: Création inscription (POST)
+        B-&gt;&gt;F: ID inscription créé
+        F-&gt;&gt;U: Redirection vers /admin-catechumenes/{id_catechumene}
+    else Erreur de validation
+        F-&gt;&gt;U: Affichage des erreurs dans le formulaire
+    end
+</pre></div></div>
+</section>
+<section id="reinscription">
+<h3>Réinscription d'un catéchumène</h3>
+<p>
+                    Permet de réinscrire un catéchumène existant pour une nouvelle année avec vérification des prérequis.
+                </p>
+<div class="card"><div class="card-header"><h5 class="diagram-title">Flux de Réinscription</h5></div><div class="card-body"><pre class="mermaid">sequenceDiagram
+    participant U as Utilisateur Admin
+    participant F as FastAPI
+    participant B as Baserow
+    
+    U-&gt;&gt;F: Recherche parent (code/téléphone)
+    F-&gt;&gt;B: Recherche parent
+    B-&gt;&gt;F: Données parent
+    F-&gt;&gt;U: Affiche résultats parent
+    
+    U-&gt;&gt;F: Sélection parent
+    F-&gt;&gt;B: Recherche catéchumènes du parent
+    B-&gt;&gt;F: Liste catéchumènes
+    F-&gt;&gt;B: Recherche inscriptions par catéchumène
+    B-&gt;&gt;F: Liste inscriptions
+    F-&gt;&gt;U: Affiche catéchumènes + inscriptions
+    
+    U-&gt;&gt;F: Accès à /admin-reinscription/{idInscription}
+    
+    F-&gt;&gt;B: Vérifier si déjà inscrit pour l'année en cours
+    
+    alt Déjà inscrit
+        F-&gt;&gt;U: Affiche message "Déjà inscrit"
+    else Pas encore inscrit
+        F-&gt;&gt;U: Formulaire de réinscription
+        
+        U-&gt;&gt;F: Soumission données réinscription
+        F-&gt;&gt;B: Création nouvelle inscription (POST)
+        B-&gt;&gt;F: Confirmation
+        F-&gt;&gt;U: Redirection vers catéchumène
+    end
+</pre></div></div>
+</section>
+</section>
+<section id="structure">
+<h2>Structure technique</h2>
+<p>
+<strong>Points d'entrée principaux</strong>
+</p>
+<ul>
+<li><strong>API REST</strong> : Endpoints pour manipuler directement les données</li>
+<li><strong>Interface administrateur</strong> : Routes pour gérer visuellement les données</li>
+<li><strong>Site public</strong> : Pages d'information générales accessibles sans authentification</li>
+</ul>
+<p>
+<strong>Dépendances principales</strong>
+</p>
+<ul>
+<li>FastAPI</li>
+<li>Uvicorn/Gunicorn</li>
+<li>Jinja2</li>
+<li>HTTPx</li>
+<li>Python-jose (JWT)</li>
+<li>Python-dotenv</li>
+<li>Passlib</li>
+</ul>
+</section>
+<section id="deploiement">
+<h2>Déploiement</h2>
+<p>
+                L'application est configurée pour être déployée sur Google Cloud Platform App Engine avec Python 3.11, 
+                utilisant Gunicorn comme serveur WSGI et Uvicorn comme worker ASGI.
+            </p>
+<div class="card"><div class="card-header"><h5 class="diagram-title">Architecture de Déploiement</h5></div><div class="card-body"><pre class="mermaid">flowchart TD
+    subgraph "Google Cloud Platform"
+        subgraph "App Engine"
+            FastAPI["FastAPI Application\n(Python 3.11)"]
+            Gunicorn["Gunicorn\n(WSGI Server)"]
+            Uvicorn["Uvicorn\n(ASGI Server)"]
+        end
+        
+        subgraph "Services Externes"
+            BaserowAPI["API Baserow\n(Base de données)"]
+        end
+    end
+    
+    subgraph "Client"
+        Browser["Navigateur Web"]
+    end
+    
+    subgraph "Structure des Fichiers"
+        AppYAML["app.yaml\n(Configuration GCP)"]
+        MainPY["main.py\n(Point d'entrée)"]
+        RequirementsTXT["requirements.txt\n(Dépendances)"]
+        TemplatesDir["Templates Jinja2"]
+        StaticDir["Fichiers Statiques\n(CSS, JS, Images)"]
+    end
+    
+    Browser &lt;--&gt; FastAPI
+    FastAPI &lt;--&gt; Gunicorn
+    Gunicorn &lt;--&gt; Uvicorn
+    FastAPI &lt;--&gt; BaserowAPI
+    
+    FastAPI --&gt; MainPY
+    AppYAML --&gt; FastAPI
+    RequirementsTXT --&gt; FastAPI
+    MainPY --&gt; TemplatesDir
+    MainPY --&gt; StaticDir
+    
+    classDef google fill:#4285F4,stroke:#333,stroke-width:1px,color:white;
+    classDef app fill:#34A853,stroke:#333,stroke-width:1px,color:white;
+    classDef files fill:#FBBC05,stroke:#333,stroke-width:1px,color:black;
+    classDef client fill:#EA4335,stroke:#333,stroke-width:1px,color:white;
+    
+    class Browser client;
+    class FastAPI,Gunicorn,Uvicorn app;
+    class BaserowAPI google;
+    class AppYAML,MainPY,RequirementsTXT,TemplatesDir,StaticDir files;
+</pre></div></div>
+</section>
+<footer class="mt-5 pt-5 text-center text-muted border-top">
+<p>
+                Documentation générée le <span id="current-date"></span>
+</p>
+</footer>
+</div>
+<!-- Bootstrap JS Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+        // Définir la date actuelle
+        document.getElementById('current-date').textContent = new Date().toLocaleDateString('fr-FR', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    </script>
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true });
+</script></body>
+</html>

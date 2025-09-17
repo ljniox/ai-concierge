@@ -1,0 +1,26 @@
+# Baserow to Supabase Class Mapping Suggestions
+
+## 1ère Année Catéchisme des Adultes (12 records)
+NEEDS REVIEW: No high-confidence match
+
+## 1ère Année Persévérance (1 records)
+NEEDS REVIEW: No high-confidence match
+
+## 2ème Année Catéchisme des Adultes (4 records)
+NEEDS REVIEW: No high-confidence match
+
+## 2ème Année Confirmation (6e) (24 records)
+SUGGESTED: 2ème année confirmation (5ème) (75% confidence)
+
+## 2ème Année Persévérance (3 records)
+NEEDS REVIEW: No high-confidence match
+
+## 3ème Année Catéchisme des Adultes (1 records)
+NEEDS REVIEW: No high-confidence match
+
+## 3ème Année Confirmation (5e) (13 records)
+SUGGESTED: 3ème année confirmation (6ème) (75% confidence)
+
+## 8 (1 records)
+NEEDS REVIEW: No high-confidence match
+

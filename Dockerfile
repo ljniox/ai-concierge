@@ -1,43 +1,28 @@
-# Use Python 3.11 slim image
 FROM python:3.11-slim
-
-# Set working directory
-WORKDIR /app
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+ENV TZ=Africa/Dakar
 
-# Install system dependencies (include tzdata for timezone support)
-ENV DEBIAN_FRONTEND=noninteractive
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
+    gcc \
     curl \
     tzdata \
     && rm -rf /var/lib/apt/lists/*
 
-# Default timezone (can be overridden by TZ env at runtime)
-ENV TZ=UTC
+# Set working directory
+WORKDIR /app
 
 # Copy requirements first for better caching
-COPY requirements.txt .
+COPY requirements.txt requirements-dev.txt ./
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
-COPY webhook.py .
-COPY webhook_config.py .
-COPY auto_reply_config.py .
-COPY auto_reply_service.py .
-COPY supabase_client.py .
-COPY catalog_repository.py .
-COPY wa_service.py .
-COPY embeddings.py .
-COPY orchestrator.py .
-COPY session_manager.py .
-COPY supabase_schema.sql .
-COPY seed_supabase_services.py .
-COPY version_info.py .
+COPY src/ ./src/
 
 # Create non-root user
 RUN useradd --create-home --shell /bin/bash app && \
@@ -48,8 +33,8 @@ USER app
 EXPOSE 8000
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD curl -f http://localhost:8000/ || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8000/api/v1/health || exit 1
 
 # Run the application
-CMD ["python", "webhook.py"]
+CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -1,0 +1,36 @@
+{
+  "by_academic_year": {
+    "2025-2026": 528
+  },
+  "by_class": {
+    "2025-2026": {
+      "6-8 ans": 33,
+      "Âge inconnu": 475,
+      "9-11 ans": 11,
+      "12-14 ans": 8,
+      "15+ ans": 1
+    }
+  },
+  "enrollment_stats": {
+    "by_inscription_date": {
+      "2025-2026": 798
+    }
+  },
+  "raw_data_summary": {
+    "total_catechumenes": 528,
+    "total_inscriptions": 798,
+    "total_classes": 14,
+    "years_found": [
+      "2025-2026"
+    ]
+  },
+  "baptism_stats": {
+    "Baptisé": 353,
+    "Non baptisé": 175
+  },
+  "document_stats": {
+    "Extrait de naissance fourni": 0,
+    "Extrait de baptême fourni": 353,
+    "Attestation de transfert fournie": 353
+  }
+}

@@ -1,0 +1,4 @@
+Actif,Code Parent,Courriel,Liste déroulante,Mot de Passe,Prénoms et Nom,SMS_Campaigns,SMS_Messages,SMS_Templates,SystemActivityLog,SystemActivityLog - CancelledBy,id,order
+True,,james.niox@icloud.com,"{'id': 2788, 'value': 'Secrétaire Général', 'color': 'dark-orange'}",True,Louis James A. Niox,,SENDTEXT-MESSAGE-ID-4479969348604335889522,,18/05/2025 20:10,,1,1.00000000000000000000
+False,,,,,,,,,,,2,2.00000000000000000000
+False,,,,,,,,,,,3,3.00000000000000000000

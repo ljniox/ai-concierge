@@ -1,0 +1,45 @@
+{
+  "title": "Statistiques des Catéchumènes 2023-2025",
+  "slides": [
+    {
+      "title": "Résumé Global",
+      "content": [
+        "Total des inscriptions: 798",
+        "Période: 2023-2024 et 2024-2025",
+        "Nombre de classes: 13"
+      ]
+    },
+    {
+      "title": "Répartition par Année",
+      "content": [
+        "2023-2024: 390 inscriptions",
+        "2024-2025: 408 inscriptions"
+      ]
+    },
+    {
+      "title": "Top 5 des Classes",
+      "content": [
+        "Class dc689b6c-0452-43da-b015-426b47fd9e8b: 120 (15%)",
+        "Class deaacd2d-86f7-400a-afef-dd73314bfb4a: 110 (14%)",
+        "Class d3dd421b-0b7e-49f0-a744-957ca127e878: 109 (14%)",
+        "Class 71f3f025-7489-40c2-aa8d-f679773f39ca: 89 (11%)"
+      ]
+    },
+    {
+      "title": "Détail 2023-2024",
+      "content": [
+        "Total: 390 inscriptions",
+        "Class deaacd2d-86f7-400a-afef-dd73314bfb4a: 59 (15%)",
+        "Class dc689b6c-0452-43da-b015-426b47fd9e8b: 57 (15%)"
+      ]
+    },
+    {
+      "title": "Détail 2024-2025",
+      "content": [
+        "Total: 408 inscriptions",
+        "Class dc689b6c-0452-43da-b015-426b47fd9e8b: 63 (15%)",
+        "Class d3dd421b-0b7e-49f0-a744-957ca127e878: 61 (15%)"
+      ]
+    }
+  ]
+}

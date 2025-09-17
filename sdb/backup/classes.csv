@@ -1,0 +1,15 @@
+id,classe_nom,description,niveau,created_at,updated_at
+fb6d9698-2975-49ea-8a24-697fc8cf1167,1ère Année Pré-Catéchuménat (CI),,CI,2025-09-12T21:24:07.177303+00:00,2025-09-12T21:24:07.177303+00:00
+6eabb6eb-2074-4807-bb6b-36b437bf116d,2ème Année Pré-Catéchuménat (CP),,CP,2025-09-12T21:24:07.177303+00:00,2025-09-12T21:24:07.177303+00:00
+dc689b6c-0452-43da-b015-426b47fd9e8b,1ère Année Communion (CE1),,CE1,2025-09-12T21:24:07.177303+00:00,2025-09-12T21:24:07.177303+00:00
+deaacd2d-86f7-400a-afef-dd73314bfb4a,2ème Année Communion (CE2),,CE2,2025-09-12T21:24:07.177303+00:00,2025-09-12T21:24:07.177303+00:00
+d3dd421b-0b7e-49f0-a744-957ca127e878,3ème Année Communion (CM1),,CM1,2025-09-12T21:24:07.177303+00:00,2025-09-12T21:24:07.177303+00:00
+71f3f025-7489-40c2-aa8d-f679773f39ca,1ère Année Confirmation (CM2),,CM2,2025-09-12T21:24:07.177303+00:00,2025-09-12T21:24:07.177303+00:00
+287422de-781f-43d8-a475-79782af496de,2ème Année Confirmation (5ème),,5ème,2025-09-12T21:24:07.177303+00:00,2025-09-12T21:24:07.177303+00:00
+87dec81f-8045-4a98-9194-2300fd75c154,3ème Année Confirmation (6ème),,6ème,2025-09-12T21:24:07.177303+00:00,2025-09-12T21:24:07.177303+00:00
+0e9984d4-d74c-4d8c-8b64-3128c5ca9fbf,,Classe de ,,2025-09-12T21:26:09.97326+00:00,2025-09-12T21:26:09.97326+00:00
+83d6c36e-fa16-41cd-a413-1736e93c797e,1ère Année Persévérance,Première année de persévérance,Persévérance,2025-09-12T21:57:21.814235+00:00,2025-09-12T21:57:21.814235+00:00
+51139cf4-48bf-42f9-9569-1cc962c57935,2ème Année Persévérance,Deuxième année de persévérance,Persévérance,2025-09-12T21:57:22.190236+00:00,2025-09-12T21:57:22.190236+00:00
+b782acc5-cf44-4b64-beef-dc1ad4307421,1ère Année Catéchisme des Adultes,Première année de catéchisme pour adultes,Adultes,2025-09-12T21:57:22.398826+00:00,2025-09-12T21:57:22.398826+00:00
+853771f9-08aa-42b0-b1e6-8d50b0ad80f3,2ème Année Catéchisme des Adultes,Deuxième année de catéchisme pour adultes,Adultes,2025-09-12T21:57:22.554185+00:00,2025-09-12T21:57:22.554185+00:00
+1f2003ff-c488-4ff7-a27a-8a0ce10caab4,3ème Année Catéchisme des Adultes,Troisième année de catéchisme pour adultes,Adultes,2025-09-12T21:57:22.709115+00:00,2025-09-12T21:57:22.709115+00:00

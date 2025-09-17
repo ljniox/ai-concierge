@@ -1,0 +1,106 @@
+{
+  "title": "Rapport des Statistiques des Catéchumènes",
+  "period": "2023-2024 et 2024-2025",
+  "generated_at": "2025-09-14T00:53:40.235132",
+  "summary": {
+    "total_inscriptions": 798,
+    "years_analyzed": [
+      "2023-2024",
+      "2024-2025"
+    ],
+    "total_classes": 14
+  },
+  "yearly_breakdown": {
+    "2023-2024": {
+      "total_inscriptions": 390,
+      "class_breakdown": {
+        "Class fb6d9698-2975-49ea-8a24-697fc8cf1167": 29,
+        "Class 71f3f025-7489-40c2-aa8d-f679773f39ca": 49,
+        "Class d3dd421b-0b7e-49f0-a744-957ca127e878": 48,
+        "Class dc689b6c-0452-43da-b015-426b47fd9e8b": 57,
+        "Class deaacd2d-86f7-400a-afef-dd73314bfb4a": 59,
+        "Class 6eabb6eb-2074-4807-bb6b-36b437bf116d": 30,
+        "Non spécifiée": 103,
+        "Class 287422de-781f-43d8-a475-79782af496de": 8,
+        "Class b782acc5-cf44-4b64-beef-dc1ad4307421": 2,
+        "Class 87dec81f-8045-4a98-9194-2300fd75c154": 2,
+        "Class 51139cf4-48bf-42f9-9569-1cc962c57935": 1,
+        "Class 853771f9-08aa-42b0-b1e6-8d50b0ad80f3": 2
+      },
+      "status_breakdown": {
+        "Inscription Validée": 351,
+        "null": 37,
+        "En attente": 2
+      },
+      "result_breakdown": {
+        "ADMIS(E) A PASSER EN CLASSE SUPERIEURE": 311,
+        "ADMIS(E) A REDOUBLER": 28,
+        "ADMIS(E) A PASSE EN CLASSE SUPERIEURE": 31,
+        "null": 17,
+        "ADMINS(E) A PASSER EN CLASSE SUPERIEURE": 2,
+        "ADMIS(E) A PASSER E CLASSE SUPERIEURE": 1
+      }
+    },
+    "2024-2025": {
+      "total_inscriptions": 408,
+      "class_breakdown": {
+        "Non spécifiée": 76,
+        "Class 6eabb6eb-2074-4807-bb6b-36b437bf116d": 36,
+        "Class d3dd421b-0b7e-49f0-a744-957ca127e878": 61,
+        "Class dc689b6c-0452-43da-b015-426b47fd9e8b": 63,
+        "Class 71f3f025-7489-40c2-aa8d-f679773f39ca": 40,
+        "Class deaacd2d-86f7-400a-afef-dd73314bfb4a": 51,
+        "Class 87dec81f-8045-4a98-9194-2300fd75c154": 12,
+        "Class 287422de-781f-43d8-a475-79782af496de": 16,
+        "Class 83d6c36e-fa16-41cd-a413-1736e93c797e": 1,
+        "Class 51139cf4-48bf-42f9-9569-1cc962c57935": 2,
+        "Class fb6d9698-2975-49ea-8a24-697fc8cf1167": 37,
+        "Class b782acc5-cf44-4b64-beef-dc1ad4307421": 10,
+        "Class 853771f9-08aa-42b0-b1e6-8d50b0ad80f3": 2,
+        "Class 1f2003ff-c488-4ff7-a27a-8a0ce10caab4": 1
+      },
+      "status_breakdown": {
+        "Inscription Validée": 368,
+        "En attente": 18,
+        "null": 22
+      },
+      "result_breakdown": {
+        "": 307,
+        "ADMIS(E) A PASSER EN CLASSE SUPERIEURE": 1,
+        "null": 100
+      }
+    }
+  },
+  "combined_analysis": {
+    "class_distribution": {
+      "Class fb6d9698-2975-49ea-8a24-697fc8cf1167": 66,
+      "Class 71f3f025-7489-40c2-aa8d-f679773f39ca": 89,
+      "Class d3dd421b-0b7e-49f0-a744-957ca127e878": 109,
+      "Class dc689b6c-0452-43da-b015-426b47fd9e8b": 120,
+      "Class deaacd2d-86f7-400a-afef-dd73314bfb4a": 110,
+      "Class 6eabb6eb-2074-4807-bb6b-36b437bf116d": 66,
+      "Non spécifiée": 179,
+      "Class 287422de-781f-43d8-a475-79782af496de": 24,
+      "Class b782acc5-cf44-4b64-beef-dc1ad4307421": 12,
+      "Class 87dec81f-8045-4a98-9194-2300fd75c154": 14,
+      "Class 51139cf4-48bf-42f9-9569-1cc962c57935": 3,
+      "Class 853771f9-08aa-42b0-b1e6-8d50b0ad80f3": 4,
+      "Class 83d6c36e-fa16-41cd-a413-1736e93c797e": 1,
+      "Class 1f2003ff-c488-4ff7-a27a-8a0ce10caab4": 1
+    },
+    "most_popular_classes": [
+      [
+        "Non spécifiée",
+        179
+      ],
+      [
+        "Class dc689b6c-0452-43da-b015-426b47fd9e8b",
+        120
+      ],
+      [
+        "Class deaacd2d-86f7-400a-afef-dd73314bfb4a",
+        110
+      ]
+    ]
+  }
+}

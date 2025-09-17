@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=development
+      - TZ=Africa/Dakar
+    volumes:
+      - ./src:/app/src
+    depends_on:
+      - redis
+    networks:
+      - concierge-network
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - concierge-network
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - app
+    networks:
+      - concierge-network
+
+volumes:
+  redis_data:
+
+networks:
+  concierge-network:
+    driver: bridge

@@ -1,0 +1,4289 @@
+# Raw Non-Migrated Inscriptions Data
+
+## Record 1
+ID: 2d5dcef7-d804-4ba1-9345-47cb16a633dc
+Student: Nicolas Enzo ALVES DA SILVA
+Student ID: 2d5dcef7-d804-4ba1-9345-47cb16a633dc
+Current Class: 2ème Année Communion (CE2)
+Year: 2023-2024
+Action: Réinscription
+Status: None
+Payment Method: 
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: secretariatdbosco@gmail.com
+Comments: 
+Final Result: ADMIS(E) A PASSER EN CLASSE SUPERIEURE
+Final Grade: 14.33
+--------------------------------------------------------------------------------
+
+## Record 2
+ID: d3571256-4ff9-47a5-b722-285d76aea6a0
+Student: Romiel Anthonio COLY
+Student ID: d3571256-4ff9-47a5-b722-285d76aea6a0
+Current Class: 2ème Année Confirmation (6e)
+Year: 2023-2024
+Action: Réinscription
+Status: None
+Payment Method: 
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: secretariatdbosco@gmail.com
+Comments: 2 éme année communion
+Final Result: ADMIS(E) A REDOUBLER
+Final Grade: 8.33
+--------------------------------------------------------------------------------
+
+## Record 3
+ID: 82b3f686-807e-41a1-91eb-aa6c6e19abff
+Student: Martha BOISSY
+Student ID: 82b3f686-807e-41a1-91eb-aa6c6e19abff
+Current Class: 1ère Année Communion (CE1)
+Year: 2023-2024
+Action: Réinscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: 0
+Book Given: None
+Operator: secretariatdbosco@gmail.com
+Comments: 
+Final Result: ADMIS(E) A PASSER EN CLASSE SUPERIEURE
+Final Grade: 9.00
+--------------------------------------------------------------------------------
+
+## Record 4
+ID: 6cbde997-9ebf-4cc0-a015-3fa9aef6c721
+Student: Dominique (29/11/2012) GOMIS
+Student ID: 6cbde997-9ebf-4cc0-a015-3fa9aef6c721
+Current Class: 2ème Année Confirmation (6e)
+Year: 2023-2024
+Action: Réinscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: secretariatdbosco@gmail.com
+Comments: 
+Final Result: ADMIS(E) A PASSER EN CLASSE SUPERIEURE
+Final Grade: 9.00
+--------------------------------------------------------------------------------
+
+## Record 5
+ID: 37e1c53b-40f8-448f-81a9-b13b1f1394c2
+Student: Claire Sophie Moussou GOMIS
+Student ID: 37e1c53b-40f8-448f-81a9-b13b1f1394c2
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2023-2024
+Action: Nouvelle Inscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: secretariatdbosco@gmail.com
+Comments: 
+Final Result: ADMIS(E) A PASSER EN CLASSE SUPERIEURE
+Final Grade: 17.50
+--------------------------------------------------------------------------------
+
+## Record 6
+ID: f95b2401-e53c-41e9-aa26-5b9119ef19b7
+Student: Alex Doudou MENDY
+Student ID: f95b2401-e53c-41e9-aa26-5b9119ef19b7
+Current Class: 1ère Année Catéchisme des Adultes
+Year: 2023-2024
+Action: Nouvelle Inscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: secretariatdbosco@gmail.com
+Comments: 
+Final Result: ADMIS(E) A PASSER EN CLASSE SUPERIEURE
+Final Grade: 12.00
+--------------------------------------------------------------------------------
+
+## Record 7
+ID: ebb4b93c-1967-47a2-93fb-7b0a6e81c58e
+Student: Ernest Francois SIDIBE
+Student ID: ebb4b93c-1967-47a2-93fb-7b0a6e81c58e
+Current Class: 2ème Année Communion (CE2)
+Year: 2023-2024
+Action: Réinscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: secretariatdbosco@gmail.com
+Comments: classe soir
+Final Result: ADMIS(E) A PASSER EN CLASSE SUPERIEURE
+Final Grade: 17.33
+--------------------------------------------------------------------------------
+
+## Record 8
+ID: 37f2c3d4-c25a-411f-8d78-0fcd3d37a89a
+Student: Jean Paul Latyr Junior SIDIBE
+Student ID: 37f2c3d4-c25a-411f-8d78-0fcd3d37a89a
+Current Class: 2ème Année Pré-Catéchuménat (CP)
+Year: 2023-2024
+Action: Réinscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: secretariatdbosco@gmail.com
+Comments: 
+Final Result: ADMIS(E) A PASSE EN CLASSE SUPERIEURE
+Final Grade: 20.00
+--------------------------------------------------------------------------------
+
+## Record 9
+ID: e750fa79-615e-47fa-b23f-c522f7c91987
+Student: Carlos DACOSTA
+Student ID: e750fa79-615e-47fa-b23f-c522f7c91987
+Current Class: 3ème Année Confirmation (5e)
+Year: 2023-2024
+Action: Réinscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 1
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: Ne figure pas dans nos bases de données, fournir le reçu d'inscription pour vérifications
+Final Result: ADMIS(E) A PASSER EN CLASSE SUPERIEURE
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 10
+ID: ffda9937-c107-4c82-8282-3c6e92595579
+Student: Siam JAILLARD
+Student ID: ffda9937-c107-4c82-8282-3c6e92595579
+Current Class: 1ère Année Confirmation (CM2)
+Year: 2023-2024
+Action: Réinscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: secretariatdbosco@gmail.com
+Comments: 
+Final Result: ADMIS(E) A PASSER EN CLASSE SUPERIEURE
+Final Grade: 9.66
+--------------------------------------------------------------------------------
+
+## Record 11
+ID: 4e316975-1cfd-4e07-a2bd-609e8e566316
+Student: Diong GOMIS
+Student ID: 4e316975-1cfd-4e07-a2bd-609e8e566316
+Current Class: 2ème Année Pré-Catéchuménat (CP)
+Year: 2023-2024
+Action: Réinscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: 
+Final Result: ADMIS(E) A PASSE EN CLASSE SUPERIEURE
+Final Grade: 16.00
+--------------------------------------------------------------------------------
+
+## Record 12
+ID: b24fd7a9-193d-4a69-ab3a-64bde54b7cba
+Student: Nelson GOMIS
+Student ID: b24fd7a9-193d-4a69-ab3a-64bde54b7cba
+Current Class: 2ème Année Confirmation (6e)
+Year: 2023-2024
+Action: Réinscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: 
+Final Result: ADMIS(E) A PASSER EN CLASSE SUPERIEURE
+Final Grade: 12.66
+--------------------------------------------------------------------------------
+
+## Record 13
+ID: 0fc59fc7-139c-4437-aa18-6a34889cbded
+Student: Cébéa MENDY
+Student ID: 0fc59fc7-139c-4437-aa18-6a34889cbded
+Current Class: 1ère Année Communion (CE1)
+Year: 2023-2024
+Action: Réinscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: 1
+Book Given: None
+Operator: onix88@gmail.com
+Comments: Extrait de naissance à fournir
+Final Result: ADMIS(E) A PASSER EN CLASSE SUPERIEURE
+Final Grade: 12.00
+--------------------------------------------------------------------------------
+
+## Record 14
+ID: 2501e054-f453-4847-9f91-d1ab2c94efd8
+Student: Cécile Jacqueline MANGA
+Student ID: 2501e054-f453-4847-9f91-d1ab2c94efd8
+Current Class: 2ème Année Pré-Catéchuménat (CP)
+Year: 2023-2024
+Action: Réinscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: 
+Final Result: ADMIS(E) A PASSE EN CLASSE SUPERIEURE
+Final Grade: 10.00
+--------------------------------------------------------------------------------
+
+## Record 15
+ID: 0c3b90e2-7f2e-4a3f-a936-78fbddf90c25
+Student: Gilbertine MENDY
+Student ID: 0c3b90e2-7f2e-4a3f-a936-78fbddf90c25
+Current Class: 3ème Année Communion (CM1)
+Year: 2023-2024
+Action: Réinscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: 
+Final Result: ADMIS(E) A PASSER EN CLASSE SUPERIEURE
+Final Grade: 15.50
+--------------------------------------------------------------------------------
+
+## Record 16
+ID: a7ab604d-9cc1-45c9-b87d-50fe3b167c6d
+Student: Helene Catherine DIEDHIOU
+Student ID: a7ab604d-9cc1-45c9-b87d-50fe3b167c6d
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2023-2024
+Action: Nouvelle Inscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: 
+Final Result: ADMIS(E) A PASSER EN CLASSE SUPERIEURE
+Final Grade: 15.00
+--------------------------------------------------------------------------------
+
+## Record 17
+ID: 7af85d69-9bf5-4d8b-9938-29832481fd1e
+Student: Virginie GOMIS
+Student ID: 7af85d69-9bf5-4d8b-9938-29832481fd1e
+Current Class: 1ère Année Communion (CE1)
+Year: 2023-2024
+Action: Réinscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: 1
+Book Given: None
+Operator: secretariatdbosco@gmail.com
+Comments: 
+Final Result: ADMIS(E) A REDOUBLER
+Final Grade: 8.00
+--------------------------------------------------------------------------------
+
+## Record 18
+ID: f85b6d3c-15b1-4406-8ba1-55a99accfd2d
+Student: Madeleine Beatrice Ndione
+Student ID: f85b6d3c-15b1-4406-8ba1-55a99accfd2d
+Current Class: 1ère Année Confirmation (CM2)
+Year: 2023-2024
+Action: Transfert à partir d'une autre paroisse
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: oui
+Absences: None
+Book Given: None
+Operator: secretariatdbosco@gmail.com
+Comments: 
+Final Result: ADMIS(E) A REDOUBLER
+Final Grade: 6.16
+--------------------------------------------------------------------------------
+
+## Record 19
+ID: 628406f7-2fc9-4c62-837a-472df8c23d68
+Student: Harry David Mensah CLEGBAZA FRANCISCO
+Student ID: 628406f7-2fc9-4c62-837a-472df8c23d68
+Current Class: 2ème Année Confirmation (6e)
+Year: 2023-2024
+Action: Réinscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: secretariatdbosco@gmail.com
+Comments: 
+Final Result: ADMIS(E) A PASSER EN CLASSE SUPERIEURE
+Final Grade: 18.00
+--------------------------------------------------------------------------------
+
+## Record 20
+ID: b22ce372-05de-414a-a4ff-4c60350177b4
+Student: Freddy Abraham Pascal Kokou CLEGBAZA FRANCISCO
+Student ID: b22ce372-05de-414a-a4ff-4c60350177b4
+Current Class: 2ème Année Persévérance
+Year: 2023-2024
+Action: Réinscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: secretariatdbosco@gmail.com
+Comments: 
+Final Result: ADMIS(E) A PASSER EN CLASSE SUPERIEURE
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 21
+ID: 8dc57c8c-5003-4ee0-aead-8d4cb4ad672c
+Student: Jeanne Michelle DIATTA
+Student ID: 8dc57c8c-5003-4ee0-aead-8d4cb4ad672c
+Current Class: 2ème Année Confirmation (6e)
+Year: 2023-2024
+Action: Réinscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 1
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: Pas inscrite, extrait de baptême non présenté
+Final Result: ADMIS(E) A PASSER EN CLASSE SUPERIEURE
+Final Grade: 15.33
+--------------------------------------------------------------------------------
+
+## Record 22
+ID: fe848236-06c4-4c2d-9c3f-1fef2b10df5d
+Student: Michel Meyson Lahiniriko
+Student ID: fe848236-06c4-4c2d-9c3f-1fef2b10df5d
+Current Class: 1ère Année Communion (CE1)
+Year: 2023-2024
+Action: Transfert à partir d'une autre paroisse
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: oui
+Absences: 1
+Book Given: None
+Operator: secretariatdbosco@gmail.com
+Comments: 
+Final Result: ADMIS(E) A REDOUBLER
+Final Grade: 8.00
+--------------------------------------------------------------------------------
+
+## Record 23
+ID: 52f4fa55-e2bf-4794-ba2b-e0d62d438a78
+Student: andrews Mathys Lahiniriko
+Student ID: 52f4fa55-e2bf-4794-ba2b-e0d62d438a78
+Current Class: 1ère Année Communion (CE1)
+Year: 2023-2024
+Action: Transfert à partir d'une autre paroisse
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: oui
+Absences: 1
+Book Given: None
+Operator: secretariatdbosco@gmail.com
+Comments: 
+Final Result: ADMIS(E) A REDOUBLER
+Final Grade: 3.00
+--------------------------------------------------------------------------------
+
+## Record 24
+ID: e122ccfa-4d1a-4739-a052-49510cda7afa
+Student: Elisabeth DIONE
+Student ID: e122ccfa-4d1a-4739-a052-49510cda7afa
+Current Class: 1ère Année Catéchisme des Adultes
+Year: 2023-2024
+Action: Nouvelle Inscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: 
+Final Result: ADMIS(E) A PASSER EN CLASSE SUPERIEURE
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 25
+ID: 083b0868-0218-45fe-baa8-ae8632081ed1
+Student: Audrey Alison MANEL
+Student ID: 083b0868-0218-45fe-baa8-ae8632081ed1
+Current Class: 2ème Année Confirmation (6e)
+Year: 2023-2024
+Action: Réinscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: secretariatdbosco@gmail.com
+Comments: 
+Final Result: ADMIS(E) A PASSER EN CLASSE SUPERIEURE
+Final Grade: 17.00
+--------------------------------------------------------------------------------
+
+## Record 26
+ID: d5bfda12-de06-4530-aca3-74f06ab295a0
+Student: Antoine MENDY
+Student ID: d5bfda12-de06-4530-aca3-74f06ab295a0
+Current Class: 2ème Année Confirmation (6e)
+Year: 2023-2024
+Action: Réinscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: 
+Final Result: ADMIS(E) A REDOUBLER
+Final Grade: 2.33
+--------------------------------------------------------------------------------
+
+## Record 27
+ID: 345affc3-6410-46cc-92dd-0feb5dae9fba
+Student: Annicette Kabounta MENDY
+Student ID: 345affc3-6410-46cc-92dd-0feb5dae9fba
+Current Class: 2ème Année Communion (CE2)
+Year: 2023-2024
+Action: Réinscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: 
+Final Result: ADMIS(E) A PASSER EN CLASSE SUPERIEURE
+Final Grade: 11.50
+--------------------------------------------------------------------------------
+
+## Record 28
+ID: 88a0fb31-26ad-4083-9132-c3d61777d80b
+Student: Aïssatou Christine MENDY
+Student ID: 88a0fb31-26ad-4083-9132-c3d61777d80b
+Current Class: 3ème Année Communion (CM1)
+Year: 2023-2024
+Action: Réinscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: 
+Final Result: ADMIS(E) A PASSER EN CLASSE SUPERIEURE
+Final Grade: 11.17
+--------------------------------------------------------------------------------
+
+## Record 29
+ID: cfda6436-66db-43d6-98e1-d4e5f6de9bfe
+Student: Sergio MENDY
+Student ID: cfda6436-66db-43d6-98e1-d4e5f6de9bfe
+Current Class: 3ème Année Communion (CM1)
+Year: 2023-2024
+Action: Réinscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: 
+Final Result: ADMIS(E) A PASSER EN CLASSE SUPERIEURE
+Final Grade: 12.80
+--------------------------------------------------------------------------------
+
+## Record 30
+ID: ef8ac920-e370-4ff3-81bb-0d9e0500b85a
+Student: Michel DIOH
+Student ID: ef8ac920-e370-4ff3-81bb-0d9e0500b85a
+Current Class: 1ère Année Confirmation (CM2)
+Year: 2023-2024
+Action: None
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 1
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: Inscripition a verifier
+Final Result: ADMIS(E) A REDOUBLER
+Final Grade: 4.66
+--------------------------------------------------------------------------------
+
+## Record 31
+ID: d39556cb-874a-4139-a8fa-ccecaf10569e
+Student: clémentine Obega
+Student ID: d39556cb-874a-4139-a8fa-ccecaf10569e
+Current Class: 1ère Année Communion (CE1)
+Year: 2023-2024
+Action: Nouvelle Inscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: 0
+Book Given: None
+Operator: secretariatdbosco@gmail.com
+Comments: 
+Final Result: ADMIS(E) A PASSER EN CLASSE SUPERIEURE
+Final Grade: 15.00
+--------------------------------------------------------------------------------
+
+## Record 32
+ID: 6efc648c-4273-492d-b061-3cf9e1f68a9c
+Student: Michel Armand SANKA
+Student ID: 6efc648c-4273-492d-b061-3cf9e1f68a9c
+Current Class: 3ème Année Communion (CM1)
+Year: 2023-2024
+Action: Réinscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: 
+Final Result: ADMIS(E) A PASSER EN CLASSE SUPERIEURE
+Final Grade: 12.10
+--------------------------------------------------------------------------------
+
+## Record 33
+ID: bde03e53-9e16-4fbf-8567-172ea45d1f02
+Student: Paul Edouard SENGHOR
+Student ID: bde03e53-9e16-4fbf-8567-172ea45d1f02
+Current Class: 1ère Année Confirmation (CM2)
+Year: 2023-2024
+Action: Réinscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: secretariatdbosco@gmail.com
+Comments: 
+Final Result: ADMIS(E) A PASSER EN CLASSE SUPERIEURE
+Final Grade: 11.66
+--------------------------------------------------------------------------------
+
+## Record 34
+ID: 32677517-fa12-4d77-bbe7-7329561423ad
+Student: Candy Rose Hélène NADIAKANE
+Student ID: 32677517-fa12-4d77-bbe7-7329561423ad
+Current Class: 2ème Année Confirmation (6e)
+Year: 2023-2024
+Action: Réinscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: 
+Final Result: ADMIS(E) A PASSER EN CLASSE SUPERIEURE
+Final Grade: 17.33
+--------------------------------------------------------------------------------
+
+## Record 35
+ID: 65980961-601f-4e84-a76c-41ed5936ed2e
+Student: Olga Marie DIOUF
+Student ID: 65980961-601f-4e84-a76c-41ed5936ed2e
+Current Class: 2ème Année Communion (CE2)
+Year: 2023-2024
+Action: Réinscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: mbissine.william@gmail.com
+Comments: 
+Final Result: ADMIS(E) A PASSER EN CLASSE SUPERIEURE
+Final Grade: 12.50
+--------------------------------------------------------------------------------
+
+## Record 36
+ID: 82d7a6a8-4851-4966-ac57-eb0825e9a20a
+Student: Koffi Jean-Marie KPADENOU
+Student ID: 82d7a6a8-4851-4966-ac57-eb0825e9a20a
+Current Class: 2ème Année Catéchisme des Adultes
+Year: 2023-2024
+Action: Réinscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: 
+Final Result: ADMIS(E) A PASSER EN CLASSE SUPERIEURE
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 37
+ID: 8dd79872-6ffa-434a-96f1-7da8669f80ed
+Student: Komi Marie-Vincent KPADENOU
+Student ID: 8dd79872-6ffa-434a-96f1-7da8669f80ed
+Current Class: 2ème Année Catéchisme des Adultes
+Year: 2023-2024
+Action: Réinscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: 
+Final Result: ADMIS(E) A PASSER EN CLASSE SUPERIEURE
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 38
+ID: 0129a4a7-1f58-4c0e-9da5-cf9cdcdb64fb
+Student: Agathe Mariétou DIOH
+Student ID: 0129a4a7-1f58-4c0e-9da5-cf9cdcdb64fb
+Current Class: 3ème Année Confirmation (5e)
+Year: 2023-2024
+Action: Réinscription
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 1
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: Ne figure pas dans nos bases de données, fournir le reçu d'inscription pour vérifications
+Aucun contact connu, même l'an passé, situation à régulariser urgemment
+Final Result: ADMIS(E) A PASSER EN CLASSE SUPERIEURE
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 39
+ID: e8e8af47-3142-4a0a-afbf-98f42369ba98
+Student: Josue Ariel Guy TADENYO
+Student ID: e8e8af47-3142-4a0a-afbf-98f42369ba98
+Current Class: 2ème Année Communion (CE2)
+Year: 2023-2024
+Action: Nouvelle Inscription
+Status: 
+Payment Method: 
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: ADMIS(E) A PASSER EN CLASSE SUPERIEURE
+Final Grade: 9.50
+--------------------------------------------------------------------------------
+
+## Record 40
+ID: 26aac506-287e-4260-a8c0-aeaa83cf0afa
+Student: Josue Ariel Guy TADENYO
+Student ID: e8e8af47-3142-4a0a-afbf-98f42369ba98
+Current Class: 3ème Année Communion (CM1)
+Year: 2024-2025
+Action: Réinscription
+Status: Inscription Validée
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 41
+ID: fdd707ef-3444-4d3b-81d0-e907500b0976
+Student: Audrey Alison MANEL
+Student ID: 083b0868-0218-45fe-baa8-ae8632081ed1
+Current Class: 3ème Année Confirmation (5e)
+Year: 2024-2025
+Action: Réinscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 42
+ID: 5b417c93-dcff-473c-a9db-4ff103471ad1
+Student: Harry David Mensah CLEGBAZA FRANCISCO
+Student ID: 628406f7-2fc9-4c62-837a-472df8c23d68
+Current Class: 3ème Année Confirmation (5e)
+Year: 2024-2025
+Action: Réinscription
+Status: Inscription Validee
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 43
+ID: bd2152bb-64c4-4856-8744-2033e4db8412
+Student: Freddy Abraham Pascal Kokou CLEGBAZA FRANCISCO
+Student ID: b22ce372-05de-414a-a4ff-4c60350177b4
+Current Class: 2ème Année Persévérance
+Year: 2024-2025
+Action: Réinscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 44
+ID: f5414cba-4207-4e7f-a7c2-5586610decff
+Student: Veronique MENDY
+Student ID: c9e0f48a-98d3-4bb1-b58b-795190095007
+Current Class: 3ème Année Communion (CM1)
+Year: 2024-2025
+Action: Réinscription
+Status: Inscription Validee
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 45
+ID: bfec4461-8ac6-4904-a50e-392e15e3863f
+Student: Rose Aurélie Élisabeth TINE
+Student ID: 46cf678c-f3b2-4df1-9caa-cec2f7a68ecc
+Current Class: 3ème Année Confirmation (5e)
+Year: 2024-2025
+Action: Réinscription
+Status: Inscription Validee
+Payment Method: None
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 46
+ID: 2927609d-5b59-473b-bc19-7c4c471a7b6b
+Student: Dominique (29/11/2012) GOMIS
+Student ID: 6cbde997-9ebf-4cc0-a015-3fa9aef6c721
+Current Class: 3ème Année Confirmation (5e)
+Year: 2024-2025
+Action: Réinscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 47
+ID: 9f5de237-f99e-42cb-aaf8-52e1e932aba9
+Student: Claire Sophie Moussou GOMIS
+Student ID: 37e1c53b-40f8-448f-81a9-b13b1f1394c2
+Current Class: 2ème Année Pré-Catéchuménat (CP)
+Year: 2024-2025
+Action: Réinscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 48
+ID: 0ee1ff49-ebaf-4f4f-8d54-72cbbaf33f80
+Student: Lucas Albert Joseph MANE
+Student ID: 0ee1ff49-ebaf-4f4f-8d54-72cbbaf33f80
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validee
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 49
+ID: effb5ee5-3d17-4ab0-ac99-5e36d7da0ee7
+Student: Jason Christian Essenam AMEGISSE
+Student ID: effb5ee5-3d17-4ab0-ac99-5e36d7da0ee7
+Current Class: 2ème Année Pré-Catéchuménat (CP)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 50
+ID: 1eaa17cb-64c7-46c8-9abe-0d6a87eb4bb0
+Student: John Marie GOMIS
+Student ID: 827a482c-214c-49c5-85d7-4ef7924e60f8
+Current Class: 2ème Année Confirmation (6e)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: 16/11
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 51
+ID: 83f30587-8156-4667-9d40-0f86b2ce14cf
+Student: André Jonathan Henry GOMIS
+Student ID: 5b0f3544-8181-457e-ad86-6c09c1c60701
+Current Class: 2ème Année Confirmation (6e)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: 14/12
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 52
+ID: 766808a3-cda4-4901-97f6-e50fcba61094
+Student: Paul Edouard SENGHOR
+Student ID: bde03e53-9e16-4fbf-8567-172ea45d1f02
+Current Class: 2ème Année Confirmation (6e)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 53
+ID: 8d29b82f-8536-44ec-a04e-88c0f6f8414e
+Student: Chanel Biouzy CARLOS
+Student ID: aaf5f5de-1f95-4659-b678-8a767c85dafd
+Current Class: 2ème Année Confirmation (6e)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: 23/11
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 54
+ID: e796f34f-3d22-4db7-9bd8-e63b1877d656
+Student: Guillaume Antoine NANAN
+Student ID: f2b0d7b3-abaf-4f59-afc1-811a008cd23a
+Current Class: 2ème Année Confirmation (6e)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: 16/11
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 55
+ID: 492fcb5e-2bf2-4bdc-82fd-3f18b4d7687e
+Student: Martha BOISSY
+Student ID: 82b3f686-807e-41a1-91eb-aa6c6e19abff
+Current Class: 2ème Année Communion (CE2)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 56
+ID: 942fcd35-6aae-4e87-8880-819eb8c9a31e
+Student: Bénédicte Emmanuel NDIAYE
+Student ID: fd2deba6-636c-4cf3-9141-046e40b71bbd
+Current Class: 2ème Année Confirmation (6e)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: 30/11
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 57
+ID: 174860fc-fa7a-486f-9ee1-f5529b7e57f9
+Student: Marie Georgette Dié Ndour
+Student ID: ebd28da8-04ea-43ff-8332-7352c39e0aae
+Current Class: 2ème Année Confirmation (6e)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: Au Secrétariat
+Amount: 5000
+Paid: 0
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 58
+ID: e55df78a-fd27-4775-b154-acc02a91a13b
+Student: Joachim Ismael Mathieu MAIRE
+Student ID: 2372d740-1d55-4fa0-8f59-a1cf7e86998c
+Current Class: 3ème Année Confirmation (5e)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: Au Secrétariat
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Sur instruction du curé pour la vocation
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 59
+ID: 726b9d07-1b1b-4bcc-a0cc-cc8c799fa6ae
+Student: Ernest Francois SIDIBE
+Student ID: ebb4b93c-1967-47a2-93fb-7b0a6e81c58e
+Current Class: 3ème Année Communion (CM1)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 60
+ID: 7457eeb3-a64f-4975-8f50-303ad8bcba62
+Student: Jean Paul Latyr Junior SIDIBE
+Student ID: 37f2c3d4-c25a-411f-8d78-0fcd3d37a89a
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 61
+ID: 8ef5ef39-f18a-4811-b417-b7720572298f
+Student: Eléone Sophie Adebambo KEITA
+Student ID: 8ef5ef39-f18a-4811-b417-b7720572298f
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: OM
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: 
+Final Result: 
+Final Grade: 20.00
+--------------------------------------------------------------------------------
+
+## Record 62
+ID: 92fb9d88-efa3-4a55-b7f5-8e96189428f3
+Student: Rose Mossane NDIAYE
+Student ID: bd30ed98-b89d-4dd6-a7ac-87b2ee334653
+Current Class: 3ème Année Communion (CM1)
+Year: 2024-2025
+Action: Réinscription
+Status: Inscription Validée
+Payment Method: ORANGE MONEY
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 63
+ID: 8c79a0d8-f3aa-4675-94d1-1c7896ba2f93
+Student: Cédric Alexandre MANEL
+Student ID: 8c79a0d8-f3aa-4675-94d1-1c7896ba2f93
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 64
+ID: 5f0b5745-cb17-4305-a8ce-169e15b9b566
+Student: Yohan Charles CARVALHO
+Student ID: 5f0b5745-cb17-4305-a8ce-169e15b9b566
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: 
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 65
+ID: 36e01c93-9889-4f7d-a3fb-06b8263fc5f6
+Student: Kiyane BICKINDOU
+Student ID: 58380a4b-412e-46f1-bb16-74257b9ddf21
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Réinscription
+Status: Inscription Validée
+Payment Method: ORANGE MONEY
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 66
+ID: b7d6e8b3-8492-406b-bd91-a0dad9a9055c
+Student: Yelina BICKINDOU
+Student ID: 1ccdde42-020d-4fa9-9f4a-8f353006c2e2
+Current Class: 1ère Année Confirmation (CM2)
+Year: 2024-2025
+Action: Réinscription
+Status: Inscription Validée
+Payment Method: ORANGE MONEY
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 67
+ID: 80d215a7-b154-4d47-a63f-00c66670afd7
+Student: TRISTAN HICHEM DRISSA AKPATA
+Student ID: 80d215a7-b154-4d47-a63f-00c66670afd7
+Current Class: 1ère Année Catéchisme des Adultes
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 68
+ID: a7a67c0c-c145-4fb0-96ea-f3edaba6128e
+Student: NATHAN MAHUGNON ALEXANDRE AKPATA
+Student ID: a7a67c0c-c145-4fb0-96ea-f3edaba6128e
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 69
+ID: 406d6b22-8f4a-4bf5-87e7-cedd694c99c8
+Student: CHARLOTTE MARIAM CICA AKPATA
+Student ID: 406d6b22-8f4a-4bf5-87e7-cedd694c99c8
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 70
+ID: fc8237ff-119d-4126-a090-f9e0a2256465
+Student: Louis Pierre Narcisse MENDY
+Student ID: 47e8627d-e35c-4a3b-8b8d-a9a596c2af91
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: None
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 71
+ID: 07d5e338-52bb-4942-8511-fe6a35bebe74
+Student: Hortense Germaine MALOU
+Student ID: 2e1afccb-8ffb-4772-8ea9-19d8bdea07c9
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: Verifier date de naissance, baptisée en 2018
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 72
+ID: 3e22a7be-a9fe-4365-aeab-e75a5e754a16
+Student: Kalian Albert Apatchkor SYLVA
+Student ID: 32907c68-1302-4147-ba23-4bf50bd39262
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: Valider dans registrer, bapteme en 2019
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 73
+ID: e8306ab7-de96-4d74-9fac-98f1df6791ff
+Student: Jérémie Mario NDIAYE
+Student ID: 69bc454a-607a-48c7-9f7b-399596d4e1b7
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: Verifier année de naissance et registre de baptême
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 74
+ID: 067b52bf-28f5-4987-a245-f4336425c23f
+Student: Maelys PREIRA
+Student ID: d18c9ed6-887c-475d-9a1c-e1eceb922dfb
+Current Class: 3ème Année Communion (CM1)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: Enfant tetraplégique. Inscrit en classe de sacrement pour recevoir la communion
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 75
+ID: c91ae91c-c10a-41c9-a5c5-72a5df00a818
+Student: Séréna Eden Dibor COLLI
+Student ID: 556b98dc-04b0-4e53-ba90-95daec2c0b04
+Current Class: 3ème Année Communion (CM1)
+Year: 2024-2025
+Action: Transfert
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: oui
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: "Transféré en 3ème année de communion Attestation fournie"
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 76
+ID: 7095db1d-7ba2-4c10-b2a7-3897e5126f09
+Student: Alessio Léandre Issa COLLI
+Student ID: 09eecf37-d467-4ecb-9828-5c96626b8115
+Current Class: 3ème Année Confirmation (5e)
+Year: 2024-2025
+Action: Transfert
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: oui
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: transfert depuis Notre dame des anges pour la classe de confirmation
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 77
+ID: c556c344-9aa7-4132-9e57-a46a0713770b
+Student: Yannick Seyni DJIBALENE
+Student ID: 5519ed99-a386-4a23-b152-42af3b658267
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: Vérifier registre de date de naissance
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 78
+ID: 251b3dd9-fa8b-4c5b-b91c-35f435f20ad0
+Student: Josepha BAMPOKY
+Student ID: 5e14b026-4955-494e-b566-60f82c1356f2
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: vérifier registre 12/2018
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 79
+ID: 2933f12a-81e8-44de-b7ad-9a42472feeae
+Student: Maël Victor DIEDHIOU
+Student ID: 9516e284-c3f9-4728-9120-61e2a5ef66c3
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 80
+ID: f2754ab8-9e47-458c-a464-989e27f13d1a
+Student: Pierre Cyril SAGNA
+Student ID: f08856ab-d4b8-42fb-b14c-80ac76befe33
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: 
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 81
+ID: 53e7c57d-2aa9-4998-af4f-470bc05b3f3f
+Student: Bernadette NDONG
+Student ID: a3dede49-346c-4039-8b13-ee197b7c82c6
+Current Class: 1ère Année Catéchisme des Adultes
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: Au Secrétariat
+Amount: 5000
+Paid: 0
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 82
+ID: 44cd9ef5-c401-44c5-9fd9-481dc0025d8c
+Student: Emmanuella Sanou FAYE
+Student ID: 6f5afa38-6da0-404a-bf88-58248c37f35c
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Vérifier registre et date de naissance
+Final Result: None
+Final Grade: 20.00
+--------------------------------------------------------------------------------
+
+## Record 83
+ID: 4eb644ba-6e19-4eac-bdfe-66a7b9c830eb
+Student: Kylian William CARLOS
+Student ID: 9b29d72b-3d83-4cad-a27e-a7b2b6fa5aef
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Vérifier registre et date de naissance
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 84
+ID: 85343b55-2871-4469-8353-13ea69d841d6
+Student: Madeleine Beatrice Ndione
+Student ID: f85b6d3c-15b1-4406-8ba1-55a99accfd2d
+Current Class: 1ère Année Confirmation (CM2)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 85
+ID: 3104464d-4966-4431-a1eb-80435d93cd86
+Student: Thérèse Mélanie Rophe BAKHOUM
+Student ID: d7385e5f-5116-406d-9ed4-180bf06648f2
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: 19.00
+--------------------------------------------------------------------------------
+
+## Record 86
+ID: 14ca26a1-44b3-4ff6-81ac-577484e2e68b
+Student: Araud Pierre Michel BAKHOUM
+Student ID: ee48457e-fcfc-4216-9fc3-fd747670ec75
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 87
+ID: 4ef9f345-c00e-4717-aeca-981f973a9437
+Student: Céline Malou NDECKY
+Student ID: 16626c4c-ef9a-4b43-a58d-d3749c8219a5
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Extrait de naissance fourni
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 88
+ID: 1047ba98-17c7-480c-8b79-f5dec4060bdf
+Student: Kylian Sean Sessi HOUNGBEDJI
+Student ID: f5496917-388f-4fc2-a651-b1ce99895084
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 89
+ID: ffa05d02-804e-4f3b-8f10-3efcdb1e7b14
+Student: Giovanna Ramata ISIDORO
+Student ID: 9e83b4fb-7388-4057-9858-0d772abda1d3
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Bapteme 15 Aout 2018
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 90
+ID: a360f576-b577-4428-8671-99da80eeab54
+Student: Marie Helene Christine faye
+Student ID: 638da1d5-4237-42ef-929b-2a7b0c890c42
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 91
+ID: 220c0e8d-3811-47e2-baa3-12239ed29018
+Student: Sephora Maëlys N Somda
+Student ID: 5be0ab76-0634-4547-9638-baa038a86f5a
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 92
+ID: a2559535-cc37-4027-9d83-a190af3b92ca
+Student: Symphonie Perpétue Azariel Somda
+Student ID: 5a544fa7-39f1-4ae5-866c-98e8bdf7bd55
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 93
+ID: 83691d42-20ae-4640-9a25-ee1a4a210a8f
+Student: Nelson GOMIS
+Student ID: b24fd7a9-193d-4a69-ab3a-64bde54b7cba
+Current Class: 3ème Année Confirmation (5e)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 94
+ID: c2895ef8-d3d2-4bef-a418-ca52f7f8b651
+Student: Diong GOMIS
+Student ID: 4e316975-1cfd-4e07-a2bd-609e8e566316
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 95
+ID: b172ea37-a722-4a9f-8faf-dac0175de78d
+Student: Sabrina Margot Emma DIOUF
+Student ID: 527b5d9d-8402-4617-93b5-45150b31643d
+Current Class: 2ème Année Pré-Catéchuménat (CP)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 96
+ID: a4703a66-c0d1-4975-b706-1dcf6c48ed1f
+Student: Nathalie NZALE
+Student ID: f58267d9-b796-42e9-a5e3-1222a38a0b75
+Current Class: 2ème Année Confirmation (6e)
+Year: 2024-2025
+Action: Transfert
+Status: Inscription Validée
+Payment Method: WAVE
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: oui
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 97
+ID: c9ab3b70-aec1-4250-8c42-2f3a97715cd5
+Student: Siam JAILLARD
+Student ID: ffda9937-c107-4c82-8282-3c6e92595579
+Current Class: 2ème Année Confirmation (6e)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: 16/11
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 98
+ID: cde3274c-8b57-46c6-b797-e3ef84380213
+Student: Nicolas Daniel NKOGHE
+Student ID: 4e455ad4-66c3-4d58-8819-3ed3a53286c0
+Current Class: 2ème Année Pré-Catéchuménat (CP)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: EN A FOURNIR
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 99
+ID: f7fe5154-b1e6-4ad3-9a44-b3392a2a7c2e
+Student: Anna Rose SIDIBE
+Student ID: 0a2deb1c-5ade-48a2-8ff3-efea2751c12a
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Extrait de naissance a fournir
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 100
+ID: f77b072b-8b1e-4d3e-b598-f44dcbc82eab
+Student: Marie Prudence DIONOU
+Student ID: 346b4cb1-4c6f-4a77-8674-8971757e9138
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: Au Secrétariat
+Amount: 5000
+Paid: 0
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Doit fournir l'extrait de bapteme
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 101
+ID: 91aac120-a5fb-45a9-876c-96fc662104e5
+Student: clémentine Obega
+Student ID: d39556cb-874a-4139-a8fa-ccecaf10569e
+Current Class: 2ème Année Communion (CE2)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Reçu par Viviane
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 102
+ID: 2420ecd0-62df-419b-9c4b-0651830a54b7
+Student: Michel Armand SANKA
+Student ID: 6efc648c-4273-492d-b061-3cf9e1f68a9c
+Current Class: 1ère Année Confirmation (CM2)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 103
+ID: 5a1df72b-d773-4b03-883c-fdc86a099e0d
+Student: Pierre Alexandre Vincent GOMIS
+Student ID: 64251578-2da5-4856-aa7c-9cb38667bef3
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 104
+ID: bacdfa2a-d456-4043-976d-6ba4acd51871
+Student: Liliane Padiou NDECKY
+Student ID: 7c869cc7-5280-4d7a-9b28-1c1343f1fe24
+Current Class: 2ème Année Pré-Catéchuménat (CP)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 105
+ID: f07b30d2-915f-4b1b-acef-615e17cb9b08
+Student: Anna Françoise Philomène DIOUF
+Student ID: 1afa19fa-0ad7-40b4-b3ef-0cb3f95ef701
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: vérifier registre et date de naissance
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 106
+ID: ebd1330f-0988-41a8-80e3-4721e21211b6
+Student: Marie Thérèse Fatima COLY
+Student ID: dc6b3edb-4c98-4663-8b82-a58fa8b02cc6
+Current Class: 2ème Année Pré-Catéchuménat (CP)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: EB à fournir
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 107
+ID: e58266f3-96a9-4237-a119-8e76533aa014
+Student: Jeanne Michelle DIATTA
+Student ID: 8dc57c8c-5003-4ee0-aead-8d4cb4ad672c
+Current Class: 3ème Année Confirmation (5e)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 108
+ID: 6fd86ae1-ea85-40ad-bd8c-3521120efdb8
+Student: Gilbertine MENDY
+Student ID: 0c3b90e2-7f2e-4a3f-a936-78fbddf90c25
+Current Class: 1ère Année Confirmation (CM2)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 109
+ID: 93fdea46-87a3-4a22-837d-430218bb5453
+Student: Helene Catherine DIEDHIOU
+Student ID: a7ab604d-9cc1-45c9-b87d-50fe3b167c6d
+Current Class: 2ème Année Pré-Catéchuménat (CP)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 110
+ID: 4f54dd09-fa6b-46bf-8f40-9135583a3e65
+Student: Barthélémy Louis Babacar DIOUF
+Student ID: f35d87a0-f7dd-41c8-8393-3975f69c41c6
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 111
+ID: 536f665f-0a1d-4963-a03a-719b65a09a30
+Student: Eric Salomon Abel BADIANE
+Student ID: fb544102-9c76-4e6c-bbfd-d22926c7b82e
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Chez Viviane
+Final Result: None
+Final Grade: 19.00
+--------------------------------------------------------------------------------
+
+## Record 112
+ID: 8df37943-3f6b-43e2-8615-bb45e3fbf1b8
+Student: Christ Jérémie SAGBO
+Student ID: a253f648-b8c0-4e22-8937-b2e416b3b3b6
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Chez Viviane ;vérifier registre et date de naissance
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 113
+ID: 39bf439e-af20-4790-8c38-c2e7113ae799
+Student: Madeleine Constance Esther Grace FAYE
+Student ID: 060f1d27-c63a-4f1d-ac16-944779b0a70b
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Chez Viviane
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 114
+ID: 0024ea05-9f97-45ca-b468-99d1b5fb8d84
+Student: Annicette Kabounta MENDY
+Student ID: 345affc3-6410-46cc-92dd-0feb5dae9fba
+Current Class: 3ème Année Communion (CM1)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 115
+ID: 334e8374-cf9c-405c-a3c8-78de1a9e7395
+Student: Marie Philomène DIOUF
+Student ID: 31239271-f178-4d1d-bbc9-4f511ec07f51
+Current Class: 1ère Année Confirmation (CM2)
+Year: 2024-2025
+Action: Transfert
+Status: Inscription Validée
+Payment Method: Au Secrétariat
+Amount: 5000
+Paid: 0
+SMS: non
+Transfer Certificate: oui
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Exhonérée, voir extrait de baptême et lieu de baptême
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 116
+ID: eeea3836-d118-4f36-99bb-9fe2515d656b
+Student: Rose MENDY
+Student ID: 2ff474cb-8157-4154-b4cc-7d530503d92d
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Extrait de naissance à fournir
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 117
+ID: 3c45e9d7-1219-4471-bb7b-3307571afc7e
+Student: Ambroise Stéphane MENDY
+Student ID: 77ba7c3b-522f-48bc-b3c3-d96998e988dc
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 0
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 118
+ID: e237da48-aa22-4ddf-a962-a5e55d14a54e
+Student: Christian Yves FAYE
+Student ID: 6658bd09-74e2-40e9-8748-77f25999bde1
+Current Class: 2ème Année Pré-Catéchuménat (CP)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 119
+ID: 7565d4c0-4bff-402f-91e8-08cdbec08700
+Student: Marie Elisabeth Ndoumbé FAYE
+Student ID: d5cddc9f-bff3-45dd-9f78-c0a84aa6799f
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 120
+ID: 054a9b98-1dc0-465a-a15a-5615be7dc6a5
+Student: Virginie GOMIS
+Student ID: 7af85d69-9bf5-4d8b-9938-29832481fd1e
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 121
+ID: f0d1ca69-d975-4f13-ba6a-f71df0569bac
+Student: Cébéa MENDY
+Student ID: 0fc59fc7-139c-4437-aa18-6a34889cbded
+Current Class: 2ème Année Communion (CE2)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 122
+ID: d0e7c28a-c491-4740-9e34-b8d2a07974c1
+Student: Alexandre NDIAYE
+Student ID: fcd5d391-c2b8-4f08-b09b-d896e2e40d4d
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 123
+ID: da4ebbc6-a68d-4715-b477-8af365c9d26b
+Student: Angelica MENDES
+Student ID: 6103f8a3-759f-40d4-8b28-440d1955a03f
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 124
+ID: 0f7b9ff0-e0d1-4f08-a144-9fc7dc2474cc
+Student: Marcel Emmanuel Olivier SISSOKO
+Student ID: daade2a6-a491-499c-92be-e5e70de1df34
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Vérifier registre et date de naissance
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 125
+ID: b022a118-2722-4e5d-86b1-df17077f6f2a
+Student: Marthe Marie NDIONE
+Student ID: b022a118-2722-4e5d-86b1-df17077f6f2a
+Current Class: 2ème Année Communion (CE2)
+Year: 2023-2024
+Action: Nouvelle Inscription
+Status: 
+Payment Method: 
+Amount: 5000
+Paid: 0
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: 
+Final Result: ADMIS(E) A PASSER EN CLASSE SUPERIEURE
+Final Grade: 13.25
+--------------------------------------------------------------------------------
+
+## Record 126
+ID: 1b11b189-709d-4b9b-b144-360728aa4caf
+Student: Marthe Marie NDIONE
+Student ID: b022a118-2722-4e5d-86b1-df17077f6f2a
+Current Class: 3ème Année Communion (CM1)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 127
+ID: 4ea515de-74c9-4173-8ea7-f3e401eba80c
+Student: Frédéric Henry COLY
+Student ID: c0bf2f35-93c8-476a-a9f7-23cd95332f48
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Extrait de Bapteme a fournir
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 128
+ID: 1bb45bf1-7a92-455a-826a-7e1b372c380d
+Student: Aicha Abou BA
+Student ID: 73723646-8509-4fbc-acc3-4de1da3b9632
+Current Class: 1ère Année Catéchisme des Adultes
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 129
+ID: 5cc685ba-01a3-4f22-a808-da98d750415b
+Student: François FAYE
+Student ID: 8949d1aa-6716-4fdc-ab4d-03866cb20dba
+Current Class: 1ère Année Catéchisme des Adultes
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: Au Secrétariat
+Amount: 5000
+Paid: 0
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 130
+ID: a4654d2e-cec8-4537-a263-b145279bcb87
+Student: Gabriel Azarias DIOP
+Student ID: 0e03f6a1-1443-48b7-ab20-59985797aba7
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 131
+ID: a750ad30-11f6-4caf-9c3a-3c630ccc6555
+Student: Joséphine Mary M. Onyiye Chukwu ANENE
+Student ID: 2860756d-cd2c-438d-9657-96685f07f89d
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 132
+ID: 731656a5-87c2-4c34-be1f-aac26df1fb9a
+Student: Chidima Grace ANENE
+Student ID: 094afa64-4ff5-4c74-98c4-1cc2de28c169
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 133
+ID: 9131425e-e360-4195-b7b0-da9a5fe916f1
+Student: Maria Kalir MENDY
+Student ID: bf227c09-b980-4183-bd42-76f3a9da734c
+Current Class: 3ème Année Confirmation (5e)
+Year: 2024-2025
+Action: Transfert
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: oui
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Attestation de transfert à fournir
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 134
+ID: eb9fa05e-9c79-41cb-a443-335f3352374e
+Student: Gaspard MENDY
+Student ID: 2f4179c3-0940-4742-a24b-190ef49cd1db
+Current Class: 3ème Année Communion (CM1)
+Year: 2024-2025
+Action: Transfert
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: oui
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 135
+ID: eced6626-d3e0-487c-abfd-bf70eee4b587
+Student: Agathe Odile SARR
+Student ID: 585b81a1-7fd1-414d-a8c7-b5921e95e549
+Current Class: 2ème Année Confirmation (6e)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: Au Secrétariat
+Amount: 5000
+Paid: 0
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 136
+ID: 92e79b2f-0019-408e-8613-399dad3b99aa
+Student: Thérèse Bernadette GOMIS
+Student ID: 1fc2ef39-7083-42e1-81e7-bfa84b9b996e
+Current Class: 2ème Année Confirmation (6e)
+Year: 2024-2025
+Action: Transfert
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: oui
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Attestation de transfert à fournir
+Vérifier registre
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 137
+ID: e5458f98-3c67-43b3-a965-2ed82f5ffe2b
+Student: Bright Crépine SOMOU
+Student ID: e5458f98-3c67-43b3-a965-2ed82f5ffe2b
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: 
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: onix88@gmail.com
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 138
+ID: 1fc5b3c0-7105-4d68-a4fc-b725ef76fbe3
+Student: Alex Doudou MENDY
+Student ID: f95b2401-e53c-41e9-aa26-5b9119ef19b7
+Current Class: 2ème Année Catéchisme des Adultes
+Year: 2024-2025
+Action: Réinscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 139
+ID: d64b02ca-b3dd-4b16-b3db-17c3a67fefa9
+Student: Francois Junior MENDES
+Student ID: b76c1174-c346-4e40-8a1c-4ff59397b81e
+Current Class: 2ème Année Pré-Catéchuménat (CP)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Extrait de bapteme à fournir, vérifier registre SDB aussi
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 140
+ID: 599df71b-02fa-4da9-8f0c-ba42760dc05f
+Student: Sessi Iris Ariane AFFOKPON
+Student ID: cc27e86e-e480-4032-8ec3-dfd49ded4fa1
+Current Class: 2ème Année Communion (CE2)
+Year: 2024-2025
+Action: Transfert
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: oui
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Chez Viviane | Dossier à fournir
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 141
+ID: 82d90da5-9780-44de-b873-fffa693c82a6
+Student: Noah Claude Kouady BOUCAL
+Student ID: 82d90da5-9780-44de-b873-fffa693c82a6
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: 
+Payment Method: 
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 142
+ID: 37916506-db8d-4cf6-a4ec-d8861af938c6
+Student: Henri Emmanuel SANE
+Student ID: 14a2af71-e763-49e7-9da8-5d4cc22b0b64
+Current Class: 2ème Année Communion (CE2)
+Year: 2024-2025
+Action: Transfert
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: oui
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Dossier complet
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 143
+ID: e65a7386-2889-432a-a8f9-72909831f011
+Student: Emmanuel Michel SANE
+Student ID: f9fc6b8f-07ae-477a-bc66-d15d7e2ff608
+Current Class: 2ème Année Confirmation (6e)
+Year: 2024-2025
+Action: Transfert
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 0
+SMS: non
+Transfer Certificate: oui
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Dossier complet
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 144
+ID: b58bd656-44ab-4047-a33c-12cef58599af
+Student: Emmanuel Michel SANE
+Student ID: f9fc6b8f-07ae-477a-bc66-d15d7e2ff608
+Current Class: 2ème Année Confirmation (6e)
+Year: 2024-2025
+Action: Transfert
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 0
+SMS: non
+Transfer Certificate: oui
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Dossier complet
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 145
+ID: 65b4ee65-caa4-4fe9-8d71-a39ca06419e8
+Student: Trévor Francis NDIAYE
+Student ID: cbfb1df2-ac3e-4395-97b0-0b1d2f9df340
+Current Class: 2ème Année Communion (CE2)
+Year: 2024-2025
+Action: Transfert
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: oui
+Absences: None
+Book Given: 09/11/2024
+Operator: sdb@jss.ovh
+Comments: Dossier complet
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 146
+ID: f1fea82e-92e6-4ae1-b1a5-ce0d9f911514
+Student: Emile Pierre Alanga DIATTA
+Student ID: 40c8e15d-9ebf-4e7a-877d-7d0ad2d612d3
+Current Class: 1ère Année Confirmation (CM2)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: 09/11/2024
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 147
+ID: 24abdf44-9676-40ba-b838-5de723524715
+Student: Fabienne Anne Marthe DIATTA
+Student ID: 6cfd206a-b231-4542-af20-962a390f5c3b
+Current Class: 2ème Année Communion (CE2)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: 09/11/2024
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 148
+ID: 7a9f4838-322a-409b-8a4a-f241b09af91e
+Student: Maria MENDY
+Student ID: 80d1051e-bec2-4e8b-958a-74d3862f834d
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Dossier Complet
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 149
+ID: f2870d24-cab5-4b51-a236-6534923a89da
+Student: Joséphine Marie Léonce KANFOME
+Student ID: f3e4c32e-f9a8-4ee4-9b86-437475ab73a6
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 150
+ID: 9555e981-c5da-4ba1-8ac4-d79e6569fd7c
+Student: Carlos Nolan Felwin TAVARES
+Student ID: e0e61ac2-1351-47a5-8dbf-0b49875fd8a7
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Baptisé le 25/02/201 à Don Bosco
+Vérifier registre
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 151
+ID: 489b5412-82e3-4cb8-a48a-4c686fb6faaf
+Student: Nicole Iphigénie Yvette MBENGUE
+Student ID: ba9e2172-1af0-4f79-af2c-5368bf8b50a9
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 152
+ID: 92284c60-86dd-41aa-992e-9d80fe0b6c47
+Student: Rayan Pierre Eladio MBENGUE
+Student ID: bd8a742c-76b6-4f94-84f8-efc95698025e
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 153
+ID: ff787a9c-3952-4ae1-9d83-897734ec56e4
+Student: Jacques COLY
+Student ID: e72502dc-c228-4a31-8b83-d5915a640394
+Current Class: 3ème Année Communion (CM1)
+Year: 2024-2025
+Action: Transfert
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: oui
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 154
+ID: b2c69fa7-65d4-4bec-aa5e-d1b296f471c6
+Student: Cécile Jacqueline MANGA
+Student ID: 2501e054-f453-4847-9f91-d1ab2c94efd8
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: WAVE
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 155
+ID: 49819cc9-8299-4d57-9d7b-165396e94494
+Student: Parfait Sékou SEYDY
+Student ID: c988b434-e3da-41ab-9563-b6277cfcd843
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: WAVE
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 156
+ID: 72dbef42-58e3-45e2-a2ca-ca79dc1600ec
+Student: Elisabeth Anna Cécile NDIAYE
+Student ID: 93d87e72-3ebb-44a3-bae2-7e8d87e8146e
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 0
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Vérifier registre de 2019 et date de naissance
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 157
+ID: eea745e6-c67c-4e05-a9df-3b4f3d232dbb
+Student: Hélène Aïssatou SENE
+Student ID: 929ce68c-7c2d-4564-aec1-5281bda041a2
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 158
+ID: 63b26cad-d929-4c0a-a567-0c32460df474
+Student: Maurice Dibor NDIONE
+Student ID: 123232a6-0050-4ddf-b570-c6cebed1ccca
+Current Class: 2ème Année Pré-Catéchuménat (CP)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: ORANGE MONEY
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 159
+ID: b7d99858-144a-4137-b27d-68867b158de5
+Student: Pauline Thérèse Ngoné FAYE
+Student ID: 93b68c5f-d52d-46fc-8223-7e03b8ba6827
+Current Class: 2ème Année Pré-Catéchuménat (CP)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: ORANGE MONEY
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 160
+ID: 83fd2273-cbaa-4731-acb0-2c36c5d23115
+Student: Marie Rosanna Gilberia EHEMBA
+Student ID: ea0579b7-5251-4d84-b00f-25c1f28ebd81
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 161
+ID: 5f30944a-8eb0-4ad0-a18a-919e890fc769
+Student: Eurizanda Isabelle Aimée KASSOKA
+Student ID: 6b7a16c6-7224-49ed-a126-e6ef2880b47b
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 162
+ID: 440db58a-b8f6-4075-854f-c98a6e1243d0
+Student: Emilie PREIRA
+Student ID: b967ba60-11a4-4c43-9fb9-542b571e5f31
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 163
+ID: 580b9cf5-590f-4f6f-864f-dd1436567441
+Student: David Mor Ousmane MBAYE
+Student ID: e89e57a4-03d3-42e7-931e-cede82986ba8
+Current Class: 2ème Année Confirmation (6e)
+Year: 2024-2025
+Action: Transfert
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: oui
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Attestation de transfert et extrait de bapteme à fournir
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 164
+ID: a10e9405-2093-4d44-9491-2f0234488652
+Student: Merveille ADJEVI
+Student ID: 77436431-2dee-4d2d-ad37-a7332d0ae391
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: Au Secrétariat
+Amount: 5000
+Paid: 0
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Verifier registres
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 165
+ID: 9e4f4110-194a-4bf1-8bc0-8c5cf8346398
+Student: Michelle Garcia ADJEVI
+Student ID: b1a6b51e-7630-470c-94da-da46568c6241
+Current Class: 2ème Année Pré-Catéchuménat (CP)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: Au Secrétariat
+Amount: 5000
+Paid: 0
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Vérivier registre
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 166
+ID: 3794a4d4-a2c7-401f-8e5a-2c046c79b6e4
+Student: Fabrice AJAVON
+Student ID: 613bd934-cae6-405f-aa39-54b84655720c
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: Au Secrétariat
+Amount: 5000
+Paid: 0
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: extrait de bapteme a fournir
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 167
+ID: 32f96a2f-a917-4946-955a-63f10c57f34d
+Student: Dione Dominique SILVA
+Student ID: 4dbb54d1-6d9a-4345-9a55-1162df2e51e7
+Current Class: 3ème Année Confirmation (5e)
+Year: 2024-2025
+Action: Transfert
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: oui
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 168
+ID: dd6229e9-7b84-4aa4-aece-bedd040be614
+Student: Yann Maêl FASSINOU
+Student ID: 3f3ff4bd-2d31-494c-a7ac-b515c772c4d9
+Current Class: 2ème Année Communion (CE2)
+Year: 2024-2025
+Action: Transfert
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: oui
+Absences: None
+Book Given: 23/11
+Operator: sdb@jss.ovh
+Comments: Doit fournir attestation Christ Roi et Extrait de Bapteme, contrainte du samedi matin
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 169
+ID: 1721699c-dfc8-4258-b2f3-a035647bb417
+Student: Jacqueline BASSENE
+Student ID: 4baf7baf-f825-4cd6-bcf9-e8a561973eef
+Current Class: 2ème Année Pré-Catéchuménat (CP)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Extrait de bapteme a fournir
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 170
+ID: 78cfb8c4-f14a-4748-a65d-2985db411a30
+Student: Adam Walter GNIMADI
+Student ID: 1a79772b-6803-45d7-9b82-90ecfca55060
+Current Class: 1ère Année Catéchisme des Adultes
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 171
+ID: cd92f778-6b05-4332-8b96-2ab44550580d
+Student: Eléonore Béatrice FAYE
+Student ID: 032b6af7-3446-4aaa-bd48-b778cfaed74a
+Current Class: 1ère Année Persévérance
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: ORANGE MONEY
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 172
+ID: 65ff12c0-747a-4578-914f-8ce38f35a764
+Student: Ange Dominique NASSALAN
+Student ID: 45bf51fa-27dd-4113-92c4-d98159eba946
+Current Class: 3ème Année Confirmation (5e)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: 23/11
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 173
+ID: 7c086f1e-7f3c-404d-8e79-4e9a320a2393
+Student: Komlan Hermann ABEVI
+Student ID: 6f506927-3320-4a23-8f5d-c3b86f484cd2
+Current Class: 1ère Année Catéchisme des Adultes
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 0
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Extrait de naissance fourni
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 174
+ID: 448a4494-5db9-4e5c-8934-234d7c13d6d4
+Student: Komlan Emmanuel ABEVI
+Student ID: 649e58f9-5323-460f-8925-c1ffd763302d
+Current Class: 1ère Année Catéchisme des Adultes
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 0
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Extrait de naissance fourni
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 175
+ID: 7da268aa-f7d7-4d8d-be96-2829244e33b3
+Student: Fifamet Océane Jerlyne NKENFON
+Student ID: 34717db6-9350-4c7f-ad79-7e43a3317e96
+Current Class: 1ère Année Confirmation (CM2)
+Year: 2024-2025
+Action: Transfert
+Status: Inscription Validée
+Payment Method: WAVE
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: oui
+Absences: None
+Book Given: 23/11
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 176
+ID: e301cc93-9844-48fc-ab63-3f7358f60978
+Student: Yann O'CONNOR
+Student ID: 065fbcdd-ebac-4cb8-b812-0c92367cde9a
+Current Class: 1ère Année Catéchisme des Adultes
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: Au Secrétariat
+Amount: 5000
+Paid: 0
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: extrait de bapteme attendu
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 177
+ID: a317f806-340c-43e3-a112-619f74f20300
+Student: Komi Victor KPADENOU
+Student ID: 048f8c70-a2e7-40d2-8734-278703bb4af5
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: Au Secrétariat
+Amount: 5000
+Paid: 0
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: 30/11
+Operator: sdb@jss.ovh
+Comments: Extrait de naissance fourni
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 178
+ID: 72bc1593-06ca-4b31-b9e1-0147605d9166
+Student: Jacquy Cyprien VAZ
+Student ID: 41384a16-9872-4cb9-8371-2670b57da8ee
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 179
+ID: 23d4e87e-0794-496f-9b49-8071facac54d
+Student: Emmanuel Laurent Pierre DIOUF
+Student ID: 8cfca827-7ea8-4c1a-9e2c-5dcc7207a555
+Current Class: 1ère Année Confirmation (CM2)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: ORANGE MONEY
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 180
+ID: 5ce100e2-aaef-43ee-8c0d-8ff51ed8151e
+Student: Sandra Marie Iphigeny Agnès DIOUF
+Student ID: 628124b7-6262-4690-bc20-a4b7b51439e2
+Current Class: 2ème Année Persévérance
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: ORANGE MONEY
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 181
+ID: 711ff059-76bc-4cb9-9e1d-bf94c9498750
+Student: Olga Marie DIOUF
+Student ID: 65980961-601f-4e84-a76c-41ed5936ed2e
+Current Class: 3ème Année Communion (CM1)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 182
+ID: 06549fe6-ceaf-4659-877b-faed07043981
+Student: Philomène BASSENE
+Student ID: 87414133-a55f-4603-b329-3085e34e0856
+Current Class: 2ème Année Confirmation (6e)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: 30/11
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 183
+ID: dce3ccde-24af-447c-9afc-3bd594af835f
+Student: Victoria Sabine OBOSU
+Student ID: a355b42e-75a8-46bd-bc58-8f10d5910e1e
+Current Class: 3ème Année Communion (CM1)
+Year: 2024-2025
+Action: Transfert
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 0
+SMS: non
+Transfer Certificate: oui
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Doit amener l'extrait de baptême
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 184
+ID: 93939b87-c271-4dc8-b770-d95023fe8c95
+Student: Charlene Agnes MENDY
+Student ID: af3bf4bf-73f2-4806-83be-a5dee65fb88d
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: Au Secrétariat
+Amount: 5000
+Paid: 0
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 185
+ID: e21bceb5-bf8f-4ab3-8716-84f1cc87c158
+Student: Félix PREIRA
+Student ID: dba72d14-566d-45f1-8b50-3eff53a0d432
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 186
+ID: 
+Student:  
+Student ID: 
+Current Class: 
+Year: 
+Action: 
+Status: 
+Payment Method: 
+Amount: None
+Paid: None
+SMS: 
+Transfer Certificate: 
+Absences: None
+Book Given: 
+Operator: 
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 187
+ID: cedc863b-9f43-4da2-b8c0-74f2025b3520
+Student: Claudine SYLVA
+Student ID: ec957695-c658-4bc8-b17d-939d5bed901e
+Current Class: 1ère Année Catéchisme des Adultes
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 188
+ID: 4b75f0e0-cf3f-4c70-a965-2ff4b773f1e6
+Student: Paul PREIRA
+Student ID: b869cb48-2059-49c3-bb24-93700f8b2a68
+Current Class: 2ème Année Pré-Catéchuménat (CP)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: 2.00
+--------------------------------------------------------------------------------
+
+## Record 189
+ID: a9a49460-3e3d-47b6-bdb8-c435c7f11257
+Student: Clément Raymond SARR
+Student ID: 434348ca-450f-48c9-a440-a3779cdc83d6
+Current Class: 2ème Année Communion (CE2)
+Year: 2024-2025
+Action: Transfert
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: oui
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 190
+ID: b9d687ac-ec17-4c1b-98f8-06d36c3e0976
+Student: Ngagne Demba THIARE
+Student ID: 8a6d856a-a599-4b52-a49a-450faf913f41
+Current Class: 1ère Année Catéchisme des Adultes
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 191
+ID: dfcce860-fd7e-4e9f-986d-3f730f9d8a66
+Student: Innoncence Vincent MENDY
+Student ID: adfb312a-549f-4675-9a00-b9d10b2da0e9
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 192
+ID: 
+Student:  
+Student ID: 
+Current Class: 
+Year: 
+Action: 
+Status: 
+Payment Method: 
+Amount: None
+Paid: None
+SMS: 
+Transfer Certificate: 
+Absences: None
+Book Given: 
+Operator: 
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 193
+ID: 
+Student:  
+Student ID: 
+Current Class: 
+Year: 
+Action: 
+Status: 
+Payment Method: 
+Amount: None
+Paid: None
+SMS: 
+Transfer Certificate: 
+Absences: None
+Book Given: 
+Operator: 
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 194
+ID: 39bf1b55-24aa-4535-8559-d4543237bd05
+Student: Elisabeth DIONE
+Student ID: 3f91876f-b454-41c2-8598-143e0abab79f
+Current Class: 2ème Année Catéchisme des Adultes
+Year: 2024-2025
+Action: Transfert
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: oui
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 195
+ID: 92a4980e-073a-4b84-b3a1-759af3e50084
+Student: Prospère DIEDHIOU
+Student ID: bf585ff2-6776-4d80-a677-41ea06bdf3ca
+Current Class: 3ème Année Catéchisme des Adultes
+Year: 2024-2025
+Action: Transfert
+Status: Inscription Validée
+Payment Method: WAVE
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: oui
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Extrait de bapteme a fournir, date de naissance à vérifier
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 196
+ID: f0cd783f-a064-4fe8-8952-212475952f83
+Student: Marie Hélène Anaîs Ayaba BADIO
+Student ID: 1b711290-5924-48a8-93e9-22dc91ecee15
+Current Class: 1ère Année Communion (CE1)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 197
+ID: 29ef0bc4-ffe5-4c09-b7c7-270876d151d0
+Student: Inaya Irma Sename BADIO
+Student ID: 7e5bccb7-2dcd-439f-9bec-185676c994bf
+Current Class: 2ème Année Pré-Catéchuménat (CP)
+Year: 2024-2025
+Action: Transfert
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: oui
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: 4.00
+--------------------------------------------------------------------------------
+
+## Record 198
+ID: 8f84bd43-64e4-42cb-a4bf-8ce8e2441669
+Student: Nicolas Enzo ALVES DA SILVA
+Student ID: 2d5dcef7-d804-4ba1-9345-47cb16a633dc
+Current Class: 3ème Année Communion (CM1)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: ORANGE MONEY
+Amount: 5000
+Paid: 5000
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 199
+ID: 7752557e-5691-4124-a6e3-9a14c868fc09
+Student: Patrice Georges Alibo DIATTA
+Student ID: 340363c1-e33c-4d90-82b3-229e0e68bc5e
+Current Class: 2ème Année Communion (CE2)
+Year: 2024-2025
+Action: Transfert
+Status: Inscription Validée
+Payment Method: ORANGE MONEY
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: oui
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 200
+ID: ec69bd2b-5694-42d6-8ad0-b02854da6bae
+Student: Béatrice Salane FAYE
+Student ID: 3fe4e976-ec67-4fcb-856f-5a8a1662fc15
+Current Class: 2ème Année Confirmation (6e)
+Year: 2024-2025
+Action: Transfert
+Status: Inscription Validée
+Payment Method: Au Secrétariat
+Amount: 5000
+Paid: 0
+SMS: non
+Transfer Certificate: oui
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Extrait de baptême à fournir
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 201
+ID: 31023d95-d9cd-4a7a-b71b-28a624faf348
+Student: Gabriel Hubert DIEME
+Student ID: 8f7fc8f8-8707-4018-8e7d-0f6b359f0b6e
+Current Class: 1ère Année Pré-Catéchuménat (CI)
+Year: 2024-2025
+Action: Nouvelle Inscription
+Status: Inscription Validée
+Payment Method: CASH
+Amount: 5000
+Paid: 5000
+SMS: non
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: Baptisé à Don Bosco en décembre éà&ç
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 202
+ID: 
+Student:  
+Student ID: 
+Current Class: 
+Year: 
+Action: 
+Status: 
+Payment Method: 
+Amount: None
+Paid: None
+SMS: 
+Transfer Certificate: 
+Absences: None
+Book Given: 
+Operator: 
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 203
+ID: 14d6c6c8-6711-404f-894c-b3d4bcc4b280
+Student: Jocelyne W NADIAKANE
+Student ID: 2513e27b-e6fa-45fc-9d43-35f7a79ccc4d
+Current Class: 1ère Année Confirmation (CM2)
+Year: 2024-2025
+Action: Réinscription
+Status: None
+Payment Method: Au Secrétariat
+Amount: 5000
+Paid: 0
+SMS: oui
+Transfer Certificate: non
+Absences: None
+Book Given: None
+Operator: sdb@jss.ovh
+Comments: 
+Final Result: 
+Final Grade: None
+--------------------------------------------------------------------------------
+
+## Record 204
+ID: INS-D1E7F97E
+Student: Marie Anne KALING
+Student ID: CAT-CFB31A95
+Current Class: 8
+Year: 2024-2025
+Action: None
+Status: None
+Payment Method: None
+Amount: 5000
+Paid: 0
+SMS: None
+Transfer Certificate: None
+Absences: None
+Book Given: None
+Operator: None
+Comments: 
+Final Result: None
+Final Grade: None
+--------------------------------------------------------------------------------
+
