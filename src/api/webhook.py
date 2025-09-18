@@ -195,12 +195,30 @@ async def verify_webhook(
     """
     expected_token = settings.webhook_verify_token
 
+    # Debug logging
+    logger.info(
+        "webhook_verification_attempt",
+        provided_token=hub_verify_token,
+        expected_token=expected_token,
+        hub_challenge=hub_challenge,
+        webhook_url=settings.webhook_url
+    )
+
     if hub_verify_token == expected_token and hub_challenge:
         logger.info("webhook_verification_successful", webhook_url=settings.webhook_url)
         return PlainTextResponse(content=hub_challenge)
     else:
         logger.warning("webhook_verification_failed", provided_token=hub_verify_token, expected_token=expected_token)
-        raise HTTPException(status_code=403, detail="Verification failed")
+        # Return more detailed error for debugging
+        return JSONResponse(
+            status_code=403,
+            content={
+                "error": "Verification failed",
+                "provided_token": hub_verify_token,
+                "expected_token": expected_token,
+                "challenge_received": hub_challenge
+            }
+        )
 
 
 @webhook_router.get("/webhook/config")
