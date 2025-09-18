@@ -68,13 +68,41 @@ async def handle_message(payload: Dict[str, Any], settings: Settings) -> Dict[st
         message_type=list(message_data.keys())
     )
 
-    # TODO: Queue message for processing by orchestration service
-    # For now, just acknowledge receipt
+    # Extract message content
+    message_content = ""
+    if "text" in message_data:
+        message_content = message_data["text"].get("body", "")
+    elif "audio" in message_data:
+        message_content = "[Audio message]"
+    elif "image" in message_data:
+        message_content = "[Image message]"
+    elif "video" in message_data:
+        message_content = "[Video message]"
+    elif "document" in message_data:
+        message_content = "[Document message]"
+    elif "location" in message_data:
+        message_content = "[Location message]"
+    elif "contacts" in message_data:
+        message_content = "[Contact message]"
+    else:
+        message_content = "[Unsupported message type]"
+
+    # For now, just log and acknowledge - we'll implement full processing later
+    logger.info(
+        "message_received",
+        phone_number=from_number,
+        message_id=message_id,
+        message_content=message_content,
+        message_type=message_data.get("type", "text")
+    )
+
     return {
-        "status": "queued",
+        "status": "received",
         "message_id": message_id,
         "phone_number": from_number,
-        "timestamp": payload.get("timestamp")
+        "timestamp": payload.get("timestamp"),
+        "message_content": message_content,
+        "note": "Message received but processing not yet implemented"
     }
 
 

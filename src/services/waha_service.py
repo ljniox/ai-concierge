@@ -18,13 +18,10 @@ class WAHAService:
 
     def __init__(self):
         self.settings = get_settings()
-        self.base_url = self.settings.waha_api_url.rstrip('/')
-        self.api_key = self.settings.waha_api_key
+        self.base_url = self.settings.waha_base_url.rstrip('/')
+        self.api_key = self.settings.waha_api_token
         self.session_id = self.settings.waha_session_id
-        self.http_client = httpx.AsyncClient(
-            timeout=30.0,
-            headers={'Content-Type': 'application/json'}
-        )
+        self.http_client = httpx.AsyncClient(timeout=30.0)
 
     def _build_url(self, endpoint: str) -> str:
         """Build full URL for WAHA API endpoint"""

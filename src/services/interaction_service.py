@@ -5,10 +5,9 @@ Interaction service for managing conversation interactions and orchestrating con
 from typing import Optional, List, Dict, Any
 from datetime import datetime, timedelta
 from supabase import Client
-from src.models.interaction import Interaction, InteractionCreate, InteractionUpdate, InteractionWithDetails, InteractionAnalytics
+from src.models.interaction import Interaction, InteractionCreate, InteractionUpdate, InteractionWithDetails, InteractionAnalytics, MessageType, InteractionType
 from src.models.session import Session
 from src.models.user import User
-from src.models.message import MessageType, InteractionType, Sentiment, Confidence
 from src.services.user_service import UserService
 from src.services.session_service import SessionService
 from src.services.redis_service import RedisService
