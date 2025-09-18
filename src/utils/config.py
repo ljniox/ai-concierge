@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     """Application settings"""
 
     # Application
-    secret_key: str = Field(..., env="SECRET_KEY")
+    secret_key: str = Field(default="your-secret-key-here-change-in-production", env="SECRET_KEY")
     environment: str = Field(default="development", env="ENVIRONMENT")
     tz: str = Field(default="Africa/Dakar", env="TZ")
 

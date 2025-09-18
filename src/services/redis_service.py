@@ -19,9 +19,9 @@ class RedisService:
     def __init__(self):
         self.settings = get_settings()
         self.redis: Optional[redis.Redis] = None
-        self._initialize_redis()
+        # Don't initialize Redis connection during __init__ to avoid startup issues
 
-    def _initialize_redis(self):
+    async def initialize(self):
         """Initialize Redis connection"""
         try:
             self.redis = redis.Redis(
@@ -42,7 +42,7 @@ class RedisService:
             )
         except Exception as e:
             logger.error("redis_initialization_failed", error=str(e))
-            raise
+            # Don't raise - allow application to start without Redis
 
     async def ping(self) -> bool:
         """Check Redis connection"""

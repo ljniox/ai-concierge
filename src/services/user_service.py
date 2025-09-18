@@ -30,7 +30,7 @@ class UserService:
             logger.info("supabase_client_initialized")
         except Exception as e:
             logger.error("supabase_initialization_failed", error=str(e))
-            raise
+            # Don't raise - allow application to start without Supabase
 
     async def create_user(self, user_data: UserCreate) -> User:
         """

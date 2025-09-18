@@ -44,7 +44,7 @@ class InteractionService:
             logger.info("supabase_client_initialized")
         except Exception as e:
             logger.error("supabase_initialization_failed", error=str(e))
-            raise
+            # Don't raise - allow application to start without Supabase
 
     async def create_interaction(self, interaction_data: InteractionCreate) -> Interaction:
         """
