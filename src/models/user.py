@@ -48,8 +48,30 @@ class User(UserBase):
     def validate_phone_number(cls, v):
         """Validate phone number format"""
         try:
-            # Parse phone number
-            parsed_number = phonenumbers.parse(v, None)
+            # Handle WhatsApp special numbers (groups, broadcasts, etc.)
+            if v.endswith('@g.us') or v.endswith('@s.whatsapp.net') or v == 'status@broadcast':
+                return v  # Accept WhatsApp special numbers as-is
+
+            # Handle WAHA format (numbers without + prefix)
+            if v.isdigit() and len(v) >= 8:  # Basic phone number without +
+                # Try to parse with common country codes
+                if v.startswith('221'):  # Senegal
+                    parsed_number = phonenumbers.parse(f"+{v}", None)
+                elif v.startswith('1'):  # US/Canada
+                    parsed_number = phonenumbers.parse(f"+{v}", None)
+                elif v.startswith('44'):  # UK
+                    parsed_number = phonenumbers.parse(f"+{v}", None)
+                elif v.startswith('33'):  # France
+                    parsed_number = phonenumbers.parse(f"+{v}", None)
+                else:
+                    # Try parsing as-is first, then with + if that fails
+                    try:
+                        parsed_number = phonenumbers.parse(v, None)
+                    except phonenumbers.NumberParseException:
+                        parsed_number = phonenumbers.parse(f"+{v}", None)
+            else:
+                # Parse phone number with + prefix
+                parsed_number = phonenumbers.parse(v, None)
 
             # Check if it's a valid number
             if not phonenumbers.is_valid_number(parsed_number):
@@ -113,7 +135,31 @@ def validate_phone_number_format(phone_number: str) -> bool:
         True if valid, False otherwise
     """
     try:
-        parsed_number = phonenumbers.parse(phone_number, None)
+        # Handle WhatsApp special numbers (groups, broadcasts, etc.)
+        if phone_number.endswith('@g.us') or phone_number.endswith('@s.whatsapp.net') or phone_number == 'status@broadcast':
+            return True  # Accept WhatsApp special numbers
+
+        # Handle WAHA format (numbers without + prefix)
+        if phone_number.isdigit() and len(phone_number) >= 8:
+            # Try to parse with common country codes
+            if phone_number.startswith('221'):  # Senegal
+                parsed_number = phonenumbers.parse(f"+{phone_number}", None)
+            elif phone_number.startswith('1'):  # US/Canada
+                parsed_number = phonenumbers.parse(f"+{phone_number}", None)
+            elif phone_number.startswith('44'):  # UK
+                parsed_number = phonenumbers.parse(f"+{phone_number}", None)
+            elif phone_number.startswith('33'):  # France
+                parsed_number = phonenumbers.parse(f"+{phone_number}", None)
+            else:
+                # Try parsing as-is first, then with + if that fails
+                try:
+                    parsed_number = phonenumbers.parse(phone_number, None)
+                except phonenumbers.NumberParseException:
+                    parsed_number = phonenumbers.parse(f"+{phone_number}", None)
+        else:
+            # Parse phone number with + prefix
+            parsed_number = phonenumbers.parse(phone_number, None)
+
         return phonenumbers.is_valid_number(parsed_number)
     except Exception:
         return False
@@ -130,7 +176,31 @@ def normalize_phone_number(phone_number: str) -> str:
         Normalized phone number in E.164 format
     """
     try:
-        parsed_number = phonenumbers.parse(phone_number, None)
+        # Handle WhatsApp special numbers (groups, broadcasts, etc.)
+        if phone_number.endswith('@g.us') or phone_number.endswith('@s.whatsapp.net') or phone_number == 'status@broadcast':
+            return phone_number  # Return WhatsApp special numbers as-is
+
+        # Handle WAHA format (numbers without + prefix)
+        if phone_number.isdigit() and len(phone_number) >= 8:
+            # Try to parse with common country codes
+            if phone_number.startswith('221'):  # Senegal
+                parsed_number = phonenumbers.parse(f"+{phone_number}", None)
+            elif phone_number.startswith('1'):  # US/Canada
+                parsed_number = phonenumbers.parse(f"+{phone_number}", None)
+            elif phone_number.startswith('44'):  # UK
+                parsed_number = phonenumbers.parse(f"+{phone_number}", None)
+            elif phone_number.startswith('33'):  # France
+                parsed_number = phonenumbers.parse(f"+{phone_number}", None)
+            else:
+                # Try parsing as-is first, then with + if that fails
+                try:
+                    parsed_number = phonenumbers.parse(phone_number, None)
+                except phonenumbers.NumberParseException:
+                    parsed_number = phonenumbers.parse(f"+{phone_number}", None)
+        else:
+            # Parse phone number with + prefix
+            parsed_number = phonenumbers.parse(phone_number, None)
+
         return phonenumbers.format_number(parsed_number, phonenumbers.PhoneNumberFormat.E164)
     except Exception:
         raise ValueError(f"Cannot normalize phone number: {phone_number}")

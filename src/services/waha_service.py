@@ -7,7 +7,8 @@ import httpx
 from typing import Optional, Dict, Any, List, Union
 from datetime import datetime
 from src.utils.config import get_settings
-from src.models.message import MessageCreate, MessageType, MessageStatus
+from src.models.message import MessageType, MessageStatus
+from src.models.interaction import InteractionCreate
 import structlog
 
 logger = structlog.get_logger()

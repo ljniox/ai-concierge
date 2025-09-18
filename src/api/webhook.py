@@ -112,6 +112,11 @@ async def handle_waha_message(message_data: Dict[str, Any], settings: Settings, 
         elif "@s.whatsapp.net" in from_number:
             from_number = from_number.split("@")[0]
 
+    # Handle WAHA format (numbers without + prefix)
+    if from_number and from_number.isdigit() and len(from_number) >= 8:
+        # Add + prefix for WAHA format numbers
+        from_number = f"+{from_number}"
+
     # Validate phone number
     if not from_number or not isinstance(from_number, str):
         raise HTTPException(status_code=400, detail="Invalid phone number")

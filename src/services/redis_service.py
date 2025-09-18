@@ -298,6 +298,16 @@ class RedisService:
             current_time = datetime.now().timestamp()
             window_start = current_time - window
 
+            # Check if Redis is available
+            if self.redis is None:
+                logger.warning("redis_not_available", key=key)
+                return {
+                    "allowed": True,
+                    "remaining": limit,
+                    "reset_time": current_time + window,
+                    "note": "Redis not available - rate limiting disabled"
+                }
+
             # Remove old entries
             await self.redis.zremrangebyscore(key, 0, window_start)
 
