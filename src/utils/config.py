@@ -28,8 +28,9 @@ class Settings(BaseSettings):
     waha_verify_token: str = Field(default="test-token", env="WAHA_VERIFY_TOKEN")
 
     # Claude AI
-    anthropic_api_key: str = Field(default="test-key", env="ANTHROPIC_API_KEY")
-    claude_model: str = Field(default="claude-3-sonnet-20240229", env="CLAUDE_MODEL")
+    anthropic_api_key: str = Field(default="test-key", env="ANTHROPIC_AUTH_TOKEN")
+    anthropic_base_url: str = Field(default="https://api.anthropic.com", env="ANTHROPIC_BASE_URL")
+    claude_model: str = Field(default="glm-4.5", env="ANTHROPIC_MODEL")
     claude_max_tokens: int = Field(default=1000, env="CLAUDE_MAX_TOKENS")
     claude_temperature: float = Field(default=0.7, env="CLAUDE_TEMPERATURE")
 

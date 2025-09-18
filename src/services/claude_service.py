@@ -26,8 +26,8 @@ class ClaudeService:
 
     def __init__(self):
         self.settings = get_settings()
-        self.api_key = self.settings.claude_api_key
-        self.base_url = "https://api.anthropic.com"
+        self.api_key = self.settings.anthropic_api_key
+        self.base_url = self.settings.anthropic_base_url
         self.model = self.settings.claude_model or "claude-3-sonnet-20240229"
         self.max_tokens = self.settings.claude_max_tokens or 1000
         self.temperature = self.settings.claude_temperature or 0.7
