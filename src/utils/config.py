@@ -24,8 +24,15 @@ class Settings(BaseSettings):
     # WAHA
     waha_base_url: str = Field(default="http://localhost:3000", env="WAHA_BASE_URL")
     waha_api_token: str = Field(default="default-token", env="WAHA_API_TOKEN")
+    waha_api_key: str = Field(default="default-token", env="WAHA_API_KEY")
     waha_session_id: str = Field(default="default", env="WAHA_SESSION_ID")
-    waha_verify_token: str = Field(default="test-token", env="WAHA_VERIFY_TOKEN")
+    waha_verify_token: str = Field(default="test-token", env="WAHA_VERIFY_TOKEN", alias="WEBHOOK_VERIFY_TOKEN")
+
+    # Webhook Configuration
+    webhook_url: str = Field(default="http://localhost:8000/api/v1/webhook", env="WEBHOOK_URL")
+    webhook_verify_token: str = Field(default="test-token", env="WEBHOOK_VERIFY_TOKEN")
+    session_name: str = Field(default="default", env="SESSION_NAME")
+    port: int = Field(default=8000, env="PORT")
 
     # Claude AI
     anthropic_api_key: str = Field(default="test-key", env="ANTHROPIC_AUTH_TOKEN")

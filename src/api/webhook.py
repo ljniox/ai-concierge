@@ -193,11 +193,25 @@ async def verify_webhook(
     """
     Handle WAHA webhook verification challenge
     """
-    expected_token = getattr(settings, 'waha_verify_token', 'test-token')
+    expected_token = settings.webhook_verify_token
 
     if hub_verify_token == expected_token and hub_challenge:
-        logger.info("webhook_verification_successful")
+        logger.info("webhook_verification_successful", webhook_url=settings.webhook_url)
         return PlainTextResponse(content=hub_challenge)
     else:
-        logger.warning("webhook_verification_failed", token=hub_verify_token)
+        logger.warning("webhook_verification_failed", provided_token=hub_verify_token, expected_token=expected_token)
         raise HTTPException(status_code=403, detail="Verification failed")
+
+
+@webhook_router.get("/webhook/config")
+async def get_webhook_config(settings: Settings = Depends(get_settings)):
+    """
+    Get current webhook configuration for setup purposes
+    """
+    return {
+        "webhook_url": settings.webhook_url,
+        "verify_token": settings.webhook_verify_token,
+        "session_name": settings.session_name,
+        "waha_session_id": settings.waha_session_id,
+        "instructions": "Use this URL and verify token to configure WAHA webhook"
+    }
