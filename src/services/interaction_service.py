@@ -36,6 +36,7 @@ class InteractionService:
         """Initialize Supabase client"""
         try:
             from supabase import create_client
+            # Initialize Supabase with minimal parameters to avoid proxy issues
             self.supabase = create_client(
                 self.settings.supabase_url,
                 self.settings.supabase_service_role_key
@@ -44,6 +45,7 @@ class InteractionService:
         except Exception as e:
             logger.error("supabase_initialization_failed", error=str(e))
             # Don't raise - allow application to start without Supabase
+            self.supabase = None
 
     async def create_interaction(self, interaction_data: InteractionCreate) -> Interaction:
         """

@@ -23,6 +23,7 @@ class UserService:
     def _initialize_supabase(self):
         """Initialize Supabase client"""
         try:
+            # Initialize Supabase with minimal parameters to avoid proxy issues
             self.supabase = create_client(
                 self.settings.supabase_url,
                 self.settings.supabase_service_role_key
@@ -31,6 +32,7 @@ class UserService:
         except Exception as e:
             logger.error("supabase_initialization_failed", error=str(e))
             # Don't raise - allow application to start without Supabase
+            self.supabase = None
 
     async def create_user(self, user_data: UserCreate) -> User:
         """

@@ -27,6 +27,7 @@ class SessionService:
         """Initialize Supabase client"""
         try:
             from supabase import create_client
+            # Initialize Supabase with minimal parameters to avoid proxy issues
             self.supabase = create_client(
                 self.settings.supabase_url,
                 self.settings.supabase_service_role_key
@@ -34,7 +35,8 @@ class SessionService:
             logger.info("supabase_client_initialized")
         except Exception as e:
             logger.error("supabase_initialization_failed", error=str(e))
-            raise
+            # Don't raise - allow application to start without Supabase
+            self.supabase = None
 
     async def create_session(self, session_data: SessionCreate) -> Session:
         """
