@@ -192,7 +192,12 @@ async def handle_waha_message(message_data: Dict[str, Any], settings: Settings, 
             }
         }
 
-        result = await interaction_service.process_interaction(from_number, message_payload, session_name)
+        result = await interaction_service.process_incoming_message(
+            phone_number=from_number,
+            message=message_content,
+            message_type=message_type,
+            message_id=message_id
+        )
         logger.info("interaction_processed", result=result)
 
         return {
