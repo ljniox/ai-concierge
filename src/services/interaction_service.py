@@ -32,6 +32,10 @@ class InteractionService:
         self.claude_service = ClaudeService()
         self._initialize_supabase()
 
+    async def initialize_redis(self):
+        """Initialize Redis connection"""
+        await self.redis_service.initialize()
+
     def _initialize_supabase(self):
         """Initialize Supabase client"""
         try:

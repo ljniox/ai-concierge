@@ -3,6 +3,7 @@ WhatsApp AI Concierge Service
 Main FastAPI application entry point
 """
 
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -14,6 +15,7 @@ from src.api.webhook import webhook_router
 from src.api.orchestrate import orchestrate_router
 from src.api.sessions import sessions_router
 from src.api.admin import admin_router
+from src.services.interaction_service import InteractionService
 
 # Configure structured logging
 structlog.configure(
@@ -35,12 +37,26 @@ structlog.configure(
 
 logger = structlog.get_logger()
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Application lifespan management"""
+    # Initialize services on startup
+    interaction_service = InteractionService()
+    await interaction_service.initialize_redis()
+    logger.info("services_initialized")
+    
+    yield
+    
+    # Cleanup on shutdown
+    logger.info("application_shutdown")
+
 app = FastAPI(
     title="WhatsApp AI Concierge API",
     description="Multi-service WhatsApp concierge with AI orchestration",
     version="1.0.0",
     docs_url="/docs",
-    redoc_url="/redoc"
+    redoc_url="/redoc",
+    lifespan=lifespan
 )
 
 # Configure CORS

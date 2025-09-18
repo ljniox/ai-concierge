@@ -78,29 +78,33 @@ class Session(SessionBase):
         """Check if session is expired"""
         if self.expires_at is None:
             return False
-        return datetime.now() > self.expires_at
+        now = datetime.now(self.expires_at.tzinfo) if self.expires_at.tzinfo else datetime.now()
+        return now > self.expires_at
 
     @property
     def is_active_session(self) -> bool:
         """Check if session is currently active"""
+        # Use timezone-aware datetime if session datetime has timezone
+        now = datetime.now(self.last_activity_at.tzinfo) if self.last_activity_at.tzinfo else datetime.now()
         return (
             self.status == SessionStatus.ACTIVE and
             not self.is_expired and
-            self.last_activity_at > datetime.now() - timedelta(minutes=30)
+            self.last_activity_at > now - timedelta(minutes=30)
         )
 
     @property
     def duration_minutes(self) -> float:
         """Get session duration in minutes"""
-        now = datetime.now()
+        now = datetime.now(self.created_at.tzinfo) if self.created_at.tzinfo else datetime.now()
         end_time = min(now, self.expires_at) if self.expires_at else now
         duration = end_time - self.created_at
         return duration.total_seconds() / 60
 
     def update_activity(self):
         """Update last activity timestamp"""
-        self.last_activity_at = datetime.now()
-        self.updated_at = datetime.now()
+        now = datetime.now(self.last_activity_at.tzinfo) if hasattr(self, 'last_activity_at') and self.last_activity_at.tzinfo else datetime.now()
+        self.last_activity_at = now
+        self.updated_at = now
 
     def add_message(self):
         """Increment message count and update activity"""
