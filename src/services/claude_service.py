@@ -5,7 +5,7 @@ Claude AI orchestration service for conversation management and AI processing
 import json
 import httpx
 from typing import Optional, Dict, Any, List, Union
-from datetime import datetime
+from datetime import datetime, date
 from enum import Enum
 from src.utils.config import get_settings
 from src.models.session import SessionStatus
@@ -19,6 +19,7 @@ class ServiceType(Enum):
     RENSEIGNEMENT = "RENSEIGNEMENT"
     CATECHESE = "CATECHESE"
     CONTACT_HUMAIN = "CONTACT_HUMAIN"
+    SUPER_ADMIN = "SUPER_ADMIN"
 
 
 class ClaudeService:
@@ -117,6 +118,7 @@ class ClaudeService:
     async def classify_user_intent(
         self,
         message: str,
+        phone_number: str = None,
         conversation_history: Optional[List[Dict[str, str]]] = None
     ) -> Dict[str, Any]:
         """
@@ -130,6 +132,18 @@ class ClaudeService:
             Intent classification result
         """
         try:
+            # Check if user is Super Admin
+            from src.services.super_admin_service import SuperAdminService
+            super_admin_service = SuperAdminService()
+
+            if phone_number and super_admin_service.is_super_admin(phone_number):
+                return {
+                    "intent": ServiceType.SUPER_ADMIN.value,
+                    "confidence": 1.0,
+                    "reasoning": "Super Admin user detected",
+                    "extracted_entities": {"admin_user": True}
+                }
+
             system_prompt = """You are an intelligent conversation classifier for a WhatsApp AI concierge service.
 
 Your task is to analyze user messages and classify them into one of the following categories:
@@ -211,7 +225,7 @@ Be precise and thoughtful in your classification. Consider the context and previ
             Response with service information
         """
         try:
-            system_prompt = """You are a helpful assistant for the Service Diocésain de la Catéchèse (SDB).
+            system_prompt = """You are Gust-IA, a helpful assistant for the Service Diocésain de la Catéchèse (SDB).
 
 Your role is to provide information about:
 - Catechism schedules and locations
@@ -227,9 +241,7 @@ Key information to remember:
 - Fees are moderate with payment plans available
 - Age groups: Children (6-12), Teens (13-17), Adults (18+)
 
-Be helpful, informative, and encouraging. If you don't have specific information, guide users to contact the appropriate person.
-
-Always respond in a friendly, professional manner with clear, actionable information."""
+IMPORTANT: Be very concise and direct. Keep responses short and to the point. If you don't have specific information, guide users to contact the appropriate person briefly."""
 
             response = await self.send_message(
                 message=message,
@@ -267,7 +279,7 @@ Always respond in a friendly, professional manner with clear, actionable informa
             Response with catechism content
         """
         try:
-            system_prompt = """You are a knowledgeable catechism teacher assistant.
+            system_prompt = """You are Gust-IA, a knowledgeable catechism teacher assistant.
 
 Your role is to help with:
 - Bible verses and their explanations
@@ -285,7 +297,7 @@ Guidelines:
 - Encourage deeper understanding of faith
 - Suggest prayers or reflections when relevant
 
-Always respond with patience, wisdom, and pastoral sensitivity."""
+IMPORTANT: Keep responses very concise and to the point. Be pastoral but brief."""
 
             response = await self.send_message(
                 message=message,
@@ -305,6 +317,52 @@ Always respond with patience, wisdom, and pastoral sensitivity."""
             logger.error("catechese_response_failed", error=str(e))
             raise
 
+    async def generate_super_admin_response(
+        self,
+        message: str,
+        user_context: Optional[Dict[str, Any]] = None,
+        conversation_history: Optional[List[Dict[str, str]]] = None
+    ) -> Dict[str, Any]:
+        """
+        Generate response for Super Admin commands
+
+        Args:
+            message: User message
+            user_context: User context information
+            conversation_history: Previous conversation messages
+
+        Returns:
+            Response with Super Admin command results
+        """
+        try:
+            from src.services.super_admin_service import SuperAdminService
+            super_admin_service = SuperAdminService()
+
+            # Parse and execute admin command
+            command_result = await super_admin_service.parse_admin_command(message)
+
+            return {
+                "service": ServiceType.SUPER_ADMIN.value,
+                "response": {
+                    "content": [{"text": command_result.get("message", "Commande exécutée")}],
+                    "admin_result": command_result
+                },
+                "confidence": 1.0,
+                "requires_human_followup": False
+            }
+
+        except Exception as e:
+            logger.error("super_admin_response_failed", error=str(e))
+            return {
+                "service": ServiceType.SUPER_ADMIN.value,
+                "response": {
+                    "content": [{"text": f"Erreur lors de l'exécution de la commande: {str(e)}"}],
+                    "admin_result": {"success": False, "message": str(e)}
+                },
+                "confidence": 0.5,
+                "requires_human_followup": False
+            }
+
     async def generate_contact_humain_response(
         self,
         message: str,
@@ -323,7 +381,7 @@ Always respond with patience, wisdom, and pastoral sensitivity."""
             Response with human contact information
         """
         try:
-            system_prompt = """You are a compassionate customer service representative for the Service Diocésain de la Catéchèse.
+            system_prompt = """You are Gust-IA, a compassionate customer service representative for the Service Diocésain de la Catéchèse.
 
 Your role is to:
 - Acknowledge the user's need for human assistance
@@ -337,12 +395,7 @@ Contact information to provide:
 - Email: [Email to be added]
 - Emergency contact: [Emergency contact if applicable]
 
-Response approach:
-- Be warm and reassuring
-- Acknowledge the user's feelings
-- Explain the process clearly
-- Provide specific next steps
-- Set realistic expectations"""
+IMPORTANT: Keep responses very brief and to the point while being warm and reassuring."""
 
             response = await self.send_message(
                 message=message,
@@ -366,7 +419,8 @@ Response approach:
         self,
         message: str,
         session_context: Optional[Dict[str, Any]] = None,
-        conversation_history: Optional[List[Dict[str, str]]] = None
+        conversation_history: Optional[List[Dict[str, str]]] = None,
+        phone_number: str = None
     ) -> Dict[str, Any]:
         """
         Main orchestration method for handling user conversations
@@ -385,6 +439,7 @@ Response approach:
             # Step 1: Classify user intent
             intent_result = await self.classify_user_intent(
                 message=message,
+                phone_number=phone_number,
                 conversation_history=conversation_history
             )
 
@@ -393,7 +448,13 @@ Response approach:
             extracted_entities = intent_result.get('extracted_entities', {})
 
             # Step 2: Generate appropriate response based on intent
-            if intent_type == ServiceType.RENSEIGNEMENT.value:
+            if intent_type == ServiceType.SUPER_ADMIN.value:
+                response_result = await self.generate_super_admin_response(
+                    message=message,
+                    user_context=extracted_entities,
+                    conversation_history=conversation_history
+                )
+            elif intent_type == ServiceType.RENSEIGNEMENT.value:
                 response_result = await self.generate_renseignement_response(
                     message=message,
                     user_context=extracted_entities,

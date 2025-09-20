@@ -13,6 +13,7 @@ from src.services.session_service import SessionService
 from src.services.redis_service import RedisService
 from src.services.waha_service import WAHAService
 from src.services.claude_service import ClaudeService, ServiceType
+from src.services.response_formatter import ResponseFormatter
 from src.utils.config import get_settings
 import structlog
 
@@ -30,6 +31,7 @@ class InteractionService:
         self.redis_service = RedisService()
         self.waha_service = WAHAService()
         self.claude_service = ClaudeService()
+        self.response_formatter = ResponseFormatter()
         self._initialize_supabase()
 
     async def initialize_redis(self):
@@ -540,7 +542,8 @@ class InteractionService:
             orchestration_result = await self.claude_service.orchestrate_conversation(
                 message=message,
                 session_context={"session_id": session.id, "user_id": user.id},
-                conversation_history=conversation_history
+                conversation_history=conversation_history,
+                phone_number=phone_number
             )
 
             # Check for emergency situations
@@ -549,15 +552,17 @@ class InteractionService:
                 conversation_history=conversation_history
             )
 
-            # Generate response
+            # Generate and format response
             response_text = self._extract_response_text(orchestration_result)
+            formatted_response = self._format_response_with_gust_ia(response_text, orchestration_result)
             requires_human_followup = orchestration_result.get('processing_metadata', {}).get('requires_human_followup', False)
 
             # Send response via WhatsApp
-            if response_text and not emergency_result.get('requires_immediate_action', False):
+            message_to_send = formatted_response if formatted_response else response_text
+            if message_to_send and not emergency_result.get('requires_immediate_action', False):
                 wa_response = await self.waha_service.send_text_message(
                     phone_number=phone_number,
-                    message=response_text,
+                    message=message_to_send,
                     quoted_message_id=message_id
                 )
             else:
@@ -926,6 +931,35 @@ class InteractionService:
             return ""
         except Exception:
             return ""
+
+    def _format_response_with_gust_ia(self, response_text: str, orchestration_result: Dict[str, Any]) -> str:
+        """Format response with Gust-IA prefix and service indicator"""
+        try:
+            # Get service type
+            service_type_str = orchestration_result.get('service_response', {}).get('service', ServiceType.CONTACT_HUMAIN)
+
+            # Convert string to ServiceType enum
+            service_type = ServiceType.CONTACT_HUMAIN
+            for st in ServiceType:
+                if st.value == service_type_str:
+                    service_type = st
+                    break
+
+            # Check if this is an admin response
+            is_admin = service_type == ServiceType.SUPER_ADMIN
+
+            # Special formatting for admin help
+            admin_result = orchestration_result.get('service_response', {}).get('response', {}).get('admin_result', {})
+            if admin_result.get('is_help'):
+                return self.response_formatter.format_admin_help(response_text)
+
+            # Format response with Gust-IA prefix
+            return self.response_formatter.format_response(response_text, service_type, is_admin)
+
+        except Exception as e:
+            logger.error("response_formatting_failed", error=str(e))
+            # Fallback to simple formatting
+            return f"[Gust-IA]\n----------------------------¬\n{response_text}"
 
     async def _update_session_context(self, session: Session, orchestration_result: Dict[str, Any], requires_followup: bool):
         """Update session context after interaction"""
