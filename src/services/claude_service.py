@@ -31,6 +31,16 @@ class ClaudeService:
         self.model = self.settings.claude_model or "claude-3-sonnet-20240229"
         self.max_tokens = self.settings.claude_max_tokens or 1000
         self.temperature = self.settings.claude_temperature or 0.7
+        
+        # Log configuration for debugging (without exposing sensitive data)
+        api_key_status = "SET" if self.api_key and self.api_key != "test-key" else "NOT_SET"
+        logger.info(
+            "claude_service_initialized",
+            base_url=self.base_url,
+            model=self.model,
+            api_key_status=api_key_status
+        )
+        
         self.http_client = httpx.AsyncClient(
             timeout=60.0,
             headers={

@@ -19,14 +19,34 @@ class WAHAService:
 
     def __init__(self):
         self.settings = get_settings()
-        self.base_url = self.settings.waha_base_url.rstrip('/')
+        # Handle base URLs that might already include /api
+        base_url = self.settings.waha_base_url.rstrip('/')
+        if base_url.endswith('/api'):
+            self.base_url = base_url[:-4]  # Remove /api suffix
+        else:
+            self.base_url = base_url
         self.api_key = self.settings.waha_api_token
         self.session_id = self.settings.waha_session_id
+        
+        # Log configuration for debugging (without exposing sensitive data)
+        api_key_status = "SET" if self.api_key and self.api_key != "default-token" else "NOT_SET"
+        logger.info(
+            "waha_service_initialized",
+            base_url=self.base_url,
+            session_id=self.session_id,
+            api_key_status=api_key_status
+        )
+        
         self.http_client = httpx.AsyncClient(timeout=30.0)
 
     def _build_url(self, endpoint: str) -> str:
         """Build full URL for WAHA API endpoint"""
-        return f"{self.base_url}/api/{self.session_id}/{endpoint.lstrip('/')}"
+        # Ensure no double slashes and proper API path
+        endpoint = endpoint.lstrip('/')
+        if self.base_url.endswith('/api'):
+            return f"{self.base_url}/{self.session_id}/{endpoint}"
+        else:
+            return f"{self.base_url}/api/{self.session_id}/{endpoint}"
 
     def _get_headers(self) -> Dict[str, str]:
         """Get request headers with authentication"""
@@ -660,8 +680,18 @@ class WAHAService:
         Returns:
             Formatted phone number
         """
+        if not phone_number or phone_number.strip() == "":
+            raise ValueError("Phone number cannot be empty")
+        
+        # Skip special WhatsApp addresses like status@broadcast
+        if '@' in phone_number:
+            return phone_number
+        
         # Remove all non-digit characters
         cleaned = ''.join(c for c in phone_number if c.isdigit())
+
+        if not cleaned:
+            raise ValueError(f"Invalid phone number: {phone_number}")
 
         # Remove leading + or 00
         if cleaned.startswith('00'):

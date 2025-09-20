@@ -24,25 +24,39 @@ class RedisService:
     async def initialize(self):
         """Initialize Redis connection"""
         try:
-            self.redis = redis.Redis(
-                host=self.settings.redis_host,
-                port=self.settings.redis_port,
-                password=self.settings.redis_password,
-                db=self.settings.redis_db,
-                decode_responses=False,  # Use pickle/JSON for complex objects
-                socket_connect_timeout=5,
-                socket_timeout=5,
-                retry_on_timeout=True
-            )
+            # Try to use REDIS_URL if available, otherwise use individual settings
+            if self.settings.redis_url:
+                self.redis = redis.from_url(
+                    self.settings.redis_url,
+                    decode_responses=False,
+                    socket_connect_timeout=5,
+                    socket_timeout=5,
+                    retry_on_timeout=True
+                )
+            else:
+                self.redis = redis.Redis(
+                    host=self.settings.redis_host,
+                    port=self.settings.redis_port,
+                    password=self.settings.redis_password,
+                    db=self.settings.redis_db,
+                    decode_responses=False,  # Use pickle/JSON for complex objects
+                    socket_connect_timeout=5,
+                    socket_timeout=5,
+                    retry_on_timeout=True
+                )
+            
+            # Test connection
+            await self.redis.ping()
             logger.info(
                 "redis_client_initialized",
-                host=self.settings.redis_host,
+                host=self.settings.redis_host or self.settings.redis_url,
                 port=self.settings.redis_port,
                 db=self.settings.redis_db
             )
         except Exception as e:
             logger.error("redis_initialization_failed", error=str(e))
-            # Don't raise - allow application to start without Redis
+            logger.warning("redis_will_be_disabled_gracefully")
+            self.redis = None
 
     async def ping(self) -> bool:
         """Check Redis connection"""
