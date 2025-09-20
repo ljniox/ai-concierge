@@ -109,26 +109,78 @@ class ResponseFormatter:
             logger.error("text_extraction_error", error=str(e))
             return ""
 
-    def format_renseignement_list(self, renseignements: list) -> str:
+    def format_renseignement_list(self, renseignements: list, categories: list = None, suggestions: list = None) -> str:
         """Format list of renseignements for display"""
         if not renseignements:
-            return "Aucun renseignement disponible."
+            result = "Aucun renseignement disponible."
+        else:
+            formatted_items = []
+            for i, renseignement in enumerate(renseignements[:7], 1):  # Show up to 7 items
+                titre = renseignement.get('titre', f'Renseignement {i}')
+                contenu = renseignement.get('contenu', '')
+                categorie = renseignement.get('categorie', 'général')
+                status = renseignement.get('status', 'actif')
 
-        formatted_items = []
-        for i, renseignement in enumerate(renseignements[:5], 1):  # Limit to 5 items
-            titre = renseignement.get('titre', f'Renseignement {i}')
-            contenu = renseignement.get('contenu', '')
-            categorie = renseignement.get('categorie', 'général')
+                # Add status emoji
+                status_emoji = "✅" if status == "actif" else "⏸️" if status == "inactif" else "📅"
 
-            # Truncate long content
-            if len(contenu) > 100:
-                contenu = contenu[:100] + "..."
+                # Truncate long content
+                if len(contenu) > 80:
+                    contenu = contenu[:80] + "..."
 
-            formatted_items.append(f"{i}. **{titre}** ({categorie})\n   {contenu}")
+                formatted_items.append(f"{i}. {status_emoji} **{titre}** ({categorie})\n   {contenu}")
 
-        result = "📋 **Renseignements disponibles:**\n\n" + "\n\n".join(formatted_items)
+            result = "📋 **Renseignements disponibles:**\n\n" + "\n\n".join(formatted_items)
 
-        if len(renseignements) > 5:
-            result += f"\n\n... et {len(renseignements) - 5} autres renseignements."
+            if len(renseignements) > 7:
+                result += f"\n\n... et {len(renseignements) - 7} autres renseignements."
+
+        # Add categories if provided
+        if categories:
+            result += f"\n\n📂 **Catégories ({len(categories)}):** {', '.join(categories[:8])}"
+            if len(categories) > 8:
+                result += f" ... et {len(categories) - 8} autres"
+
+        # Add suggestions if provided
+        if suggestions:
+            result += "".join(suggestions)
+
+        return result
+
+    def format_categories_list(self, categories: list, suggestions: list = None) -> str:
+        """Format list of categories for display"""
+        if not categories:
+            return "Aucune catégorie disponible."
+
+        # Group categories by frequency or alphabetically
+        formatted_categories = []
+        for i, categorie in enumerate(categories[:12], 1):  # Show up to 12 categories
+            formatted_categories.append(f"{i}. **{categorie}**")
+
+        result = "📂 **Catégories disponibles:**\n\n" + "\n".join(formatted_categories)
+
+        if len(categories) > 12:
+            result += f"\n\n... et {len(categories) - 12} autres catégories."
+
+        # Add suggestions if provided
+        if suggestions:
+            result += "".join(suggestions)
+
+        return result
+
+    def format_admin_list(self, admins: list, suggestions: list = None) -> str:
+        """Format list of admin phone numbers"""
+        if not admins:
+            return "Aucun administrateur trouvé."
+
+        formatted_admins = []
+        for i, admin in enumerate(admins, 1):
+            formatted_admins.append(f"{i}. **{admin}**")
+
+        result = f"👥 **Administrateurs ({len(admins)}):**\n\n" + "\n".join(formatted_admins)
+
+        # Add suggestions if provided
+        if suggestions:
+            result += "".join(suggestions)
 
         return result

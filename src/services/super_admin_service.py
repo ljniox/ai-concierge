@@ -25,13 +25,88 @@ class SuperAdminService:
     def __init__(self):
         self.settings = get_settings()
         self.supabase = get_supabase_client()
-        self.super_admin_phone = "221765005555"
+        self.super_admin_phones = ["221765005555"]  # List of admin phone numbers
 
     def is_super_admin(self, phone_number: str) -> bool:
         """Check if phone number belongs to Super Admin"""
         # Remove any formatting and compare
         clean_phone = phone_number.replace("+", "").replace(" ", "").replace("-", "")
-        return clean_phone == self.super_admin_phone
+        return clean_phone in self.super_admin_phones
+
+    async def add_admin_phone(self, phone_number: str) -> Dict[str, Any]:
+        """Add a new admin phone number"""
+        try:
+            clean_phone = phone_number.replace("+", "").replace(" ", "").replace("-", "")
+
+            if clean_phone in self.super_admin_phones:
+                return {
+                    "success": False,
+                    "message": f"Le numéro {phone_number} est déjà un administrateur."
+                }
+
+            self.super_admin_phones.append(clean_phone)
+
+            logger.info("admin_phone_added", phone_number=clean_phone, total_admins=len(self.super_admin_phones))
+
+            return {
+                "success": True,
+                "message": f"Le numéro {phone_number} a été ajouté comme administrateur.",
+                "total_admins": len(self.super_admin_phones)
+            }
+        except Exception as e:
+            logger.error("admin_phone_add_error", error=str(e))
+            return {
+                "success": False,
+                "message": f"Erreur: {str(e)}"
+            }
+
+    async def remove_admin_phone(self, phone_number: str) -> Dict[str, Any]:
+        """Remove an admin phone number"""
+        try:
+            clean_phone = phone_number.replace("+", "").replace(" ", "").replace("-", "")
+
+            if clean_phone not in self.super_admin_phones:
+                return {
+                    "success": False,
+                    "message": f"Le numéro {phone_number} n'est pas un administrateur."
+                }
+
+            if len(self.super_admin_phones) <= 1:
+                return {
+                    "success": False,
+                    "message": "Impossible de supprimer le dernier administrateur."
+                }
+
+            self.super_admin_phones.remove(clean_phone)
+
+            logger.info("admin_phone_removed", phone_number=clean_phone, total_admins=len(self.super_admin_phones))
+
+            return {
+                "success": True,
+                "message": f"Le numéro {phone_number} a été supprimé comme administrateur.",
+                "total_admins": len(self.super_admin_phones)
+            }
+        except Exception as e:
+            logger.error("admin_phone_remove_error", error=str(e))
+            return {
+                "success": False,
+                "message": f"Erreur: {str(e)}"
+            }
+
+    async def list_admin_phones(self) -> Dict[str, Any]:
+        """List all admin phone numbers"""
+        try:
+            return {
+                "success": True,
+                "message": f"Administrateurs ({len(self.super_admin_phones)}):",
+                "admins": self.super_admin_phones
+            }
+        except Exception as e:
+            logger.error("admin_list_error", error=str(e))
+            return {
+                "success": False,
+                "message": f"Erreur: {str(e)}"
+            }
 
     async def add_renseignement(
         self,
@@ -149,6 +224,35 @@ class SuperAdminService:
             status=RenseignementStatus.INACTIVE
         )
 
+    async def get_categories(self) -> Dict[str, Any]:
+        """Get all unique categories from renseignements"""
+        try:
+            result = self.supabase.table("renseignements").select("categorie").execute()
+
+            if result.data:
+                # Extract unique categories
+                categories = list(set(item.get("categorie", "général") for item in result.data))
+                categories.sort()  # Sort alphabetically
+
+                logger.info("categories_retrieved", count=len(categories))
+                return {
+                    "success": True,
+                    "message": f"Catégories disponibles ({len(categories)}):",
+                    "categories": categories
+                }
+            else:
+                return {
+                    "success": True,
+                    "message": "Aucune catégorie trouvée",
+                    "categories": []
+                }
+        except Exception as e:
+            logger.error("categories_retrieval_error", error=str(e))
+            return {
+                "success": False,
+                "message": f"Erreur: {str(e)}"
+            }
+
     async def list_renseignements(
         self,
         categorie: Optional[str] = None,
@@ -252,6 +356,22 @@ class SuperAdminService:
             # List renseignements command
             elif message_lower.startswith("lister renseignements") or message_lower.startswith("list renseignements"):
                 return await self._parse_list_renseignements(message)
+
+            # Categories command
+            elif message_lower.startswith("categories") or message_lower.startswith("catégories"):
+                categories_result = await self.get_categories()
+                if categories_result.get("success"):
+                    suggestions = self._generate_suggestions("categories", None)
+                    categories_result["suggestions"] = suggestions
+                return categories_result
+
+            # Admin management commands
+            elif message_lower.startswith("ajouter admin") or message_lower.startswith("add admin"):
+                return await self._parse_add_admin(message)
+            elif message_lower.startswith("supprimer admin") or message_lower.startswith("remove admin"):
+                return await self._parse_remove_admin(message)
+            elif message_lower.startswith("lister admins") or message_lower.startswith("list admins"):
+                return await self.list_admin_phones()
 
             # Help command
             elif message_lower in ["aide", "help", "commandes"]:
@@ -375,13 +495,104 @@ class SuperAdminService:
         """Parse list renseignements command"""
         try:
             parts = message.split()
-            categorie = None
 
+            # Check if specific category requested
             if len(parts) > 2:
                 categorie = parts[2]
+                result = await self.list_renseignements(categorie=categorie)
 
-            return await self.list_renseignements(categorie=categorie)
+                # Add suggestions to the result
+                if result.get("success"):
+                    suggestions = self._generate_suggestions("list_with_category", categorie)
+                    result["suggestions"] = suggestions
 
+                return result
+            else:
+                # List all renseignements
+                result = await self.list_renseignements(categorie=None)
+
+                if result.get("success"):
+                    # Get categories for suggestions
+                    categories_result = await self.get_categories()
+
+                    suggestions = self._generate_suggestions("list_all", None)
+                    if categories_result.get("success"):
+                        categories = categories_result.get("categories", [])
+                        if categories:
+                            suggestions.append(f"\n📂 **Catégories disponibles:** {', '.join(categories[:5])}")
+                            if len(categories) > 5:
+                                suggestions.append(f"   ... et {len(categories) - 5} autres catégories")
+
+                    result["suggestions"] = suggestions
+                    result["categories"] = categories_result.get("categories", [])
+
+                return result
+
+        except Exception as e:
+            return {
+                "success": False,
+                "message": f"Erreur d'analyse: {str(e)}"
+            }
+
+    def _generate_suggestions(self, context: str, param: str = None) -> List[str]:
+        """Generate contextual command suggestions"""
+        suggestions = []
+
+        if context == "list_all":
+            suggestions.extend([
+                "\n💡 **Commandes suggérées:**",
+                "• `lister renseignements horaire` - voir les horaires",
+                "• `categories` - voir toutes les catégories",
+                "• `ajouter renseignement | titre | contenu | categorie` - ajouter un nouveau renseignement"
+            ])
+        elif context == "list_with_category":
+            category = param or ""
+            suggestions.extend([
+                "\n💡 **Commandes suggérées:**",
+                f"• `lister renseignements` - voir tous les renseignements",
+                f"• `categories` - voir toutes les catégories",
+                f"• `ajouter renseignement | nouveau titre | contenu | {category}` - ajouter dans cette catégorie"
+            ])
+        elif context == "categories":
+            suggestions.extend([
+                "\n💡 **Commandes suggérées:**",
+                "• `lister renseignements` - voir tous les renseignements",
+                "• `lister renseignements [categorie]` - filtrer par catégorie",
+                "• `ajouter renseignement | titre | contenu | categorie` - ajouter un renseignement"
+            ])
+
+        return suggestions
+
+    async def _parse_add_admin(self, message: str) -> Dict[str, Any]:
+        """Parse add admin command"""
+        try:
+            parts = message.split()
+            if len(parts) < 3:
+                return {
+                    "success": False,
+                    "message": "Format: ajouter admin [numéro_de_téléphone]"
+                }
+
+            phone_number = parts[2]
+            return await self.add_admin_phone(phone_number)
+        except Exception as e:
+            return {
+                "success": False,
+                "message": f"Erreur d'analyse: {str(e)}"
+            }
+
+    async def _parse_remove_admin(self, message: str) -> Dict[str, Any]:
+        """Parse remove admin command"""
+        try:
+            parts = message.split()
+            if len(parts) < 3:
+                return {
+                    "success": False,
+                    "message": "Format: supprimer admin [numéro_de_téléphone]"
+                }
+
+            phone_number = parts[2]
+            return await self.remove_admin_phone(phone_number)
         except Exception as e:
             return {
                 "success": False,
@@ -393,26 +604,29 @@ class SuperAdminService:
         help_text = """
 🔧 **Commandes Super Admin Disponibles:**
 
-📝 **Ajouter un renseignement:**
-`ajouter renseignement | titre | contenu | [categorie]`
+📝 **Gestion des renseignements:**
+• `ajouter renseignement | titre | contenu | [categorie]`
+• `modifier renseignement | ID | titre: nouveau_titre | contenu: nouveau_contenu | categorie: nouvelle_categorie`
+• `desactiver renseignement [ID]`
+• `lister renseignements [categorie]`
+• `categories` - voir toutes les catégories
 
-📝 **Modifier un renseignement:**
-`modifier renseignement | ID | titre: nouveau_titre | contenu: nouveau_contenu | categorie: nouvelle_categorie`
-
-❌ **Désactiver un renseignement:**
-`desactiver renseignement [ID]`
-
-📋 **Lister les renseignements:**
-`lister renseignements [categorie]`
+👥 **Gestion des administrateurs:**
+• `ajouter admin [numéro]` - ajouter un nouvel administrateur
+• `supprimer admin [numéro]` - supprimer un administrateur
+• `lister admins` - voir tous les administrateurs
 
 ❓ **Aide:**
-`aide` ou `help`
+• `aide` ou `help` - afficher cette aide
 
 **Exemples:**
-- `ajouter renseignement | Nouvel horaire | Les cours sont maintenant le samedi | horaire`
-- `modifier renseignement | 1 | titre: Horaire mis à jour`
-- `desactiver renseignement 5`
-- `lister renseignements horaire`
+• `ajouter renseignement | Nouvel horaire | Les cours sont maintenant le samedi | horaire`
+• `modifier renseignement | 1 | titre: Horaire mis à jour`
+• `desactiver renseignement 5`
+• `lister renseignements horaire`
+• `categories`
+• `ajouter admin 221765001234`
+• `lister admins`
         """
 
         return {

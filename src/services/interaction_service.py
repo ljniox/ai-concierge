@@ -948,10 +948,30 @@ class InteractionService:
             # Check if this is an admin response
             is_admin = service_type == ServiceType.SUPER_ADMIN
 
-            # Special formatting for admin help
+            # Get admin result for special formatting
             admin_result = orchestration_result.get('service_response', {}).get('response', {}).get('admin_result', {})
+
+            # Special formatting for different admin response types
             if admin_result.get('is_help'):
                 return self.response_formatter.format_admin_help(response_text)
+            elif 'categories' in admin_result:
+                return self.response_formatter.format_categories_list(
+                    admin_result.get('categories', []),
+                    admin_result.get('suggestions', [])
+                )
+            elif 'admins' in admin_result:
+                return self.response_formatter.format_admin_list(
+                    admin_result.get('admins', []),
+                    admin_result.get('suggestions', [])
+                )
+            elif 'suggestions' in admin_result:
+                # Enhanced formatting for list responses with suggestions
+                categories = admin_result.get('categories', [])
+                return self.response_formatter.format_renseignement_list(
+                    [],  # Will be replaced with actual data
+                    categories,
+                    admin_result.get('suggestions', [])
+                )
 
             # Format response with Gust-IA prefix
             return self.response_formatter.format_response(response_text, service_type, is_admin)
