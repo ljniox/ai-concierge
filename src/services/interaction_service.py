@@ -79,7 +79,7 @@ class InteractionService:
                 "user_id": session.user_id,
                 "user_message": interaction_data.user_message,
                 "assistant_response": interaction_data.assistant_response,
-                "service": interaction_data.service,
+                "service": str(interaction_data.service),
                 "interaction_type": interaction_data.interaction_type.value if isinstance(interaction_data.interaction_type, str) else interaction_data.interaction_type,
                 "message_type": interaction_data.message_type.value if isinstance(interaction_data.message_type, str) else interaction_data.message_type,
                 "confidence_score": interaction_data.confidence_score,
@@ -96,7 +96,7 @@ class InteractionService:
                     session_id=interaction_data.session_id,
                     user_message=interaction_data.user_message,
                     assistant_response=interaction_data.assistant_response,
-                    service=interaction_data.service,
+                    service=str(interaction_data.service),
                     interaction_type=interaction_data.interaction_type,
                     message_type=interaction_data.message_type,
                     confidence_score=interaction_data.confidence_score,
@@ -929,7 +929,7 @@ class InteractionService:
 
     async def _update_session_context(self, session: Session, orchestration_result: Dict[str, Any], requires_followup: bool):
         """Update session context after interaction"""
-        service_type = orchestration_result.get('service_response', {}).get('service', ServiceType.CONTACT_HUMAIN)
+        service_type = str(orchestration_result.get('service_response', {}).get('service', ServiceType.CONTACT_HUMAIN))
         await self.session_service.update_session(
             session.id,
             {

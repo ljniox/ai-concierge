@@ -12,49 +12,49 @@ class Settings(BaseSettings):
     """Application settings"""
 
     # Application
-    secret_key: str = Field(default="your-secret-key-here-change-in-production", env="SECRET_KEY")
-    environment: str = Field(default="development", env="ENVIRONMENT")
-    tz: str = Field(default="Africa/Dakar", env="TZ")
+    secret_key: str = Field(default="your-secret-key-here-change-in-production")
+    environment: str = Field(default="development")
+    tz: str = Field(default="Africa/Dakar")
 
     # Supabase
-    supabase_url: str = Field(..., env="SUPABASE_URL")
-    supabase_anon_key: str = Field(..., env="SUPABASE_ANON_KEY")
-    supabase_service_role_key: str = Field(..., env="SUPABASE_SERVICE_ROLE_KEY")
+    supabase_url: str = Field(default="https://example.supabase.co")
+    supabase_anon_key: str = Field(default="default-anon-key")
+    supabase_service_role_key: str = Field(default="default-service-key")
 
     # WAHA
-    waha_base_url: str = Field(default="http://localhost:3000", env="WAHA_BASE_URL")
-    waha_api_token: str = Field(default="default-token", env="WAHA_API_TOKEN")
-    waha_api_key: str = Field(default="default-token", env="WAHA_API_KEY")
-    waha_session_id: str = Field(default="default", env="WAHA_SESSION_ID")
-    waha_verify_token: str = Field(default="test-token", env="WAHA_VERIFY_TOKEN", alias="WEBHOOK_VERIFY_TOKEN")
+    waha_base_url: str = Field(default="http://localhost:3000")
+    waha_api_token: str = Field(default="default-token")
+    waha_api_key: str = Field(default="default-token")
+    waha_session_id: str = Field(default="default")
+    waha_verify_token: str = Field(default="test-token")
 
     # Webhook Configuration
-    webhook_url: str = Field(default="http://localhost:8000/api/v1/webhook", env="WEBHOOK_URL")
-    webhook_verify_token: str = Field(default="test-token", env="WEBHOOK_VERIFY_TOKEN")
-    session_name: str = Field(default="default", env="SESSION_NAME")
-    port: int = Field(default=8000, env="PORT")
+    webhook_url: str = Field(default="http://localhost:8000/api/v1/webhook")
+    webhook_verify_token: str = Field(default="test-token")
+    session_name: str = Field(default="default")
+    port: int = Field(default=8000)
 
     # Claude AI
-    anthropic_api_key: str = Field(default="test-key", env="ANTHROPIC_AUTH_TOKEN")
-    anthropic_base_url: str = Field(default="https://api.anthropic.com", env="ANTHROPIC_BASE_URL")
-    claude_model: str = Field(default="claude-3-sonnet-20240229", env="ANTHROPIC_MODEL")
-    claude_max_tokens: int = Field(default=1000, env="CLAUDE_MAX_TOKENS")
-    claude_temperature: float = Field(default=0.7, env="CLAUDE_TEMPERATURE")
+    anthropic_auth_token: str = Field(default="test-key")
+    anthropic_base_url: str = Field(default="https://api.anthropic.com")
+    claude_model: str = Field(default="claude-3-sonnet-20240229")
+    claude_max_tokens: int = Field(default=1000)
+    claude_temperature: float = Field(default=0.7)
 
     # Redis
-    redis_url: Optional[str] = Field(default="redis://localhost:6379/0", env="REDIS_URL")
-    redis_host: str = Field(default="localhost", env="REDIS_HOST")
-    redis_port: int = Field(default=6379, env="REDIS_PORT")
-    redis_db: int = Field(default=0, env="REDIS_DB")
-    redis_password: Optional[str] = Field(default=None, env="REDIS_PASSWORD")
+    redis_url: Optional[str] = Field(default="redis://localhost:6379/0")
+    redis_host: str = Field(default="localhost")
+    redis_port: int = Field(default=6379)
+    redis_db: int = Field(default=0)
+    redis_password: Optional[str] = Field(default=None)
 
     # JWT
-    jwt_secret_key: str = Field(default="default-jwt-secret", env="JWT_SECRET_KEY")
-    jwt_algorithm: str = Field(default="HS256", env="JWT_ALGORITHM")
-    jwt_expire_minutes: int = Field(default=30, env="JWT_EXPIRE_MINUTES")
+    jwt_secret_key: str = Field(default="default-jwt-secret")
+    jwt_algorithm: str = Field(default="HS256")
+    jwt_expire_minutes: int = Field(default=30)
 
     # Logging
-    log_level: str = Field(default="INFO", env="LOG_LEVEL")
+    log_level: str = Field(default="INFO")
 
     # Service Configuration
     session_timeout_minutes: int = Field(default=30, description="Session timeout in minutes")
@@ -69,13 +69,16 @@ class Settings(BaseSettings):
         env_file = ".env"
         env_file_encoding = "utf-8"
         case_sensitive = False
-        extra = "ignore"
+        extra = "allow"
 
 
 # Global settings instance
-settings = Settings()
+_settings = None
 
 
 def get_settings() -> Settings:
     """Get settings instance"""
-    return settings
+    global _settings
+    if _settings is None:
+        _settings = Settings()
+    return _settings

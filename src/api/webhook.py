@@ -97,11 +97,16 @@ async def handle_waha_message(message_data: Dict[str, Any], settings: Settings, 
     """
     Process WAHA format message
     """
-    from_number = message_data.get("from")
-    message_id = message_data.get("id")
-    timestamp = message_data.get("timestamp")
-    from_me = message_data.get("fromMe", False)
-    body = message_data.get("body", "")
+    # Extract phone number from key.remoteJid or from field
+    key_data = message_data.get("key", {})
+    from_number = key_data.get("remoteJid") or message_data.get("from")
+    message_id = key_data.get("id") or message_data.get("id")
+    timestamp = message_data.get("timestamp") or message_data.get("messageTimestamp")
+    from_me = key_data.get("fromMe", False) or message_data.get("fromMe", False)
+
+    # Extract message content
+    message_content = message_data.get("message", {})
+    body = message_content.get("conversation", "") or message_data.get("body", "")
     has_media = message_data.get("hasMedia", False)
     media = message_data.get("media", {})
 

@@ -16,9 +16,9 @@ logger = structlog.get_logger()
 
 class ServiceType(Enum):
     """Service types for AI orchestration"""
-    RENSEIGNEMENT = "renseignement"
-    CATECHESE = "catechese"
-    CONTACT_HUMAIN = "contact_humain"
+    RENSEIGNEMENT = "RENSEIGNEMENT"
+    CATECHESE = "CATECHESE"
+    CONTACT_HUMAIN = "CONTACT_HUMAIN"
 
 
 class ClaudeService:
@@ -26,7 +26,7 @@ class ClaudeService:
 
     def __init__(self):
         self.settings = get_settings()
-        self.api_key = self.settings.anthropic_api_key
+        self.api_key = self.settings.anthropic_auth_token
         self.base_url = self.settings.anthropic_base_url
         self.model = self.settings.claude_model or "claude-3-sonnet-20240229"
         self.max_tokens = self.settings.claude_max_tokens or 1000
@@ -45,7 +45,7 @@ class ClaudeService:
             timeout=60.0,
             headers={
                 'Content-Type': 'application/json',
-                'x-api-key': self.api_key,
+                'Authorization': f'Bearer {self.api_key}',
                 'anthropic-version': '2023-06-01'
             }
         )
@@ -239,7 +239,7 @@ Always respond in a friendly, professional manner with clear, actionable informa
             )
 
             return {
-                "service": ServiceType.RENSEIGNEMENT,
+                "service": ServiceType.RENSEIGNEMENT.value,
                 "response": response,
                 "confidence": 0.8,
                 "requires_human_followup": False
@@ -295,7 +295,7 @@ Always respond with patience, wisdom, and pastoral sensitivity."""
             )
 
             return {
-                "service": ServiceType.CATECHESE,
+                "service": ServiceType.CATECHESE.value,
                 "response": response,
                 "confidence": 0.8,
                 "requires_human_followup": False
@@ -352,7 +352,7 @@ Response approach:
             )
 
             return {
-                "service": ServiceType.CONTACT_HUMAIN,
+                "service": ServiceType.CONTACT_HUMAIN.value,
                 "response": response,
                 "confidence": 0.9,
                 "requires_human_followup": True
@@ -443,7 +443,7 @@ Response approach:
                     "extracted_entities": {}
                 },
                 "service_response": {
-                    "service": ServiceType.CONTACT_HUMAIN,
+                    "service": ServiceType.CONTACT_HUMAIN.value,
                     "response": {"content": [{"text": "Je suis désolé, j'ai rencontré une erreur. Un agent humain vous contactera bientôt."}]},
                     "confidence": 0.3,
                     "requires_human_followup": True

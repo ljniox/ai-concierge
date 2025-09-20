@@ -1,0 +1,12 @@
+[Unit]
+Description=WhatsApp AI Concierge Fixed API Configuration
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/home/ubuntu/ai-concierge/scripts/update-webhook-config.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

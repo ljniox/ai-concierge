@@ -21,8 +21,9 @@ COPY requirements.txt requirements-dev.txt ./
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
+# Copy application code and environment file
 COPY src/ ./src/
+COPY .env .
 
 # Create non-root user
 RUN useradd --create-home --shell /bin/bash app && \

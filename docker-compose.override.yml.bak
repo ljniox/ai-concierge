@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: ai-concierge-app-fixed
+    networks:
+      - concierge-network
+    environment:
+      - CONCIERGE_HOSTNAME=ai-concierge-app-fixed
+      - CONCIERGE_API_URL=http://ai-concierge-app-fixed:8000
+
+  nginx:
+    container_name: ai-concierge-nginx-fixed
+    networks:
+      - concierge-network
+
+  redis:
+    container_name: ai-concierge-redis-fixed
+    networks:
+      - concierge-network
+
+networks:
+  concierge-network:
+    external: true

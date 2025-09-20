@@ -19,25 +19,30 @@ To use MCP servers, ensure the configuration is loaded in your Claude Code sessi
 
 ### WhatsApp AI Concierge Service
 
-**New Technology Stack Added:**
+**Production Technology Stack:**
 - **Backend**: FastAPI (Python) for webhook and API endpoints
 - **WhatsApp Integration**: WAHA SDK for WhatsApp Business API
 - **Database**: Supabase (PostgreSQL) for session and service management
-- **AI Orchestration**: Claude SDK for conversational AI
+- **AI Orchestration**: Claude SDK with glm-4.5 model
 - **Caching**: Redis for session state
-- **Deployment**: Docker + Coolify
+- **Deployment**: Docker with container networking
 
 **Key Endpoints:**
-- `/webhook` - WhatsApp message handling
-- `/orchestrate` - AI response orchestration
-- `/sessions/*` - Session management
-- `/admin/services/*` - Service administration
+- `/api/v1/webhook` - WhatsApp message handling
+- `/api/v1/orchestrate` - AI response orchestration
+- `/api/v1/sessions/*` - Session management
 - `/health` - System health monitoring
 
 **Core Services:**
 - **RENSEIGNEMENT** - General information service
 - **CATECHESE** - Catechism service with code_parent authentication
 - **CONTACT_HUMAIN** - Human agent handoff service
+
+**Container Architecture:**
+- `ai-concierge-app-1` - Main application container
+- `waha-core` - WhatsApp API integration
+- `redis` - Session caching
+- Fixed container networking with service discovery
 
 ### 1. Environment Configuration (.env file)
 
@@ -53,6 +58,16 @@ SUPABASE_URL=https://ixzpejqzxvxpnkbznqnj.supabase.co
 SUPABASE_PASSWORD=puqrE3-ziqwem-pufpoc
 SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml4enBlanF6eHZ4cG5rYnpucW5qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc3MDg1MjgsImV4cCI6MjA3MzI4NDUyOH0.uOLdQu-Lub8UjzqEreLHRMqLWKAsS-c521W_8pvSYb4
 SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml4enBlanF6eHZ4cG5rYnpucW5qIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NzcwODUyOCwiZXhwIjoyMDczMjg0NTI4fQ.Jki6OqWq0f1Svd2u2m8Zt3xbust-fSlRlSMcWvnsOz4
+
+# WhatsApp AI Concierge Production Settings
+WEBHOOK_URL=http://ai-concierge-app-1:8000/api/v1/webhook
+CONCIERGE_API_URL=http://ai-concierge-app-1:8000
+WAHA_BASE_URL=https://waha-core.niox.ovh
+WAHA_API_TOKEN=28C5435535C2487DAFBD1164B9CD4E34
+ANTHROPIC_AUTH_TOKEN=0ee8c49b8ea94d7e84bf747d4286fecd.SNHHi7BSHuxTofkf
+ANTHROPIC_BASE_URL=https://api.z.ai/api/anthropic
+ANTHROPIC_MODEL=glm-4.5
+REDIS_URL=redis://redis:6379/0
 ```
 
 ### 2. Rclone Configuration
@@ -231,12 +246,39 @@ rclone copy sdb:"Annee 2024-2025/EB - "*.pdf ./
 6. ✅ Begin working with student data
 
 ### WhatsApp AI Concierge Service
-1. 🔄 Feature specification complete (`/specs/001-projet-concierge-ia/spec.md`)
-2. 🔄 Implementation plan complete (`/specs/001-projet-concierge-ia/plan.md`)
-3. ⏳ Ready for task generation (`/tasks` command)
-4. ⏳ Implementation execution phase
-5. ⏳ Testing and validation
+1. ✅ Feature specification complete (`/specs/001-projet-concierge-ia/spec.md`)
+2. ✅ Implementation plan complete (`/specs/001-projet-concierge-ia/plan.md`)
+3. ✅ Core implementation complete
+4. ✅ Fixed API configuration with container networking
+5. ✅ Service architecture documentation complete (`SERVICES_ARCHITECTURE.md`)
+6. 🔄 Production deployment and monitoring
+
+## Development Principles
+
+### Code Quality
+- **Type Safety**: Use Python type hints throughout
+- **Error Handling**: Comprehensive error handling with proper logging
+- **Testing**: Unit and integration tests for all components
+- **Documentation**: Inline documentation and architectural diagrams
+
+### Security Best Practices
+- **Environment Variables**: All sensitive data in .env files
+- **API Security**: JWT tokens and webhook verification
+- **Database Security**: Supabase RLS policies and service keys
+- **Container Security**: Non-root users and minimal base images
+
+### Deployment Architecture
+- **Container Networking**: Use service names instead of IPs
+- **Health Monitoring**: Comprehensive health check endpoints
+- **Log Management**: Structured logging with appropriate levels
+- **Scalability**: Horizontal scaling with load balancing
+
+### Monitoring & Operations
+- **Health Checks**: `/health` endpoint for all services
+- **Logging**: JSON-formatted logs with correlation IDs
+- **Metrics**: Request latency, success rates, error tracking
+- **Alerting**: Critical error notifications and SLA monitoring
 
 ---
-*Last Updated: $(date)*
-*Version: 1.0*
+*Last Updated: September 20, 2025*
+*Version: 2.0 - Production Ready*
