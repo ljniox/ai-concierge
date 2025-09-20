@@ -19,12 +19,8 @@ class WAHAService:
 
     def __init__(self):
         self.settings = get_settings()
-        # Handle base URLs that might already include /api
-        base_url = self.settings.waha_base_url.rstrip('/')
-        if base_url.endswith('/api'):
-            self.base_url = base_url[:-4]  # Remove /api suffix
-        else:
-            self.base_url = base_url
+        # Use the base URL as provided, the _build_url method handles the API path
+        self.base_url = self.settings.waha_base_url.rstrip('/')
         self.api_key = self.settings.waha_api_token
         self.session_id = self.settings.waha_session_id
         
@@ -41,12 +37,10 @@ class WAHAService:
 
     def _build_url(self, endpoint: str) -> str:
         """Build full URL for WAHA API endpoint"""
-        # Ensure no double slashes and proper API path
+        # For WAHA, the correct URL pattern is: {base_url}/api/{endpoint}
+        # The session ID is passed in the request body, not the URL
         endpoint = endpoint.lstrip('/')
-        if self.base_url.endswith('/api'):
-            return f"{self.base_url}/{self.session_id}/{endpoint}"
-        else:
-            return f"{self.base_url}/api/{self.session_id}/{endpoint}"
+        return f"{self.base_url}/api/{endpoint}"
 
     def _get_headers(self) -> Dict[str, str]:
         """Get request headers with authentication"""
@@ -147,6 +141,7 @@ class WAHAService:
 
             url = self._build_url('/sendText')
             payload = {
+                'session': self.session_id,
                 'chatId': f"{phone_number}@c.us",
                 'text': message
             }
@@ -196,24 +191,28 @@ class WAHAService:
             if media_type == 'image':
                 url = self._build_url('/sendImage')
                 payload = {
+                    'session': self.session_id,
                     'chatId': f"{phone_number}@c.us",
                     'image': media_url
                 }
             elif media_type == 'document':
                 url = self._build_url('/sendDocument')
                 payload = {
+                    'session': self.session_id,
                     'chatId': f"{phone_number}@c.us",
                     'document': media_url
                 }
             elif media_type == 'audio':
                 url = self._build_url('/sendAudio')
                 payload = {
+                    'session': self.session_id,
                     'chatId': f"{phone_number}@c.us",
                     'audio': media_url
                 }
             elif media_type == 'video':
                 url = self._build_url('/sendVideo')
                 payload = {
+                    'session': self.session_id,
                     'chatId': f"{phone_number}@c.us",
                     'video': media_url
                 }
@@ -266,6 +265,7 @@ class WAHAService:
 
             url = self._build_url('/sendLocation')
             payload = {
+                'session': self.session_id,
                 'chatId': f"{phone_number}@c.us",
                 'lat': latitude,
                 'lng': longitude
@@ -315,6 +315,7 @@ class WAHAService:
 
             url = self._build_url('/sendContact')
             payload = {
+                'session': self.session_id,
                 'chatId': f"{phone_number}@c.us",
                 'name': contact_name,
                 'phone': contact_phone
@@ -364,6 +365,7 @@ class WAHAService:
 
             url = self._build_url('/sendButtons')
             payload = {
+                'session': self.session_id,
                 'chatId': f"{phone_number}@c.us",
                 'text': text,
                 'buttons': buttons
@@ -415,6 +417,7 @@ class WAHAService:
 
             url = self._build_url('/sendList')
             payload = {
+                'session': self.session_id,
                 'chatId': f"{phone_number}@c.us",
                 'text': text,
                 'title': title,
@@ -449,7 +452,7 @@ class WAHAService:
         """
         try:
             url = self._build_url('/markMessageAsRead')
-            payload = {'messageId': message_id}
+            payload = {'messageId': message_id, 'session': self.session_id}
 
             response = await self.http_client.post(
                 url,
@@ -480,7 +483,8 @@ class WAHAService:
             url = self._build_url('/deleteMessage')
             payload = {
                 'messageId': message_id,
-                'everyone': for_everyone
+                'everyone': for_everyone,
+                'session': self.session_id
             }
 
             response = await self.http_client.post(
@@ -520,6 +524,7 @@ class WAHAService:
 
             url = self._build_url('/chatHistory')
             params = {
+                'session': self.session_id,
                 'chatId': chat_id,
                 'limit': limit
             }
@@ -557,7 +562,7 @@ class WAHAService:
             chat_id = f"{phone_number}@c.us"
 
             url = self._build_url('/chatInfo')
-            params = {'chatId': chat_id}
+            params = {'session': self.session_id, 'chatId': chat_id}
 
             response = await self.http_client.get(
                 url,
@@ -610,7 +615,7 @@ class WAHAService:
             chat_id = f"{phone_number}@c.us"
 
             url = self._build_url('/profilePicture')
-            params = {'chatId': chat_id}
+            params = {'session': self.session_id, 'chatId': chat_id}
 
             response = await self.http_client.get(
                 url,
