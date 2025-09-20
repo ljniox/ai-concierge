@@ -569,7 +569,7 @@ class InteractionService:
                 user_id=user.id,
                 user_message=message,
                 assistant_response=response_text,
-                service=orchestration_result.get('service_response', {}).get('service', ServiceType.CONTACT_HUMAIN).value,
+                service=str(orchestration_result.get('service_response', {}).get('service', ServiceType.CONTACT_HUMAIN)),
                 interaction_type=InteractionType.MESSAGE,
                 message_type=MessageType.TEXT,
                 confidence_score=orchestration_result.get('processing_metadata', {}).get('confidence_score', 0.5),
@@ -604,7 +604,7 @@ class InteractionService:
                 "response_sent": bool(response_text),
                 "requires_human_followup": requires_human_followup,
                 "emergency_detected": emergency_result.get('is_emergency', False),
-                "service_used": orchestration_result.get('service_response', {}).get('service', ServiceType.CONTACT_HUMAIN).value
+                "service_used": str(orchestration_result.get('service_response', {}).get('service', ServiceType.CONTACT_HUMAIN))
             }
 
         except Exception as e:
@@ -933,10 +933,10 @@ class InteractionService:
         await self.session_service.update_session(
             session.id,
             {
-                "current_service": service_type.value if service_type else None,
+                "current_service": str(service_type) if service_type else None,
                 "context": {
                     **(session.context or {}),
-                    "last_service": service_type.value if service_type else None,
+                    "last_service": str(service_type) if service_type else None,
                     "requires_human_followup": requires_followup
                 }
             }
