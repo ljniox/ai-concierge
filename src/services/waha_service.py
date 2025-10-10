@@ -4,6 +4,7 @@ WAHA integration service for WhatsApp messaging operations
 
 import json
 import httpx
+import os
 from typing import Optional, Dict, Any, List, Union
 from datetime import datetime
 from src.utils.config import get_settings
@@ -170,23 +171,58 @@ class WAHAService:
         media_url: str,
         media_type: str,
         caption: Optional[str] = None,
-        quoted_message_id: Optional[str] = None
+        quoted_message_id: Optional[str] = None,
+        filename: Optional[str] = None
     ) -> Dict[str, Any]:
         """
         Send media message (image, document, audio, video)
 
         Args:
             phone_number: Recipient phone number
-            media_url: URL to media file
+            media_url: URL to media file (can be external URL or MinIO URL)
             media_type: Type of media (image, document, audio, video)
             caption: Optional caption for media
             quoted_message_id: Optional message ID to reply to
+            filename: Optional filename for documents
 
         Returns:
             Message response data
         """
         try:
             phone_number = self._format_phone_number(phone_number)
+
+            # If it's a local file path, upload to MinIO first
+            if os.path.exists(media_url):
+                try:
+                    from src.services.minio_storage_service import get_minio_storage
+                    minio_storage = get_minio_storage()
+
+                    # Read file and upload to MinIO
+                    with open(media_url, 'rb') as f:
+                        file_data = f.read()
+
+                    file_info = minio_storage.upload_file_data(
+                        file_data=file_data,
+                        filename=filename or os.path.basename(media_url),
+                        metadata={
+                            "phone_number": phone_number,
+                            "media_type": media_type,
+                            "source": "waha_service_upload"
+                        }
+                    )
+
+                    # Use MinIO URL
+                    media_url = file_info["public_url"]
+                    logger.info("file_uploaded_to_minio",
+                              original_path=media_url,
+                              minio_url=media_url,
+                              file_size=file_info["file_size"])
+
+                except Exception as e:
+                    logger.error("minio_upload_failed",
+                               file_path=media_url,
+                               error=str(e))
+                    # Continue with original URL if MinIO upload fails
 
             if media_type == 'image':
                 url = self._build_url('/sendImage')
@@ -202,6 +238,8 @@ class WAHAService:
                     'chatId': f"{phone_number}@c.us",
                     'document': media_url
                 }
+                if filename:
+                    payload['filename'] = filename
             elif media_type == 'audio':
                 url = self._build_url('/sendAudio')
                 payload = {

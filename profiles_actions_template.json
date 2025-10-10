@@ -1,0 +1,340 @@
+{
+  "version": "1.0",
+  "description": "Configuration des profils et actions pour Gust-IA",
+  "profiles": [
+    {
+      "profile_id": "admin_principal",
+      "profile_name": "Administrateur Principal",
+      "description": "Accès complet à toutes les fonctionnalités",
+      "phone_numbers": ["221765005555"],
+      "permissions": ["super_admin", "profile_management", "all_actions"],
+      "default_locale": "fr",
+      "is_active": true
+    },
+    {
+      "profile_id": "catechiste",
+      "profile_name": "Catéchiste",
+      "description": "Gestion des catéchumènes et classes",
+      "phone_numbers": [],
+      "permissions": ["view_catechumenes", "manage_classes", "view_renseignements"],
+      "default_locale": "fr",
+      "is_active": true
+    },
+    {
+      "profile_id": "parent",
+      "profile_name": "Parent",
+      "description": "Accès limité aux informations de ses enfants",
+      "phone_numbers": [],
+      "permissions": ["view_own_children", "view_class_schedule"],
+      "default_locale": "fr",
+      "is_active": true
+    }
+  ],
+  "actions": [
+    {
+      "action_id": "search_catechumene",
+      "name": "Rechercher un catéchumène",
+      "description": "Rechercher un catéchumène par nom ou ID",
+      "category": "catechumene_management",
+      "required_permissions": ["view_catechumenes"],
+      "parameters": [
+        {
+          "name": "search_term",
+          "type": "string",
+          "required": true,
+          "description": "Nom ou ID du catéchumène à rechercher"
+        },
+        {
+          "name": "search_type",
+          "type": "string",
+          "required": false,
+          "default": "name",
+          "enum": ["name", "id", "parent_code"],
+          "description": "Type de recherche"
+        }
+      ],
+      "database_operations": [
+        {
+          "table": "catechumenes",
+          "operation": "select",
+          "fields": ["id", "nom", "prenom", "date_naissance", "classe_id", "parent_id"],
+          "conditions": [
+            {
+              "field": "nom",
+              "operator": "ilike",
+              "value": "%{search_term}%"
+            }
+          ],
+          "fields": ["id", "prenoms", "nom", "annee_naissance", "classe_id", "code_parent"]
+        }
+      ],
+      "response_format": {
+        "success_template": "📋 **Catéchumène trouvé:**\n{prenoms} {nom}\n📅 Année de naissance: {annee_naissance}\n👨‍👩‍👧‍👦 Code parent: {code_parent}",
+        "error_template": "❌ Catéchumène non trouvé: {search_term}",
+        "multiple_results_template": "📋 **{count} catéchumènes trouvés:**\n{results}"
+      }
+    },
+    {
+      "action_id": "list_class_students",
+      "name": "Lister les élèves d'une classe",
+      "description": "Afficher tous les catéchumènes d'une classe spécifique",
+      "category": "class_management",
+      "required_permissions": ["view_catechumenes", "manage_classes"],
+      "parameters": [
+        {
+          "name": "class_name",
+          "type": "string",
+          "required": true,
+          "description": "Nom de la classe"
+        }
+      ],
+      "database_operations": [
+        {
+          "table": "catechumenes",
+          "operation": "select",
+          "fields": ["id", "prenoms", "nom", "annee_naissance", "classe_id"],
+          "conditions": [
+            {
+              "field": "classe_id",
+              "operator": "=",
+              "value": "{class_id}"
+            }
+          ],
+          "order_by": "nom, prenoms"
+        }
+      ],
+      "response_format": {
+        "success_template": "📚 **Élèves de la classe {classe_nom}:**\n{student_list}",
+        "error_template": "❌ Classe non trouvée: {class_name}",
+        "empty_template": "📚 Aucun élève dans la classe {class_name}"
+      }
+    },
+    {
+      "action_id": "view_parent_info",
+      "name": "Voir les informations parentales",
+      "description": "Consulter les informations d'un parent et ses enfants",
+      "category": "parent_management",
+      "required_permissions": ["view_parents"],
+      "parameters": [
+        {
+          "name": "parent_code",
+          "type": "string",
+          "required": true,
+          "description": "Code parent pour l'identification"
+        }
+      ],
+      "database_operations": [
+        {
+          "table": "parents",
+          "operation": "select",
+          "fields": ["id", "prenoms", "nom", "telephone", "email"],
+          "conditions": [
+            {
+              "field": "code_parent",
+              "operator": "=",
+              "value": "{parent_code}"
+            }
+          ]
+        },
+        {
+          "table": "catechumenes",
+          "operation": "select",
+          "fields": ["id", "nom", "prenom", "date_naissance", "classes.nom as classe_nom"],
+          "conditions": [
+            {
+              "field": "parent_id",
+              "operator": "=",
+              "value": "parents.id"
+            }
+          ],
+          "joins": [
+            {
+              "table": "classes",
+              "on": "catechumenes.classe_id = classes.id"
+            }
+          ]
+        }
+      ],
+      "response_format": {
+        "success_template": "👨‍👩‍👧‍👦 **Informations parentales:**\n**{prenoms} {nom}**\n📞 {telephone}\n📧 {email}\n\n👶 **Enfants ({children_count}):**\n{children_list}",
+        "error_template": "❌ Parent non trouvé avec le code: {parent_code}"
+      }
+    },
+    {
+      "action_id": "check_class_schedule",
+      "name": "Consulter les horaires des classes",
+      "description": "Voir les horaires d'une classe spécifique",
+      "category": "schedule_management",
+      "required_permissions": ["view_class_schedule"],
+      "parameters": [
+        {
+          "name": "class_name",
+          "type": "string",
+          "required": false,
+          "description": "Nom de la classe (optionnel, montre toutes si non spécifié)"
+        }
+      ],
+      "database_operations": [
+        {
+          "table": "classes",
+          "operation": "select",
+          "fields": ["id", "nom", "horaire", "jour", "salle", "enseignant"],
+          "conditions": [
+            {
+              "field": "nom",
+              "operator": "ilike",
+              "value": "%{class_name}%",
+              "optional": true
+            }
+          ],
+          "order_by": "jour, horaire"
+        }
+      ],
+      "response_format": {
+        "success_template": "📅 **Horaires des classes:**\n{schedule_list}",
+        "error_template": "❌ Aucun horaire trouvé",
+        "single_class_template": "📅 **Horaire - {nom}:**\n🗓️ {jour} de {horaire}\n🏫 Salle: {salle}\n👨‍🏫 Enseignant: {enseignant}"
+      }
+    },
+    {
+      "action_id": "add_renseignement",
+      "name": "Ajouter un renseignement",
+      "description": "Créer un nouveau renseignement dans la base",
+      "category": "content_management",
+      "required_permissions": ["manage_renseignements"],
+      "parameters": [
+        {
+          "name": "titre",
+          "type": "string",
+          "required": true,
+          "description": "Titre du renseignement"
+        },
+        {
+          "name": "contenu",
+          "type": "string",
+          "required": true,
+          "description": "Contenu du renseignement"
+        },
+        {
+          "name": "categorie",
+          "type": "string",
+          "required": false,
+          "default": "général",
+          "description": "Catégorie du renseignement"
+        },
+        {
+          "name": "priorite",
+          "type": "integer",
+          "required": false,
+          "default": 1,
+          "description": "Priorité (1-5)"
+        }
+      ],
+      "database_operations": [
+        {
+          "table": "renseignements",
+          "operation": "insert",
+          "fields": {
+            "titre": "{titre}",
+            "contenu": "{contenu}",
+            "categorie": "{categorie}",
+            "priorite": "{priorite}",
+            "status": "actif"
+          }
+        }
+      ],
+      "response_format": {
+        "success_template": "✅ Renseignement ajouté avec succès!\n📝 **{titre}**\nCatégorie: {categorie}\nPriorité: {priorite}",
+        "error_template": "❌ Erreur lors de l'ajout du renseignement: {error}"
+      }
+    },
+    {
+      "action_id": "list_renseignements",
+      "name": "Lister les renseignements",
+      "description": "Afficher les renseignements avec filtrage par catégorie",
+      "category": "content_management",
+      "required_permissions": ["view_renseignements"],
+      "parameters": [
+        {
+          "name": "categorie",
+          "type": "string",
+          "required": false,
+          "description": "Filtrer par catégorie (optionnel)"
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "default": 10,
+          "description": "Nombre maximum de résultats"
+        }
+      ],
+      "database_operations": [
+        {
+          "table": "renseignements",
+          "operation": "select",
+          "fields": ["id", "titre", "contenu", "categorie", "priorite", "created_at"],
+          "conditions": [
+            {
+              "field": "categorie",
+              "operator": "ilike",
+              "value": "%{categorie}%",
+              "optional": true
+            },
+            {
+              "field": "status",
+              "operator": "=",
+              "value": "actif"
+            }
+          ],
+          "order_by": "priorite DESC, created_at DESC",
+          "limit": "{limit}"
+        }
+      ],
+      "response_format": {
+        "success_template": "📋 **Renseignements ({categorie_filter}):**\n{renseignements_list}",
+        "error_template": "❌ Aucun renseignement trouvé",
+        "empty_template": "📋 Aucun renseignement disponible"
+      }
+    }
+  ],
+  "entity_links": {
+    "catechumenes": {
+      "description": "Table des catéchumènes",
+      "fields": ["id", "nom", "prenom", "date_naissance", "classe_id", "parent_id"],
+      "relationships": {
+        "classes": {"type": "many_to_one", "foreign_key": "classe_id"},
+        "parents": {"type": "many_to_one", "foreign_key": "parent_id"}
+      }
+    },
+    "parents": {
+      "description": "Table des parents",
+      "fields": ["id", "nom", "prenom", "telephone", "email", "code_parent"],
+      "relationships": {
+        "catechumenes": {"type": "one_to_many", "local_key": "id"}
+      }
+    },
+    "classes": {
+      "description": "Table des classes",
+      "fields": ["id", "nom", "horaire", "jour", "salle", "enseignant"],
+      "relationships": {
+        "catechumenes": {"type": "one_to_many", "local_key": "id"}
+      }
+    },
+    "renseignements": {
+      "description": "Table des renseignements",
+      "fields": ["id", "titre", "contenu", "categorie", "status", "priorite"],
+      "relationships": {}
+    }
+  },
+  "permission_mappings": {
+    "super_admin": ["*"],
+    "profile_management": ["view_profiles", "create_profiles", "edit_profiles", "delete_profiles"],
+    "catechumene_management": ["view_catechumenes", "create_catechumenes", "edit_catechumenes"],
+    "class_management": ["view_classes", "create_classes", "edit_classes", "manage_classes"],
+    "parent_management": ["view_parents", "create_parents", "edit_parents"],
+    "content_management": ["view_renseignements", "manage_renseignements"],
+    "schedule_management": ["view_class_schedule"],
+    "view_own_children": ["view_parents_restricted"]
+  }
+}

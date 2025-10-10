@@ -4,16 +4,18 @@ Interaction service for managing conversation interactions and orchestrating con
 
 from typing import Optional, List, Dict, Any
 from datetime import datetime, timedelta
+import os
 from supabase import Client
 from src.models.interaction import Interaction, InteractionCreate, InteractionUpdate, InteractionWithDetails, InteractionAnalytics, MessageType, InteractionType
-from src.models.session import Session
+from src.models.session import Session, SessionUpdate
 from src.models.user import User
 from src.services.user_service import UserService
 from src.services.session_service import SessionService
 from src.services.redis_service import RedisService
-from src.services.waha_service import WAHAService
+from src.services.whatsapp_service import WhatsAppService
 from src.services.claude_service import ClaudeService, ServiceType
 from src.services.response_formatter import ResponseFormatter
+from src.services.profile_service import ProfileService
 from src.utils.config import get_settings
 import structlog
 
@@ -29,9 +31,13 @@ class InteractionService:
         self.user_service = UserService()
         self.session_service = SessionService()
         self.redis_service = RedisService()
-        self.waha_service = WAHAService()
+        self.whatsapp_service = WhatsAppService(
+            base_url=os.getenv('WHATSAPP_API_URL', 'http://whatsapp-service:3001'),
+            instance_name=os.getenv('WHATSAPP_SERVICE_NAME', 'gust-ia')
+        )
         self.claude_service = ClaudeService()
         self.response_formatter = ResponseFormatter()
+        self.profile_service = ProfileService()
         self._initialize_supabase()
 
     async def initialize_redis(self):
@@ -328,7 +334,7 @@ class InteractionService:
             )
 
             return InteractionWithDetails(
-                **interaction.dict(),
+                **interaction.model_dump() if hasattr(interaction, 'model_dump') else interaction.dict(),
                 user_name=user.name if user else None,
                 session_status=session.status.value if session else None,
                 follow_up_required=follow_up_required
@@ -535,16 +541,99 @@ class InteractionService:
             # Get or create session
             session = await self.session_service.create_or_get_session(user.id)
 
-            # Get conversation history
-            conversation_history = await self._get_conversation_history(session.id)
+            # Check for admin commands first (before profile commands)
+            from src.services.super_admin_service import SuperAdminService
+            admin_service = SuperAdminService()
 
-            # Process with Claude AI
-            orchestration_result = await self.claude_service.orchestrate_conversation(
-                message=message,
-                session_context={"session_id": session.id, "user_id": user.id},
-                conversation_history=conversation_history,
-                phone_number=phone_number
-            )
+            # Initialize variables
+            admin_command_processed = False
+
+            if admin_service.is_super_admin(phone_number):
+                try:
+                    admin_result = await admin_service.parse_admin_command(message)
+                    if admin_result.get('success'):
+                        response_text = admin_result.get('response', admin_result.get('message', ''))
+                        orchestration_result = {
+                            'response': response_text,
+                            'service_type': ServiceType.SUPER_ADMIN,
+                            'processing_metadata': {
+                                'admin_action': True,
+                                'admin_command': message,
+                                'execution_time': admin_result.get('execution_time', 0)
+                            }
+                        }
+                        admin_command_processed = True
+                    else:
+                        # Admin command failed, continue with profile processing
+                        error_msg = admin_result.get('response', admin_result.get('message', 'Command failed'))
+                        logger.info("admin_command_failed", message=message, error=error_msg)
+                except Exception as e:
+                    logger.error("admin_command_processing_error", message=message, error=str(e))
+
+            # Check for profile-based actions if admin command wasn't processed successfully
+            profile_command = None
+            action_result = None
+            if not admin_command_processed:
+                profile_command = await self.profile_service.parse_profile_command(message, phone_number)
+
+                if profile_command and profile_command.get('action') == 'execute_action':
+                    # Execute profile-based action
+                    action_result = await self.profile_service.execute_action(
+                        profile=profile_command['profile'],
+                        action_id=profile_command['action_id'],
+                        parameters=profile_command['parameters']
+                    )
+
+                    if action_result and action_result.get('success'):
+                        response_text = action_result.get('response', '')
+                        orchestration_result = {
+                            'response': response_text,
+                            'service_type': ServiceType.RENSEIGNEMENT,
+                            'processing_metadata': {
+                                'profile_action': True,
+                                'action_id': profile_command['action_id'],
+                                'execution_time': action_result.get('execution_time', 0)
+                            }
+                        }
+                    else:
+                        error_msg = action_result.get('error', 'Erreur inconnue') if action_result else 'Erreur inconnue'
+                        response_text = f"❌ Erreur: {error_msg}"
+                        orchestration_result = {
+                            'response': response_text,
+                            'service_type': ServiceType.CONTACT_HUMAIN,
+                            'processing_metadata': {
+                                'profile_action': True,
+                                'action_id': profile_command['action_id'],
+                                'error': error_msg
+                            }
+                        }
+
+                elif profile_command and profile_command.get('action') == 'no_profile':
+                    # No profile found, use normal Claude processing
+                    response_text = "🔒 Profil non trouvé. Votre numéro n'est pas autorisé à exécuter des actions."
+                    orchestration_result = {
+                        'response': response_text,
+                        'service_type': ServiceType.CONTACT_HUMAIN,
+                        'processing_metadata': {
+                            'profile_action': False,
+                            'no_profile': True
+                        }
+                    }
+                else:
+                    # No profile command found, proceed to normal Claude processing
+                    # Get conversation history and process with Claude AI
+                    conversation_history = await self._get_conversation_history(session.id)
+
+                    orchestration_result = await self.claude_service.orchestrate_conversation(
+                    message=message,
+                    session_context={"session_id": session.id, "user_id": user.id},
+                    conversation_history=conversation_history,
+                    phone_number=phone_number
+                )
+
+            # Initialize conversation_history for profile actions (not defined in that path)
+            if 'conversation_history' not in locals():
+                conversation_history = []
 
             # Check for emergency situations
             emergency_result = await self.claude_service.detect_emergency_situations(
@@ -557,14 +646,20 @@ class InteractionService:
             formatted_response = self._format_response_with_gust_ia(response_text, orchestration_result)
             requires_human_followup = orchestration_result.get('processing_metadata', {}).get('requires_human_followup', False)
 
-            # Send response via WhatsApp
+            # Send response via appropriate platform
             message_to_send = formatted_response if formatted_response else response_text
             if message_to_send and not emergency_result.get('requires_immediate_action', False):
-                wa_response = await self.waha_service.send_text_message(
-                    phone_number=phone_number,
-                    message=message_to_send,
-                    quoted_message_id=message_id
-                )
+                # Check if this is a Telegram message
+                if phone_number.startswith('telegram_'):
+                    # For Telegram messages, skip WhatsApp sending (handled by telegram API)
+                    wa_response = {"id": "telegram_message_handled_elsewhere"}
+                    logger.info("skipping_whatsapp_send_for_telegram", phone_number=phone_number)
+                else:
+                    # Send via WhatsApp for regular messages
+                    wa_response = await self.whatsapp_service.send_text_message(
+                        phone_number=phone_number,
+                        message=message_to_send
+                    )
             else:
                 wa_response = {"id": "emergency_no_response"}
 
@@ -574,7 +669,7 @@ class InteractionService:
                 user_id=user.id,
                 user_message=message,
                 assistant_response=response_text,
-                service=str(orchestration_result.get('service_response', {}).get('service', ServiceType.CONTACT_HUMAIN)),
+                service=orchestration_result.get('service_response', {}).get('service', ServiceType.CONTACT_HUMAIN.value),
                 interaction_type=InteractionType.MESSAGE,
                 message_type=MessageType.TEXT,
                 confidence_score=orchestration_result.get('processing_metadata', {}).get('confidence_score', 0.5),
@@ -583,7 +678,8 @@ class InteractionService:
                     "message_id": message_id,
                     "quoted_message_id": quoted_message_id,
                     "wa_response_id": wa_response.get('id'),
-                    "orchestration_result": orchestration_result,
+                    "orchestration_service": orchestration_result.get('service_response', {}).get('service', ServiceType.CONTACT_HUMAIN.value),
+                    "orchestration_confidence": orchestration_result.get('processing_metadata', {}).get('confidence_score', 0.5),
                     "emergency_detected": emergency_result.get('is_emergency', False),
                     "requires_human_followup": requires_human_followup
                 }
@@ -606,10 +702,11 @@ class InteractionService:
                 "interaction_id": interaction.id,
                 "session_id": session.id,
                 "user_id": user.id,
+                "response": response_text,
                 "response_sent": bool(response_text),
                 "requires_human_followup": requires_human_followup,
                 "emergency_detected": emergency_result.get('is_emergency', False),
-                "service_used": str(orchestration_result.get('service_response', {}).get('service', ServiceType.CONTACT_HUMAIN))
+                "service": str(orchestration_result.get('service_response', {}).get('service', ServiceType.CONTACT_HUMAIN))
             }
 
         except Exception as e:
@@ -651,7 +748,7 @@ class InteractionService:
             )
 
             # Send greeting
-            wa_response = await self.waha_service.send_text_message(
+            wa_response = await self.whatsapp_service.send_text_message(
                 phone_number=phone_number,
                 message=greeting_message
             )
@@ -675,10 +772,11 @@ class InteractionService:
             interaction = await self.create_interaction(interaction_data)
 
             # Update session to reset to selection state
-            await self.session_service.update_session(
-                session.id,
-                {"current_service": None, "context": {}}
+            session_update = SessionUpdate(
+                current_service=None,
+                context={}
             )
+            await self.session_service.update_session(session.id, session_update)
 
             return {
                 "success": True,
@@ -722,12 +820,10 @@ class InteractionService:
             )
 
             # Send buttons
-            wa_response = await self.waha_service.send_buttons(
+            # Note: New WhatsApp service doesn't support buttons yet, send as text
+            wa_response = await self.whatsapp_service.send_text_message(
                 phone_number=phone_number,
-                text=menu_message,
-                buttons=buttons,
-                title="Nos Services",
-                footer="Choisissez une option"
+                message=menu_message
             )
 
             # Get user and session
@@ -983,18 +1079,20 @@ class InteractionService:
 
     async def _update_session_context(self, session: Session, orchestration_result: Dict[str, Any], requires_followup: bool):
         """Update session context after interaction"""
-        service_type = str(orchestration_result.get('service_response', {}).get('service', ServiceType.CONTACT_HUMAIN))
-        await self.session_service.update_session(
-            session.id,
-            {
-                "current_service": str(service_type) if service_type else None,
-                "context": {
-                    **(session.context or {}),
-                    "last_service": str(service_type) if service_type else None,
-                    "requires_human_followup": requires_followup
-                }
+        service_type = orchestration_result.get('service_response', {}).get('service', ServiceType.CONTACT_HUMAIN.value)
+        if isinstance(service_type, str):
+            service_type = service_type
+        else:
+            service_type = service_type.value
+        session_update = SessionUpdate(
+            current_service=str(service_type) if service_type else None,
+            context={
+                **(session.context or {}),
+                "last_service": str(service_type) if service_type else None,
+                "requires_human_followup": requires_followup
             }
         )
+        await self.session_service.update_session(session.id, session_update)
 
     async def _cache_conversation_history(self, session_id: str, history: List[Dict[str, str]], user_message: str, assistant_response: str):
         """Cache updated conversation history"""
@@ -1071,7 +1169,7 @@ class InteractionService:
             # Check individual services
             services = [
                 ("redis", self.redis_service.ping()),
-                ("waha", self.waha_service.is_session_connected()),
+                ("whatsapp", self.whatsapp_service.is_connected()),
                 ("claude", self.claude_service.health_check())
             ]
 
@@ -1099,6 +1197,7 @@ class InteractionService:
 
     async def close(self):
         """Close all service connections"""
-        await self.waha_service.close()
+        # New WhatsApp service doesn't require explicit closing
+        pass
         await self.claude_service.close()
         logger.info("interaction_service_closed")

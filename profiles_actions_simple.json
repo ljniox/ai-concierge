@@ -1,0 +1,158 @@
+{
+  "version": "1.0",
+  "description": "Configuration simplifiée des profils et actions",
+  "profiles": [
+    {
+      "profile_id": "admin_principal",
+      "profile_name": "Administrateur Principal",
+      "description": "Accès complet à toutes les fonctionnalités",
+      "phone_numbers": ["221765005555"],
+      "permissions": ["super_admin", "profile_management", "all_actions"],
+      "default_locale": "fr",
+      "is_active": true
+    },
+    {
+      "profile_id": "parent_test",
+      "profile_name": "Parent Test",
+      "description": "Accès parent pour tester l'authentification",
+      "phone_numbers": ["221765055550"],
+      "permissions": ["view_parents", "view_catechumenes", "view_classes"],
+      "parent_code": "PARENT001",
+      "default_locale": "fr",
+      "is_active": true
+    }
+  ],
+  "actions": [
+    {
+      "action_id": "search_catechumene",
+      "name": "Rechercher un catéchumène",
+      "description": "Rechercher un catéchumène par nom",
+      "category": "catechumene_management",
+      "required_permissions": ["view_catechumenes"],
+      "parameters": [
+        {
+          "name": "search_term",
+          "type": "string",
+          "required": true,
+          "description": "Nom du catéchumène à rechercher"
+        }
+      ],
+      "database_operations": [
+        {
+          "table": "catechumenes",
+          "operation": "select",
+          "fields": ["id", "prenoms", "nom", "annee_naissance", "code_parent", "baptise"],
+          "conditions": [
+            {
+              "field": "nom",
+              "operator": "ilike",
+              "value": "%{search_term}%"
+            }
+          ],
+          "order_by": "nom, prenoms",
+          "limit": 10
+        }
+      ],
+      "response_format": {
+        "success_template": "📋 **Catéchumène trouvé:**\n**{prenoms} {nom}**\n📅 Année: {annee_naissance}\n👶 Code parent: {code_parent}\n⛪ Baptême: {baptise}",
+        "error_template": "❌ Catéchumène non trouvé: {search_term}",
+        "multiple_results_template": "📋 **{count} catéchumènes trouvés:**\n{results}"
+      }
+    },
+    {
+      "action_id": "view_parent_info",
+      "name": "Voir les informations parentales",
+      "description": "Consulter les informations d'un parent",
+      "category": "parent_management",
+      "required_permissions": ["view_parents"],
+      "parameters": [
+        {
+          "name": "parent_code",
+          "type": "string",
+          "required": true,
+          "description": "Code parent pour l'identification"
+        }
+      ],
+      "database_operations": [
+        {
+          "table": "parents",
+          "operation": "select",
+          "fields": ["id", "prenoms", "nom", "telephone", "email", "actif"],
+          "conditions": [
+            {
+              "field": "code_parent",
+              "operator": "=",
+              "value": "{parent_code}"
+            }
+          ]
+        }
+      ],
+      "response_format": {
+        "success_template": "👨‍👩‍👧‍👦 **Informations parentales:**\n**{prenoms} {nom}**\n📞 {telephone}\n📧 {email}\n🟢 Actif: {actif}",
+        "error_template": "❌ Parent non trouvé avec le code: {parent_code}"
+      }
+    },
+    {
+      "action_id": "list_classes",
+      "name": "Lister les classes",
+      "description": "Afficher toutes les classes disponibles",
+      "category": "class_management",
+      "required_permissions": ["view_classes"],
+      "parameters": [],
+      "database_operations": [
+        {
+          "table": "classes",
+          "operation": "select",
+          "fields": ["id", "classe_nom", "niveau", "description"],
+          "order_by": "niveau, classe_nom"
+        }
+      ],
+      "response_format": {
+        "success_template": "📚 **Classes disponibles:**\n{classes_list}",
+        "error_template": "❌ Aucune classe trouvée"
+      }
+    },
+    {
+      "action_id": "list_renseignements",
+      "name": "Lister les renseignements",
+      "description": "Afficher les renseignements disponibles",
+      "category": "content_management",
+      "required_permissions": ["view_renseignements"],
+      "parameters": [
+        {
+          "name": "categorie",
+          "type": "string",
+          "required": false,
+          "description": "Filtrer par catégorie (optionnel)"
+        }
+      ],
+      "database_operations": [
+        {
+          "table": "renseignements",
+          "operation": "select",
+          "fields": ["id", "titre", "contenu", "categorie", "priorite", "created_at"],
+          "conditions": [
+            {
+              "field": "categorie",
+              "operator": "ilike",
+              "value": "%{categorie}%",
+              "optional": true
+            },
+            {
+              "field": "status",
+              "operator": "=",
+              "value": "actif"
+            }
+          ],
+          "order_by": "priorite DESC, created_at DESC",
+          "limit": 10
+        }
+      ],
+      "response_format": {
+        "success_template": "📋 **Renseignements ({categorie_filter}):**\n{renseignements_list}",
+        "error_template": "❌ Aucun renseignement trouvé",
+        "empty_template": "📋 Aucun renseignement disponible"
+      }
+    }
+  ]
+}

@@ -8,6 +8,7 @@ from datetime import datetime, date
 from enum import Enum
 from src.utils.config import get_settings
 from src.utils.database import get_supabase_client
+from src.utils.text_normalization import normalize_command, get_normalized_command_mapping, extract_command_and_params
 import structlog
 
 logger = structlog.get_logger()
@@ -339,49 +340,104 @@ class SuperAdminService:
     async def parse_admin_command(self, message: str) -> Dict[str, Any]:
         """Parse Super Admin command and execute appropriate action"""
         try:
-            message_lower = message.lower().strip()
+            normalized_message = normalize_command(message)
+            command_mapping = get_normalized_command_mapping()
 
-            # Add renseignement command
-            if message_lower.startswith("ajouter renseignement") or message_lower.startswith("add renseignement"):
-                return await self._parse_add_renseignement(message)
+            # Extract command parts
+            message_parts = normalized_message.split()
+            if not message_parts:
+                return {
+                    "success": False,
+                    "message": "Commande vide. Tapez 'aide' pour voir les commandes disponibles."
+                }
 
-            # Update renseignement command
-            elif message_lower.startswith("modifier renseignement") or message_lower.startswith("update renseignement"):
-                return await self._parse_update_renseignement(message)
+            # Get the root command (first word)
+            root_command = message_parts[0]
+            canonical_command = command_mapping.get(root_command, root_command)
 
-            # Deactivate renseignement command
-            elif message_lower.startswith("desactiver renseignement") or message_lower.startswith("deactivate renseignement"):
-                return await self._parse_deactivate_renseignement(message)
+            # Multi-word commands
+            if len(message_parts) >= 2:
+                second_word = message_parts[1]
+                canonical_second = command_mapping.get(second_word, second_word)
 
-            # List renseignements command
-            elif message_lower.startswith("lister renseignements") or message_lower.startswith("list renseignements"):
-                return await self._parse_list_renseignements(message)
+                full_command = f"{canonical_command} {canonical_second}"
 
-            # Categories command
-            elif message_lower.startswith("categories") or message_lower.startswith("catégories"):
+                # Add renseignement command
+                if full_command in ["ajouter renseignement", "add renseignement"]:
+                    return await self._parse_add_renseignement(message)
+
+                # Update renseignement command
+                elif full_command in ["modifier renseignement", "update renseignement"]:
+                    return await self._parse_update_renseignement(message)
+
+                # Deactivate renseignement command
+                elif full_command in ["desactiver renseignement", "deactivate renseignement"]:
+                    return await self._parse_deactivate_renseignement(message)
+
+                # List renseignements command (both singular and plural)
+                elif full_command in ["lister renseignement", "list renseignement", "lister renseignements", "list renseignements"]:
+                    return await self._parse_list_renseignements(message)
+
+                # Categories command
+                elif canonical_second in ["categories", "categorie", "catégories", "catégorie"]:
+                    categories_result = await self.get_categories()
+                    if categories_result.get("success"):
+                        suggestions = self._generate_suggestions("categories", None)
+                        categories_result["suggestions"] = suggestions
+                    return categories_result
+
+                # Profile-based commands (admin can also use profile commands)
+                elif full_command in ["rechercher catechumene", "chercher catechumene", "trouver catechumene"]:
+                    return await self._parse_search_catechumene(message)
+                elif full_command in ["voir parent", "parent info"]:
+                    return await self._parse_view_parent_info(message)
+                elif full_command in ["lister classe", "lister classes"]:
+                    return await self._parse_list_classes(message)
+
+                # Admin management commands
+                elif full_command in ["ajouter admin", "add admin"]:
+                    return await self._parse_add_admin(message)
+                elif full_command in ["supprimer admin", "remove admin"]:
+                    return await self._parse_remove_admin(message)
+                elif full_command in ["lister admin", "list admin", "lister admins", "list admins"]:
+                    return await self.list_admin_phones()
+
+            # Single word commands
+            # Help command
+            if canonical_command in ["aide", "help", "commandes"]:
+                return await self._get_admin_help()
+
+            # Categories command (single word)
+            elif canonical_command in ["categories", "categorie", "catégories", "catégorie"]:
                 categories_result = await self.get_categories()
                 if categories_result.get("success"):
                     suggestions = self._generate_suggestions("categories", None)
                     categories_result["suggestions"] = suggestions
                 return categories_result
 
-            # Admin management commands
-            elif message_lower.startswith("ajouter admin") or message_lower.startswith("add admin"):
-                return await self._parse_add_admin(message)
-            elif message_lower.startswith("supprimer admin") or message_lower.startswith("remove admin"):
-                return await self._parse_remove_admin(message)
-            elif message_lower.startswith("lister admins") or message_lower.startswith("list admins"):
-                return await self.list_admin_phones()
+            # Try to match as list renseignements without second word
+            elif canonical_command == "lister" and len(message_parts) >= 2:
+                # Check if second word could be "renseignement" in any form (singular or plural)
+                second_word_norm = command_mapping.get(message_parts[1], message_parts[1])
+                if second_word_norm in ["renseignement", "renseignements"]:
+                    return await self._parse_list_renseignements(message)
 
-            # Help command
-            elif message_lower in ["aide", "help", "commandes"]:
-                return await self._get_admin_help()
+            # Profile-based single word commands
+            elif canonical_command == "rechercher" and len(message_parts) >= 2:
+                return await self._parse_search_catechumene(message)
+            elif canonical_command == "chercher" and len(message_parts) >= 2:
+                return await self._parse_search_catechumene(message)
+            elif canonical_command == "trouver" and len(message_parts) >= 2:
+                return await self._parse_search_catechumene(message)
+            elif canonical_command == "voir" and len(message_parts) >= 2:
+                second_word = message_parts[1]
+                if second_word in ["parent", "parents"]:
+                    return await self._parse_view_parent_info(message)
 
-            else:
-                return {
-                    "success": False,
-                    "message": "Commande non reconnue. Tapez 'aide' pour voir les commandes disponibles."
-                }
+            return {
+                "success": False,
+                "message": f"Commande '{message}' non reconnue. Tapez 'aide' pour voir les commandes disponibles."
+            }
 
         except Exception as e:
             logger.error("admin_command_parse_error", error=str(e))
@@ -619,14 +675,22 @@ class SuperAdminService:
 ❓ **Aide:**
 • `aide` ou `help` - afficher cette aide
 
-**Exemples:**
-• `ajouter renseignement | Nouvel horaire | Les cours sont maintenant le samedi | horaire`
-• `modifier renseignement | 1 | titre: Horaire mis à jour`
+📝 **Note:** Les commandes ne sont pas sensibles à la casse ni aux accents!
+
+**Exemples (tous fonctionnent):**
+• `AJOUTER RENSEIGNEMENT | Nouvel horaire | Les cours sont maintenant le samedi | horaire`
+• `Ajouter renseignement | Nouvel horaire | Les cours sont maintenant le samedi | horaire`
+• `AJOUTER RENSEIGNEMENT | Titre | Contenu | Catégorie`
+• `modifier renseignement 1 | titre: Horaire mis à jour`
+• `MODIFIER RENSEIGNEMENT 1 | TITRE: Horaire mis à jour`
 • `desactiver renseignement 5`
+• `DESACTIVER RENSEIGNEMENT 5`
 • `lister renseignements horaire`
-• `categories`
+• `LISTER RENSEIGNEMENTS HORAIRE`
+• `categories` ou `catégories` ou `CATEGORIES`
 • `ajouter admin 221765001234`
-• `lister admins`
+• `listER admins`
+• `AIDE` ou `help`
         """
 
         return {
@@ -634,3 +698,103 @@ class SuperAdminService:
             "message": help_text.strip(),
             "is_help": True
         }
+
+    async def _parse_search_catechumene(self, message: str) -> Dict[str, Any]:
+        """Parse search catechumene command using profile service"""
+        try:
+            from src.services.profile_service import ProfileService
+            profile_service = ProfileService()
+
+            # Extract search term preserving case
+            search_term = self._extract_search_term_original_case(message, ['rechercher', 'chercher', 'trouver'])
+
+            if not search_term:
+                return {
+                    "success": False,
+                    "message": "Veuillez spécifier un nom à rechercher. Ex: rechercher Badji"
+                }
+
+            # Use profile service to execute the search
+            result = await profile_service.execute_action(
+                action_id='search_catechumene',
+                profile={'profile_id': 'admin_principal', 'profile_name': 'Administrateur Principal'},
+                parameters={'search_term': search_term, 'search_type': 'name'}
+            )
+
+            return result
+
+        except Exception as e:
+            logger.error("search_catechumene_error", error=str(e))
+            return {
+                "success": False,
+                "message": f"Erreur lors de la recherche: {str(e)}"
+            }
+
+    async def _parse_view_parent_info(self, message: str) -> Dict[str, Any]:
+        """Parse view parent info command using profile service"""
+        try:
+            from src.services.profile_service import ProfileService
+            profile_service = ProfileService()
+
+            # Extract parent code preserving case
+            parent_code = self._extract_search_term_original_case(message, ['voir', 'parent'])
+
+            if not parent_code:
+                return {
+                    "success": False,
+                    "message": "Veuillez spécifier un code parent. Ex: voir parent 57704"
+                }
+
+            # Use profile service to execute the action
+            result = await profile_service.execute_action(
+                action_id='view_parent_info',
+                profile={'profile_id': 'admin_principal', 'profile_name': 'Administrateur Principal'},
+                parameters={'parent_code': parent_code}
+            )
+
+            return result
+
+        except Exception as e:
+            logger.error("view_parent_info_error", error=str(e))
+            return {
+                "success": False,
+                "message": f"Erreur lors de la consultation: {str(e)}"
+            }
+
+    async def _parse_list_classes(self, message: str) -> Dict[str, Any]:
+        """Parse list classes command using profile service"""
+        try:
+            from src.services.profile_service import ProfileService
+            profile_service = ProfileService()
+
+            # Use profile service to execute the action
+            result = await profile_service.execute_action(
+                action_id='list_classes',
+                profile={'profile_id': 'admin_principal', 'profile_name': 'Administrateur Principal'},
+                parameters={}
+            )
+
+            return result
+
+        except Exception as e:
+            logger.error("list_classes_error", error=str(e))
+            return {
+                "success": False,
+                "message": f"Erreur lors de la liste des classes: {str(e)}"
+            }
+
+    def _extract_search_term_original_case(self, message: str, keywords: list) -> str:
+        """Extract search term preserving original case from message"""
+        for keyword in keywords:
+            # Find the keyword position in the original message (case-insensitive)
+            keyword_lower = keyword.lower()
+            message_lower = message.lower()
+
+            keyword_pos = message_lower.find(keyword_lower)
+
+            if keyword_pos != -1:
+                # Extract everything after the keyword, preserving case
+                search_term = message[keyword_pos + len(keyword):].strip()
+                return search_term
+
+        return ""

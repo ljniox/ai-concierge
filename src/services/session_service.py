@@ -10,8 +10,43 @@ from src.models.user import User
 from src.services.user_service import UserService
 from src.utils.config import get_settings
 import structlog
+import re
 
 logger = structlog.get_logger()
+
+
+def parse_datetime_with_varying_precision(datetime_str: str) -> datetime:
+    """
+    Parse datetime string with varying microsecond precision
+
+    Args:
+        datetime_str: Datetime string that may have 5 or 6 digit microseconds
+
+    Returns:
+        Parsed datetime object
+    """
+    try:
+        # Try normal parsing first
+        return datetime.fromisoformat(datetime_str)
+    except ValueError:
+        # Handle case where microseconds have 5 digits instead of 6
+        # Pattern: YYYY-MM-DDTHH:MM:SS.microseconds+timezone
+        pattern = r'^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.)(\d{1,6})([+-]\d{2}:\d{2})$'
+        match = re.match(pattern, datetime_str)
+        if match:
+            date_part, microseconds, timezone = match.groups()
+            # Pad microseconds to 6 digits
+            microseconds_padded = microseconds.ljust(6, '0')
+            fixed_datetime_str = f"{date_part}{microseconds_padded}{timezone}"
+            return datetime.fromisoformat(fixed_datetime_str)
+        else:
+            # Try other common formats
+            for fmt in ['%Y-%m-%dT%H:%M:%S.%f%z', '%Y-%m-%dT%H:%M:%S%z', '%Y-%m-%d %H:%M:%S.%f', '%Y-%m-%d %H:%M:%S']:
+                try:
+                    return datetime.strptime(datetime_str, fmt)
+                except ValueError:
+                    continue
+            raise ValueError(f"Unable to parse datetime: {datetime_str}")
 
 
 class SessionService:
@@ -118,10 +153,10 @@ class SessionService:
                     current_service=session_data["current_service"],
                     context=session_data.get("context", {}),
                     metadata=session_data.get("metadata", {}),
-                    created_at=datetime.fromisoformat(session_data["created_at"]),
-                    updated_at=datetime.fromisoformat(session_data["updated_at"]),
-                    expires_at=datetime.fromisoformat(session_data["expires_at"]) if session_data.get("expires_at") else None,
-                    last_activity_at=datetime.fromisoformat(session_data["last_activity_at"]),
+                    created_at=parse_datetime_with_varying_precision(session_data["created_at"]),
+                    updated_at=parse_datetime_with_varying_precision(session_data["updated_at"]),
+                    expires_at=parse_datetime_with_varying_precision(session_data["expires_at"]) if session_data.get("expires_at") else None,
+                    last_activity_at=parse_datetime_with_varying_precision(session_data["last_activity_at"]),
                     message_count=session_data.get("message_count", 0)
                 )
             return None
@@ -155,10 +190,10 @@ class SessionService:
                     current_service=session_data["current_service"],
                     context=session_data.get("context", {}),
                     metadata=session_data.get("metadata", {}),
-                    created_at=datetime.fromisoformat(session_data["created_at"]),
-                    updated_at=datetime.fromisoformat(session_data["updated_at"]),
-                    expires_at=datetime.fromisoformat(session_data["expires_at"]) if session_data.get("expires_at") else None,
-                    last_activity_at=datetime.fromisoformat(session_data["last_activity_at"]),
+                    created_at=parse_datetime_with_varying_precision(session_data["created_at"]),
+                    updated_at=parse_datetime_with_varying_precision(session_data["updated_at"]),
+                    expires_at=parse_datetime_with_varying_precision(session_data["expires_at"]) if session_data.get("expires_at") else None,
+                    last_activity_at=parse_datetime_with_varying_precision(session_data["last_activity_at"]),
                     message_count=session_data.get("message_count", 0)
                 )
 
@@ -375,7 +410,7 @@ class SessionService:
             average_response_time = sum(response_times) / len(response_times) if response_times else 0.0
 
             return SessionWithStats(
-                **session.dict(),
+                **session.model_dump() if hasattr(session, 'model_dump') else session.dict(),
                 user_name=user.name if user else None,
                 service_distribution=service_distribution,
                 average_response_time=average_response_time

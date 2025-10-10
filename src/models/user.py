@@ -48,6 +48,10 @@ class User(UserBase):
     def validate_phone_number(cls, v):
         """Validate phone number format"""
         try:
+            # Handle Telegram identifiers
+            if v.startswith('telegram_'):
+                return v  # Accept Telegram user IDs as-is
+
             # Handle WhatsApp special numbers (groups, broadcasts, etc.)
             if v.endswith('@g.us') or v.endswith('@s.whatsapp.net') or v == 'status@broadcast':
                 return v  # Accept WhatsApp special numbers as-is
@@ -135,6 +139,10 @@ def validate_phone_number_format(phone_number: str) -> bool:
         True if valid, False otherwise
     """
     try:
+        # Handle Telegram identifiers
+        if phone_number.startswith('telegram_'):
+            return True  # Accept Telegram user IDs
+
         # Handle WhatsApp special numbers (groups, broadcasts, etc.)
         if phone_number.endswith('@g.us') or phone_number.endswith('@s.whatsapp.net') or phone_number == 'status@broadcast':
             return True  # Accept WhatsApp special numbers
@@ -176,6 +184,10 @@ def normalize_phone_number(phone_number: str) -> str:
         Normalized phone number in E.164 format
     """
     try:
+        # Handle Telegram identifiers
+        if phone_number.startswith('telegram_'):
+            return phone_number  # Return Telegram user IDs as-is
+
         # Handle WhatsApp special numbers (groups, broadcasts, etc.)
         if phone_number.endswith('@g.us') or phone_number.endswith('@s.whatsapp.net') or phone_number == 'status@broadcast':
             return phone_number  # Return WhatsApp special numbers as-is

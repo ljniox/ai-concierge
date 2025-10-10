@@ -1,0 +1,105 @@
+version: '3.8'
+
+services:
+  evolution-api:
+    image: atendai/evolution-api:latest
+    container_name: evolution-api
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      # Database Configuration
+      DATABASE_PROVIDER: postgresql
+      DATABASE_CONNECTION_URI: 'postgresql://postgres:postgres@postgres:5432/evolution?schema=evolution_api'
+      DATABASE_CONNECTION_CLIENT_NAME: evolution_exchange
+
+      # Server Configuration
+      SERVER_PORT: 8080
+      SERVER_HOST: 0.0.0.0
+
+      # Authentication
+      AUTHENTICATION_TYPE: jwt
+      AUTHENTICATION_JWT_SECRET: evolution_secret_key_change_in_production
+      AUTHENTICATION_JWT_EXPIRESIN: 24h
+
+      # Redis Configuration
+      REDIS_ENABLED: true
+      REDIS_URI: redis://redis:6379
+      REDIS_PREFIX: evolution
+
+      # WhatsApp Configuration
+      DEL_INSTANCE_DELETE: 30
+      DEL_CHAT_MESSAGE_DELETE: 60
+
+      # RabbitMQ Configuration (for queuing)
+      RABBITMQ_ENABLED: false
+
+      # S3 Configuration (for media storage)
+      S3_ENABLED: false
+
+      # WebSocket Configuration
+      WEBSOCKET_ENABLED: true
+
+      # CORS Configuration
+      CORS_ENABLED: true
+      CORS_ORIGIN: "*"
+
+      # Logging
+      LOG_LEVEL: INFO
+
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - evolution-network
+    volumes:
+      - evolution_instances:/evolution/instances
+      - evolution_qrcodes:/evolution/qrcodes
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: evolution-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: evolution
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+    volumes:
+      - evolution_postgres_data:/var/lib/postgresql/data
+    networks:
+      - evolution-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: evolution-redis
+    restart: always
+    command: redis-server --appendonly yes
+    volumes:
+      - evolution_redis_data:/data
+    networks:
+      - evolution-network
+
+  # Nginx reverse proxy (optional)
+  nginx:
+    image: nginx:alpine
+    container_name: evolution-nginx
+    restart: always
+    ports:
+      - "8082:80"
+    volumes:
+      - ./evolution-nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - evolution-api
+    networks:
+      - evolution-network
+
+volumes:
+  evolution_instances:
+  evolution_qrcodes:
+  evolution_postgres_data:
+  evolution_redis_data:
+
+networks:
+  evolution-network:
+    driver: bridge

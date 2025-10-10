@@ -1,0 +1,458 @@
+{
+  "test_start_time": "2025-09-27T20:53:31.589686",
+  "total_scenarios_tested": 15,
+  "total_successful_tests": 11,
+  "total_failed_tests": 3,
+  "service_results": {
+    "RENSEIGNEMENT": {
+      "service_type": "RENSEIGNEMENT",
+      "user_profile": null,
+      "scenarios_tested": 3,
+      "successful_tests": 3,
+      "failed_tests": 0,
+      "details": [
+        {
+          "scenario_name": "General Information Request",
+          "message": "Bonjour, je voudrais des informations sur les horaires de catéchèse",
+          "webhook_success": true,
+          "response_received": true,
+          "response_data": {
+            "status": "processed",
+            "message_id": "wa_df9e8ad7-1440-4488-865e-3a6c8f559a1b",
+            "phone_number": "+221765005557",
+            "session": "default",
+            "message_type": "text",
+            "message_content": "Bonjour, je voudrais des informations sur les horaires de catéchèse",
+            "timestamp": 1759006411,
+            "interaction_result": {
+              "success": false,
+              "error": "'dict' object has no attribute 'dict'",
+              "phone_number": "+221765005557"
+            }
+          },
+          "expected_service": "RENSEIGNEMENT",
+          "expected_keywords": [
+            "horaire",
+            "catéchèse",
+            "information"
+          ],
+          "user_profile": null,
+          "phone": "+221765005557",
+          "keyword_matches": [
+            "horaire",
+            "catéchèse",
+            "information"
+          ]
+        },
+        {
+          "scenario_name": "Location Information",
+          "message": "Où se trouve le centre de catéchèse le plus proche ?",
+          "webhook_success": true,
+          "response_received": true,
+          "response_data": {
+            "status": "processed",
+            "message_id": "wa_12ea6d74-34af-4870-8fe2-5ef0a6adb8d9",
+            "phone_number": "+221765005557",
+            "session": "default",
+            "message_type": "text",
+            "message_content": "Où se trouve le centre de catéchèse le plus proche ?",
+            "timestamp": 1759006417,
+            "interaction_result": {
+              "success": false,
+              "error": "'dict' object has no attribute 'dict'",
+              "phone_number": "+221765005557"
+            }
+          },
+          "expected_service": "RENSEIGNEMENT",
+          "expected_keywords": [
+            "centre",
+            "proche",
+            "lieu"
+          ],
+          "user_profile": null,
+          "phone": "+221765005557",
+          "keyword_matches": [
+            "centre",
+            "proche"
+          ]
+        },
+        {
+          "scenario_name": "Registration Process",
+          "message": "Comment puis-je inscrire mon enfant à la catéchèse ?",
+          "webhook_success": true,
+          "response_received": true,
+          "response_data": {
+            "status": "processed",
+            "message_id": "wa_64dd714f-46ab-4dcf-b61d-fc6223fd902a",
+            "phone_number": "+221765005557",
+            "session": "default",
+            "message_type": "text",
+            "message_content": "Comment puis-je inscrire mon enfant à la catéchèse ?",
+            "timestamp": 1759006421,
+            "interaction_result": {
+              "success": false,
+              "error": "'dict' object has no attribute 'dict'",
+              "phone_number": "+221765005557"
+            }
+          },
+          "expected_service": "RENSEIGNEMENT",
+          "expected_keywords": [
+            "inscrire",
+            "enfant",
+            "procédure"
+          ],
+          "user_profile": null,
+          "phone": "+221765005557",
+          "keyword_matches": [
+            "inscrire",
+            "enfant"
+          ]
+        }
+      ]
+    },
+    "CATECHESE": {
+      "service_type": "CATECHESE",
+      "user_profile": null,
+      "scenarios_tested": 3,
+      "successful_tests": 2,
+      "failed_tests": 0,
+      "details": [
+        {
+          "scenario_name": "Prayer Request",
+          "message": "J'ai besoin d'une prière pour la protection de ma famille",
+          "webhook_success": true,
+          "response_received": true,
+          "response_data": {
+            "status": "processed",
+            "message_id": "wa_20b7bf47-5aa5-43e9-9670-1604764c2997",
+            "phone_number": "+221765005557",
+            "session": "default",
+            "message_type": "text",
+            "message_content": "J'ai besoin d'une prière pour la protection de ma famille",
+            "timestamp": 1759006426,
+            "interaction_result": {
+              "success": false,
+              "error": "'dict' object has no attribute 'dict'",
+              "phone_number": "+221765005557"
+            }
+          },
+          "expected_service": "CATECHESE",
+          "expected_keywords": [
+            "prière",
+            "protection",
+            "famille"
+          ],
+          "user_profile": null,
+          "phone": "+221765005557",
+          "keyword_matches": [
+            "prière",
+            "protection",
+            "famille"
+          ]
+        },
+        {
+          "scenario_name": "Bible Question",
+          "message": "Que dit la Bible sur la charité ?",
+          "webhook_success": true,
+          "response_received": true,
+          "response_data": {
+            "status": "processed",
+            "message_id": "wa_69a368f6-2cb6-49ea-9608-1943de8416ce",
+            "phone_number": "+221765005557",
+            "session": "default",
+            "message_type": "text",
+            "message_content": "Que dit la Bible sur la charité ?",
+            "timestamp": 1759006448,
+            "interaction_result": {
+              "success": false,
+              "error": "'dict' object has no attribute 'dict'",
+              "phone_number": "+221765005557"
+            }
+          },
+          "expected_service": "CATECHESE",
+          "expected_keywords": [
+            "Bible",
+            "charité",
+            "enseignement"
+          ],
+          "user_profile": null,
+          "phone": "+221765005557",
+          "keyword_matches": [
+            "Bible",
+            "charité"
+          ]
+        }
+      ]
+    },
+    "CONTACT_HUMAIN": {
+      "service_type": "CONTACT_HUMAIN",
+      "user_profile": null,
+      "scenarios_tested": 3,
+      "successful_tests": 3,
+      "failed_tests": 0,
+      "details": [
+        {
+          "scenario_name": "Human Agent Request",
+          "message": "Je veux parler à un agent humain s'il vous plaît",
+          "webhook_success": true,
+          "response_received": true,
+          "response_data": {
+            "status": "processed",
+            "message_id": "wa_9b45d774-94ae-4f6f-b46a-3c1172983531",
+            "phone_number": "+221765005557",
+            "session": "default",
+            "message_type": "text",
+            "message_content": "Je veux parler à un agent humain s'il vous plaît",
+            "timestamp": 1759006454,
+            "interaction_result": {
+              "success": false,
+              "error": "'dict' object has no attribute 'dict'",
+              "phone_number": "+221765005557"
+            }
+          },
+          "expected_service": "CONTACT_HUMAIN",
+          "expected_keywords": [
+            "agent",
+            "humain",
+            "parler"
+          ],
+          "user_profile": null,
+          "phone": "+221765005557",
+          "keyword_matches": [
+            "agent",
+            "humain",
+            "parler"
+          ]
+        },
+        {
+          "scenario_name": "Emergency Request",
+          "message": "C'est urgent, j'ai besoin d'aide immédiatement",
+          "webhook_success": true,
+          "response_received": true,
+          "response_data": {
+            "status": "processed",
+            "message_id": "wa_7c14321e-f620-4e91-a562-a0d9e1ef8e9d",
+            "phone_number": "+221765005557",
+            "session": "default",
+            "message_type": "text",
+            "message_content": "C'est urgent, j'ai besoin d'aide immédiatement",
+            "timestamp": 1759006459,
+            "interaction_result": {
+              "success": false,
+              "error": "'dict' object has no attribute 'dict'",
+              "phone_number": "+221765005557"
+            }
+          },
+          "expected_service": "CONTACT_HUMAIN",
+          "expected_keywords": [
+            "urgent",
+            "aide",
+            "immédiat"
+          ],
+          "user_profile": null,
+          "phone": "+221765005557",
+          "keyword_matches": [
+            "urgent",
+            "aide",
+            "immédiat"
+          ]
+        },
+        {
+          "scenario_name": "Complex Issue",
+          "message": "Mon problème est trop complexe pour un assistant, je préfère parler à quelqu'un",
+          "webhook_success": true,
+          "response_received": true,
+          "response_data": {
+            "status": "processed",
+            "message_id": "wa_eaaf781f-df65-4bc1-afd2-1903bbe19bf0",
+            "phone_number": "+221765005557",
+            "session": "default",
+            "message_type": "text",
+            "message_content": "Mon problème est trop complexe pour un assistant, je préfère parler à quelqu'un",
+            "timestamp": 1759006463,
+            "interaction_result": {
+              "success": false,
+              "error": "'dict' object has no attribute 'dict'",
+              "phone_number": "+221765005557"
+            }
+          },
+          "expected_service": "CONTACT_HUMAIN",
+          "expected_keywords": [
+            "complexe",
+            "quelqu'un",
+            "parler"
+          ],
+          "user_profile": null,
+          "phone": "+221765005557",
+          "keyword_matches": [
+            "complexe",
+            "quelqu'un",
+            "parler"
+          ]
+        }
+      ]
+    }
+  },
+  "workflow_results": {
+    "parent_authentication": {
+      "workflow_type": "parent_authentication",
+      "scenarios_tested": 3,
+      "successful_tests": 0,
+      "failed_tests": 3,
+      "details": [
+        {
+          "scenario_name": "Valid Parent Code Authentication",
+          "message": "Mon code parent est PARENT001, je veux accéder aux informations de mon enfant",
+          "code_parent": "PARENT001",
+          "expected_behavior": "authentication_success",
+          "webhook_success": true,
+          "response_data": {
+            "status": "processed",
+            "message_id": "wa_208cd606-5024-4fcc-b961-e3ea859b619a",
+            "phone_number": "+221765005555",
+            "session": "default",
+            "message_type": "text",
+            "message_content": "Mon code parent est PARENT001, je veux accéder aux informations de mon enfant",
+            "timestamp": 1759006468,
+            "interaction_result": {
+              "success": false,
+              "error": "1 validation error for Interaction\nservice\n  Value error, Invalid service. Must be one of: ['RENSEIGNEMENT', 'CATECHESE', 'CONTACT_HUMAIN'] [type=value_error, input_value='SUPER_ADMIN', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.5/v/value_error",
+              "phone_number": "+221765005555"
+            }
+          }
+        },
+        {
+          "scenario_name": "Invalid Parent Code",
+          "message": "Mon code parent est WRONG123, je veux accéder aux informations",
+          "code_parent": "WRONG123",
+          "expected_behavior": "authentication_failure",
+          "webhook_success": true,
+          "response_data": {
+            "status": "processed",
+            "message_id": "wa_813bbf48-f7fd-4b33-92f5-13c2b9b3d64f",
+            "phone_number": "+221765005555",
+            "session": "default",
+            "message_type": "text",
+            "message_content": "Mon code parent est WRONG123, je veux accéder aux informations",
+            "timestamp": 1759006470,
+            "interaction_result": {
+              "success": false,
+              "error": "1 validation error for Interaction\nservice\n  Value error, Invalid service. Must be one of: ['RENSEIGNEMENT', 'CATECHESE', 'CONTACT_HUMAIN'] [type=value_error, input_value='SUPER_ADMIN', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.5/v/value_error",
+              "phone_number": "+221765005555"
+            }
+          }
+        },
+        {
+          "scenario_name": "No Parent Code Provided",
+          "message": "Je veux accéder aux informations de mon enfant",
+          "code_parent": null,
+          "expected_behavior": "code_required",
+          "webhook_success": true,
+          "response_data": {
+            "status": "processed",
+            "message_id": "wa_1710602c-d70b-4dfc-96d5-f887a2bc1ce8",
+            "phone_number": "+221765005555",
+            "session": "default",
+            "message_type": "text",
+            "message_content": "Je veux accéder aux informations de mon enfant",
+            "timestamp": 1759006472,
+            "interaction_result": {
+              "success": false,
+              "error": "1 validation error for Interaction\nservice\n  Value error, Invalid service. Must be one of: ['RENSEIGNEMENT', 'CATECHESE', 'CONTACT_HUMAIN'] [type=value_error, input_value='SUPER_ADMIN', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.5/v/value_error",
+              "phone_number": "+221765005555"
+            }
+          }
+        }
+      ]
+    },
+    "student_data_retrieval": {
+      "workflow_type": "student_data_retrieval",
+      "scenarios_tested": 3,
+      "successful_tests": 3,
+      "failed_tests": 0,
+      "details": [
+        {
+          "scenario_name": "Student Information Request",
+          "message": "Je veux voir les informations de l'élève Ndongo",
+          "student_name": "Ndongo",
+          "expected_data": "student_info",
+          "webhook_success": true,
+          "response_data": {
+            "status": "processed",
+            "message_id": "wa_896db789-417e-46ba-b9e7-c2d98d65d773",
+            "phone_number": "+221765005555",
+            "session": "default",
+            "message_type": "text",
+            "message_content": "Je veux voir les informations de l'élève Ndongo",
+            "timestamp": 1759006476,
+            "interaction_result": {
+              "success": false,
+              "error": "1 validation error for Interaction\nservice\n  Value error, Invalid service. Must be one of: ['RENSEIGNEMENT', 'CATECHESE', 'CONTACT_HUMAIN'] [type=value_error, input_value='SUPER_ADMIN', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.5/v/value_error",
+              "phone_number": "+221765005555"
+            }
+          }
+        },
+        {
+          "scenario_name": "Grades Request",
+          "message": "Montrez-moi les notes de l'élève Latyr",
+          "student_name": "Latyr",
+          "expected_data": "grades",
+          "webhook_success": true,
+          "response_data": {
+            "status": "processed",
+            "message_id": "wa_3c2837c1-d245-4964-9abe-d8617afbccd3",
+            "phone_number": "+221765005555",
+            "session": "default",
+            "message_type": "text",
+            "message_content": "Montrez-moi les notes de l'élève Latyr",
+            "timestamp": 1759006478,
+            "interaction_result": {
+              "success": false,
+              "error": "1 validation error for Interaction\nservice\n  Value error, Invalid service. Must be one of: ['RENSEIGNEMENT', 'CATECHESE', 'CONTACT_HUMAIN'] [type=value_error, input_value='SUPER_ADMIN', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.5/v/value_error",
+              "phone_number": "+221765005555"
+            }
+          }
+        },
+        {
+          "scenario_name": "Attendance Request",
+          "message": "Quelles sont les présences de l'élève Emmanuel ?",
+          "student_name": "Emmanuel",
+          "expected_data": "attendance",
+          "webhook_success": true,
+          "response_data": {
+            "status": "processed",
+            "message_id": "wa_542b631c-242b-4695-8e4c-a842ee9c05bf",
+            "phone_number": "+221765005555",
+            "session": "default",
+            "message_type": "text",
+            "message_content": "Quelles sont les présences de l'élève Emmanuel ?",
+            "timestamp": 1759006481,
+            "interaction_result": {
+              "success": false,
+              "error": "1 validation error for Interaction\nservice\n  Value error, Invalid service. Must be one of: ['RENSEIGNEMENT', 'CATECHESE', 'CONTACT_HUMAIN'] [type=value_error, input_value='SUPER_ADMIN', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.5/v/value_error",
+              "phone_number": "+221765005555"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "system_health": {
+    "main_application": {
+      "status": "healthy",
+      "status_code": 200
+    },
+    "webhook_endpoint": {
+      "status": "healthy",
+      "status_code": 405
+    },
+    "database_connectivity": {
+      "status": "unhealthy",
+      "status_code": 405
+    }
+  },
+  "test_end_time": "2025-09-27T20:54:43.620253",
+  "overall_success_rate": 73.33333333333333,
+  "readiness_score": 65,
+  "readiness_assessment": "🟠 Alpha Ready - Significant Improvements Needed"
+}

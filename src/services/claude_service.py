@@ -9,6 +9,7 @@ from datetime import datetime, date
 from enum import Enum
 from src.utils.config import get_settings
 from src.models.session import SessionStatus
+from src.utils.api_key_manager import APIKeyManager, ProviderConfig, AIProviderRegistry
 import structlog
 
 logger = structlog.get_logger()
@@ -23,33 +24,218 @@ class ServiceType(Enum):
 
 
 class ClaudeService:
-    """Service for Claude AI API integration and orchestration"""
+    """Service for AI API integration and orchestration with multiple providers"""
 
     def __init__(self):
         self.settings = get_settings()
-        self.api_key = self.settings.anthropic_auth_token
-        self.base_url = self.settings.anthropic_base_url
-        self.model = self.settings.claude_model or "claude-3-sonnet-20240229"
-        self.max_tokens = self.settings.claude_max_tokens or 1000
-        self.temperature = self.settings.claude_temperature or 0.7
-        
-        # Log configuration for debugging (without exposing sensitive data)
-        api_key_status = "SET" if self.api_key and self.api_key != "test-key" else "NOT_SET"
+        self.provider_registry = AIProviderRegistry()
+        self.http_clients = {}
+
+        # Initialize providers
+        self._initialize_providers()
+
+        # Log configuration for debugging
+        active_providers = self.provider_registry.get_active_providers()
         logger.info(
-            "claude_service_initialized",
-            base_url=self.base_url,
-            model=self.model,
-            api_key_status=api_key_status
+            "ai_service_initialized",
+            default_provider=self.settings.ai_provider,
+            active_providers=active_providers,
+            total_providers=len(active_providers)
         )
-        
-        self.http_client = httpx.AsyncClient(
-            timeout=60.0,
-            headers={
-                'Content-Type': 'application/json',
-                'Authorization': f'Bearer {self.api_key}',
-                'anthropic-version': '2023-06-01'
+
+    def _initialize_providers(self):
+        """Initialize all configured AI providers"""
+
+        # Anthropic/Claude Provider
+        if self.settings.enable_anthropic:
+            anthropic_config = ProviderConfig(
+                provider_type="anthropic",
+                base_url=self.settings.anthropic_base_url,
+                model=self.settings.claude_model,
+                max_tokens=self.settings.claude_max_tokens,
+                temperature=self.settings.claude_temperature
+            )
+
+            # Create key manager with single key for Anthropic
+            if self.settings.anthropic_auth_token and self.settings.anthropic_auth_token != "test-key":
+                key_manager = APIKeyManager([self.settings.anthropic_auth_token], "anthropic")
+                anthropic_config.set_key_manager(key_manager)
+
+                # Create HTTP client for Anthropic
+                self.http_clients["anthropic"] = httpx.AsyncClient(
+                    timeout=60.0,
+                    headers={
+                        'Content-Type': 'application/json',
+                        'anthropic-version': '2023-06-01'
+                    }
+                )
+
+            is_default = self.settings.ai_provider == "anthropic"
+            self.provider_registry.register_provider("anthropic", anthropic_config, is_default)
+
+        # Gemini Provider
+        if self.settings.enable_gemini:
+            gemini_config = ProviderConfig(
+                provider_type="gemini",
+                base_url=self.settings.gemini_base_url,
+                model=self.settings.gemini_model,
+                max_tokens=self.settings.gemini_max_tokens,
+                temperature=self.settings.gemini_temperature
+            )
+
+            # Create key manager with round-robin for Gemini
+            if self.settings.gemini_api_keys:
+                key_manager = APIKeyManager(self.settings.gemini_api_keys, "gemini")
+                gemini_config.set_key_manager(key_manager)
+
+                # Create HTTP client for Gemini
+                self.http_clients["gemini"] = httpx.AsyncClient(
+                    timeout=60.0,
+                    headers={'Content-Type': 'application/json'}
+                )
+
+            is_default = self.settings.ai_provider == "gemini"
+            self.provider_registry.register_provider("gemini", gemini_config, is_default)
+
+        # OpenRouter Provider
+        if self.settings.enable_openrouter:
+            openrouter_config = ProviderConfig(
+                provider_type="openrouter",
+                base_url=self.settings.openrouter_base_url,
+                model=self.settings.openrouter_model,
+                max_tokens=self.settings.openrouter_max_tokens,
+                temperature=self.settings.openrouter_temperature
+            )
+
+            # Create key manager with round-robin for OpenRouter
+            if self.settings.openrouter_api_keys:
+                key_manager = APIKeyManager(self.settings.openrouter_api_keys, "openrouter")
+                openrouter_config.set_key_manager(key_manager)
+
+                # Create HTTP client for OpenRouter
+                self.http_clients["openrouter"] = httpx.AsyncClient(
+                    timeout=60.0,
+                    headers={
+                        'Content-Type': 'application/json',
+                        'HTTP-Referer': 'https://cate.sdb-dkr.ovh',
+                        'X-Title': 'SDB Catechism AI Concierge'
+                    }
+                )
+
+            is_default = self.settings.ai_provider == "openrouter"
+            self.provider_registry.register_provider("openrouter", openrouter_config, is_default)
+
+    def get_active_provider(self, provider_name: Optional[str] = None) -> Optional[ProviderConfig]:
+        """Get an active provider, fallback to default if specified provider is unavailable"""
+        provider = self.provider_registry.get_provider(provider_name)
+
+        if provider and provider.is_configured():
+            return provider
+
+        # Fallback to default provider
+        default_provider = self.provider_registry.get_provider()
+        if default_provider and default_provider.is_configured():
+            logger.warning(f"{provider_name}_provider_fallback",
+                          requested=provider_name,
+                          fallback=default_provider.provider_type)
+            return default_provider
+
+        logger.error("no_active_providers_available")
+        return None
+
+    async def _make_api_request(self, provider: ProviderConfig, payload: Dict[str, Any]) -> Dict[str, Any]:
+        """Make API request to the specified provider with round-robin key management"""
+
+        # Get next API key using round-robin
+        api_key = provider.key_manager.get_next_key()
+        if not api_key:
+            raise ValueError(f"No API keys available for {provider.provider_type}")
+
+        # Set authorization header based on provider type
+        headers = {}
+        client = self.http_clients.get(provider.provider_type)
+
+        if not client:
+            raise ValueError(f"No HTTP client available for {provider.provider_type}")
+
+        if provider.provider_type == "anthropic":
+            headers['Authorization'] = f'Bearer {api_key}'
+            endpoint = f"{provider.base_url}/v1/messages"
+        elif provider.provider_type == "gemini":
+            endpoint = f"{provider.base_url}/v1beta/models/{provider.model}:generateContent?key={api_key}"
+        elif provider.provider_type == "openrouter":
+            headers['Authorization'] = f'Bearer {api_key}'
+            endpoint = f"{provider.base_url}/chat/completions"
+        else:
+            raise ValueError(f"Unsupported provider type: {provider.provider_type}")
+
+        # Log request (without sensitive data)
+        logger.info(f"{provider.provider_type}_api_request",
+                   model=provider.model,
+                   endpoint=endpoint.split('?')[0])  # Remove API key from log
+
+        try:
+            response = await client.post(
+                endpoint,
+                headers=headers,
+                json=payload
+            )
+
+            logger.info(f"{provider.provider_type}_api_response",
+                       status_code=response.status_code)
+
+            response.raise_for_status()
+            result = response.json()
+
+            # Handle different response formats
+            if provider.provider_type == "gemini":
+                return self._format_gemini_response(result)
+            elif provider.provider_type == "openrouter":
+                return self._format_openrouter_response(result)
+            else:
+                return result
+
+        except httpx.HTTPStatusError as e:
+            logger.error(f"{provider.provider_type}_api_error",
+                        status_code=e.response.status_code,
+                        error=str(e))
+            raise
+        except Exception as e:
+            logger.error(f"{provider.provider_type}_request_failed",
+                        error=str(e))
+            raise
+
+    def _format_gemini_response(self, gemini_response: Dict[str, Any]) -> Dict[str, Any]:
+        """Format Gemini response to standard format"""
+        try:
+            content = gemini_response.get('candidates', [{}])[0].get('content', {}).get('parts', [{}])[0].get('text', '')
+            return {
+                'content': [
+                    {
+                        'type': 'text',
+                        'text': content
+                    }
+                ]
             }
-        )
+        except (IndexError, KeyError) as e:
+            logger.error("gemini_response_format_failed", error=str(e))
+            return {'content': []}
+
+    def _format_openrouter_response(self, openrouter_response: Dict[str, Any]) -> Dict[str, Any]:
+        """Format OpenRouter response to standard format"""
+        try:
+            content = openrouter_response.get('choices', [{}])[0].get('message', {}).get('content', '')
+            return {
+                'content': [
+                    {
+                        'type': 'text',
+                        'text': content
+                    }
+                ]
+            }
+        except (IndexError, KeyError) as e:
+            logger.error("openrouter_response_format_failed", error=str(e))
+            return {'content': []}
 
     async def send_message(
         self,
@@ -57,10 +243,11 @@ class ClaudeService:
         conversation_history: Optional[List[Dict[str, str]]] = None,
         system_prompt: Optional[str] = None,
         tools: Optional[List[Dict[str, Any]]] = None,
-        max_tokens: Optional[int] = None
+        max_tokens: Optional[int] = None,
+        provider_name: Optional[str] = None
     ) -> Dict[str, Any]:
         """
-        Send message to Claude AI
+        Send message to AI provider
 
         Args:
             message: User message
@@ -68,52 +255,167 @@ class ClaudeService:
             system_prompt: Optional system prompt
             tools: Optional tools for function calling
             max_tokens: Maximum tokens for response
+            provider_name: Specific provider to use (optional)
 
         Returns:
-            Claude API response
+            AI API response
         """
         try:
-            url = f"{self.base_url}/v1/messages"
+            # Get active provider
+            provider = self.get_active_provider(provider_name)
+            if not provider:
+                raise ValueError("No active AI providers available")
 
-            # Build messages array
-            messages = []
-            if conversation_history:
-                messages.extend(conversation_history)
+            logger.info("ai_message_sending",
+                       provider=provider.provider_type,
+                       model=provider.model,
+                       message_length=len(message))
 
-            # Add current user message
-            messages.append({
-                "role": "user",
-                "content": message
-            })
+            # Build payload based on provider type
+            if provider.provider_type == "gemini":
+                payload = self._build_gemini_payload(message, conversation_history, system_prompt)
+            elif provider.provider_type == "openrouter":
+                payload = self._build_openrouter_payload(message, conversation_history, system_prompt)
+            else:
+                payload = self._build_anthropic_payload(message, conversation_history, system_prompt, tools, max_tokens)
 
-            payload = {
-                "model": self.model,
-                "max_tokens": max_tokens or self.max_tokens,
-                "temperature": self.temperature,
-                "messages": messages
-            }
+            # Override provider defaults if specified
+            if max_tokens:
+                payload["max_tokens"] = max_tokens
 
-            if system_prompt:
-                payload["system"] = system_prompt
+            # Remove max_tokens from root level if generationConfig is present (Gemini requirement)
+            if provider.provider_type == "gemini" and "max_tokens" in payload and "generationConfig" in payload:
+                del payload["max_tokens"]
 
-            if tools:
-                payload["tools"] = tools
+            # Log payload for debugging (especially for Gemini 400 errors)
+            if provider.provider_type == "gemini":
+                logger.info("gemini_payload_debug",
+                           payload=payload,
+                           system_prompt_present=system_prompt is not None)
 
-            logger.info("claude_message_sent", message_length=len(message), model=self.model)
+            # Make API request
+            result = await self._make_api_request(provider, payload)
 
-            response = await self.http_client.post(url, json=payload)
-            response.raise_for_status()
+            # Log response type and structure for debugging
+            logger.info(f"{provider.provider_type}_api_response_type",
+                       response_type=type(result).__name__,
+                       is_list=isinstance(result, list),
+                       is_dict=isinstance(result, dict),
+                       sample=str(result)[:200] if result else "empty")
 
-            result = response.json()
-            logger.info("claude_message_received", response_id=result.get('id'))
+            # Handle case where API returns a list instead of dict
+            if isinstance(result, list):
+                logger.warning(f"{provider.provider_type}_api_returned_list", list_length=len(result))
+                if len(result) > 0:
+                    result = result[0]
+                else:
+                    logger.error(f"{provider.provider_type}_api_empty_list",
+                               response_text=str(result)[:500])
+                    raise ValueError("API returned empty list")
+
+            logger.info(f"{provider.provider_type}_message_received",
+                       response_id=result.get('id', 'unknown'))
             return result
 
-        except httpx.HTTPStatusError as e:
-            logger.error("claude_http_error", status_code=e.response.status_code, error=str(e))
-            raise
         except Exception as e:
-            logger.error("claude_message_failed", error=str(e))
+            logger.error("ai_message_failed", error=str(e), provider=provider_name)
             raise
+
+    def _build_anthropic_payload(self, message: str, conversation_history: Optional[List[Dict[str, str]]] = None,
+                                system_prompt: Optional[str] = None, tools: Optional[List[Dict[str, Any]]] = None,
+                                max_tokens: Optional[int] = None) -> Dict[str, Any]:
+        """Build payload for Anthropic API"""
+        messages = []
+        if conversation_history:
+            messages.extend(conversation_history)
+
+        messages.append({
+            "role": "user",
+            "content": message
+        })
+
+        provider = self.get_active_provider("anthropic")
+        payload = {
+            "model": provider.model,
+            "max_tokens": max_tokens or provider.max_tokens,
+            "temperature": provider.temperature,
+            "messages": messages
+        }
+
+        if system_prompt:
+            payload["system"] = system_prompt
+
+        if tools:
+            payload["tools"] = tools
+
+        return payload
+
+    def _build_gemini_payload(self, message: str, conversation_history: Optional[List[Dict[str, str]]] = None,
+                             system_prompt: Optional[str] = None) -> Dict[str, Any]:
+        """Build payload for Gemini API"""
+        provider = self.get_active_provider("gemini")
+
+        # Build contents array for Gemini
+        contents = []
+
+        if conversation_history:
+            for msg in conversation_history:
+                role = "user" if msg.get("role") == "user" else "model"
+                contents.append({
+                    "role": role,
+                    "parts": [{"text": msg.get("content", "")}]
+                })
+
+        # Add current user message
+        contents.append({
+            "role": "user",
+            "parts": [{"text": message}]
+        })
+
+        payload = {
+            "contents": contents,
+            "generationConfig": {
+                "maxOutputTokens": provider.max_tokens,
+                "temperature": provider.temperature
+            }
+        }
+
+        if system_prompt:
+            payload["systemInstruction"] = {
+                "parts": [{"text": system_prompt}]
+            }
+
+        return payload
+
+    def _build_openrouter_payload(self, message: str, conversation_history: Optional[List[Dict[str, str]]] = None,
+                                system_prompt: Optional[str] = None) -> Dict[str, Any]:
+        """Build payload for OpenRouter API"""
+        provider = self.get_active_provider("openrouter")
+
+        messages = []
+
+        if system_prompt:
+            messages.append({
+                "role": "system",
+                "content": system_prompt
+            })
+
+        if conversation_history:
+            messages.extend(conversation_history)
+
+        messages.append({
+            "role": "user",
+            "content": message
+        })
+
+        payload = {
+            "model": provider.model,
+            "max_tokens": provider.max_tokens,
+            "temperature": provider.temperature,
+            "messages": messages
+        }
+
+        return payload
 
     async def classify_user_intent(
         self,

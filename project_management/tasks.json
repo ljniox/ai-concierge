@@ -1,0 +1,176 @@
+{
+  "tasks": [
+    {
+      "id": "7fc692b7-b203-44af-b132-4e7281bebc7e",
+      "title": "Set up WhatsApp AI Concierge Core Architecture",
+      "description": "Implement FastAPI backend, WhatsApp integration via WAHA, and Claude AI orchestration",
+      "project_id": "4b566566-36e9-48bf-a9c5-726a622ae511",
+      "status": "todo",
+      "priority": "critical",
+      "assignee": null,
+      "estimated_hours": 40,
+      "actual_hours": 0,
+      "tags": [
+        "core",
+        "implementation"
+      ],
+      "created_at": "2025-09-22T16:22:56.920709",
+      "updated_at": "2025-09-22T16:22:56.920709",
+      "due_date": null,
+      "completed_at": null,
+      "blocked_reason": null,
+      "dependencies": []
+    },
+    {
+      "id": "270afbc5-8775-45bf-b114-d2df711fc669",
+      "title": "Implement Profile Management System",
+      "description": "Create user profiles with configurable actions and permissions",
+      "project_id": "4b566566-36e9-48bf-a9c5-726a622ae511",
+      "status": "todo",
+      "priority": "high",
+      "assignee": null,
+      "estimated_hours": 24,
+      "actual_hours": 0,
+      "tags": [
+        "core",
+        "implementation"
+      ],
+      "created_at": "2025-09-22T16:22:56.924096",
+      "updated_at": "2025-09-22T16:22:56.924096",
+      "due_date": null,
+      "completed_at": null,
+      "blocked_reason": null,
+      "dependencies": []
+    },
+    {
+      "id": "5f6fb37b-7491-4c65-a84b-68f133d02017",
+      "title": "Design and Implement Catechism Service",
+      "description": "Build service for managing catechumenes, parents, and class information",
+      "project_id": "4b566566-36e9-48bf-a9c5-726a622ae511",
+      "status": "todo",
+      "priority": "high",
+      "assignee": null,
+      "estimated_hours": 32,
+      "actual_hours": 0,
+      "tags": [
+        "core",
+        "implementation"
+      ],
+      "created_at": "2025-09-22T16:22:56.930345",
+      "updated_at": "2025-09-22T16:22:56.930345",
+      "due_date": null,
+      "completed_at": null,
+      "blocked_reason": null,
+      "dependencies": []
+    },
+    {
+      "id": "f8224177-abfe-426b-a581-371c30dc24ea",
+      "title": "Set up Supabase Database Schema",
+      "description": "Design and implement database schema for users, sessions, catechumenes, parents, and classes",
+      "project_id": "4b566566-36e9-48bf-a9c5-726a622ae511",
+      "status": "todo",
+      "priority": "critical",
+      "assignee": null,
+      "estimated_hours": 16,
+      "actual_hours": 0,
+      "tags": [
+        "core",
+        "implementation"
+      ],
+      "created_at": "2025-09-22T16:22:56.934351",
+      "updated_at": "2025-09-22T16:22:56.934351",
+      "due_date": null,
+      "completed_at": null,
+      "blocked_reason": null,
+      "dependencies": []
+    },
+    {
+      "id": "2fe60461-b6d9-4ef9-b819-d8d07e3d1eba",
+      "title": "Implement Redis Session Management",
+      "description": "Set up Redis for session state and caching",
+      "project_id": "4b566566-36e9-48bf-a9c5-726a622ae511",
+      "status": "todo",
+      "priority": "medium",
+      "assignee": null,
+      "estimated_hours": 8,
+      "actual_hours": 0,
+      "tags": [
+        "core",
+        "implementation"
+      ],
+      "created_at": "2025-09-22T16:22:56.939602",
+      "updated_at": "2025-09-22T16:22:56.939602",
+      "due_date": null,
+      "completed_at": null,
+      "blocked_reason": null,
+      "dependencies": []
+    },
+    {
+      "id": "8d22eb05-9a30-4827-9a44-b6b607cade42",
+      "title": "Create Response Formatting System",
+      "description": "Implement Gust-IA branded response formatting with templates",
+      "project_id": "4b566566-36e9-48bf-a9c5-726a622ae511",
+      "status": "todo",
+      "priority": "medium",
+      "assignee": null,
+      "estimated_hours": 12,
+      "actual_hours": 0,
+      "tags": [
+        "core",
+        "implementation"
+      ],
+      "created_at": "2025-09-22T16:22:56.944323",
+      "updated_at": "2025-09-22T16:22:56.944323",
+      "due_date": null,
+      "completed_at": null,
+      "blocked_reason": null,
+      "dependencies": []
+    },
+    {
+      "id": "1deb53ac-6af7-4165-91c5-e3c68c9f9ec3",
+      "title": "Set up Docker Container Architecture",
+      "description": "Create Docker containers for application, WhatsApp, Redis with proper networking",
+      "project_id": "4b566566-36e9-48bf-a9c5-726a622ae511",
+      "status": "todo",
+      "priority": "high",
+      "assignee": null,
+      "estimated_hours": 20,
+      "actual_hours": 0,
+      "tags": [
+        "core",
+        "implementation"
+      ],
+      "created_at": "2025-09-22T16:22:56.949428",
+      "updated_at": "2025-09-22T16:22:56.949428",
+      "due_date": null,
+      "completed_at": null,
+      "blocked_reason": null,
+      "dependencies": []
+    },
+    {
+      "id": "476b8761-dfbd-4ce3-8003-df56560c217d",
+      "title": "Implement Super Admin System",
+      "description": "Create administrative interface for managing renseignements and system operations",
+      "project_id": "4b566566-36e9-48bf-a9c5-726a622ae511",
+      "status": "todo",
+      "priority": "medium",
+      "assignee": null,
+      "estimated_hours": 16,
+      "actual_hours": 0,
+      "tags": [
+        "core",
+        "implementation"
+      ],
+      "created_at": "2025-09-22T16:22:56.954162",
+      "updated_at": "2025-09-22T16:22:56.954162",
+      "due_date": null,
+      "completed_at": null,
+      "blocked_reason": null,
+      "dependencies": []
+    }
+  ],
+  "metadata": {
+    "version": "1.0",
+    "created": "2025-09-22T16:22:16.387235"
+  }
+}

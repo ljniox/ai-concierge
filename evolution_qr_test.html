@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Evolution API QR Code Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .qr-container { text-align: center; margin: 20px 0; }
+        #qr-code { max-width: 300px; margin: 0 auto; }
+        .status { background: #f0f0f0; padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .error { background: #ffe6e6; color: #d00; }
+        .success { background: #e6ffe6; color: #080; }
+        .loading { background: #fff3cd; color: #856404; }
+    </style>
+</head>
+<body>
+    <h1>Evolution API QR Code Test</h1>
+
+    <div class="status" id="status">
+        <p><strong>Instance:</strong> gust-ia-v2</p>
+        <p><strong>Status:</strong> <span id="connection-status">Loading...</span></p>
+        <p><strong>Number:</strong> 221773387902</p>
+    </div>
+
+    <div class="qr-container">
+        <h2>QR Code for WhatsApp Connection</h2>
+        <div id="qr-code">
+            <p>Loading QR code...</p>
+        </div>
+        <p><small>Scan this QR code with WhatsApp to connect the instance</small></p>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <button onclick="checkStatus()">Check Status</button>
+        <button onclick="generateQR()">Generate QR Code</button>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080';
+        const API_KEY = '429683C4C977415CAAFCCE10F7D57E11';
+        const INSTANCE_NAME = 'gust-ia-v2';
+
+        async function makeRequest(endpoint, options = {}) {
+            const headers = {
+                'Content-Type': 'application/json',
+                'apikey': API_KEY,
+                ...options.headers
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}${endpoint}`, {
+                    ...options,
+                    headers
+                });
+
+                return await response.json();
+            } catch (error) {
+                console.error('Request failed:', error);
+                return { error: error.message };
+            }
+        }
+
+        async function checkStatus() {
+            const result = await makeRequest(`/instance/fetchInstances?instanceName=${INSTANCE_NAME}`);
+
+            if (result.error) {
+                document.getElementById('connection-status').textContent = `Error: ${result.error}`;
+                return;
+            }
+
+            if (result && result.length > 0) {
+                const instance = result[0];
+                document.getElementById('connection-status').textContent = instance.connectionStatus;
+
+                if (instance.connectionStatus === 'open') {
+                    document.getElementById('qr-code').innerHTML = '<p style="color: green;">✅ WhatsApp Connected!</p>';
+                }
+            }
+        }
+
+        async function generateQR() {
+            document.getElementById('qr-code').innerHTML = '<p>Generating QR code...</p>';
+
+            // Try different possible QR code endpoints
+            const endpoints = [
+                `/instance/qrcode?instanceName=${INSTANCE_NAME}`,
+                `/qrcode?instanceName=${INSTANCE_NAME}`,
+                `/qrCode?instanceName=${INSTANCE_NAME}`,
+                `/qrCode/${INSTANCE_NAME}`,
+                `/qrcode/${INSTANCE_NAME}`
+            ];
+
+            for (const endpoint of endpoints) {
+                try {
+                    const result = await makeRequest(endpoint);
+                    if (result && !result.error && result.qrcode) {
+                        if (result.qrcode.base64) {
+                            document.getElementById('qr-code').innerHTML =
+                                `<img src="data:image/png;base64,${result.qrcode.base64}" alt="QR Code" />`;
+                            return;
+                        }
+                    }
+                } catch (error) {
+                    console.log(`Failed to get QR from ${endpoint}:`, error);
+                }
+            }
+
+            document.getElementById('qr-code').innerHTML =
+                '<p style="color: red;">❌ Could not generate QR code. Please check the logs.</p>';
+        }
+
+        // Auto-check status on load
+        window.onload = function() {
+            checkStatus();
+            setTimeout(generateQR, 2000); // Try to generate QR after 2 seconds
+        };
+    </script>
+</body>
+</html>

@@ -58,7 +58,7 @@ class Session(SessionBase):
     def validate_service(cls, v):
         """Validate service type"""
         if v is not None:
-            valid_services = ['RENSEIGNEMENT', 'CATECHESE', 'CONTACT_HUMAIN']
+            valid_services = ['RENSEIGNEMENT', 'CATECHESE', 'CONTACT_HUMAIN', 'SUPER_ADMIN']
             if v not in valid_services:
                 raise ValueError(f"Invalid service. Must be one of: {valid_services}")
         return v

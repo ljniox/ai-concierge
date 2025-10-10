@@ -267,6 +267,70 @@ rclone copy sdb:"Annee 2024-2025/EB - "*.pdf ./
 - **Database Security**: Supabase RLS policies and service keys
 - **Container Security**: Non-root users and minimal base images
 
+## Execution Rules
+
+### Mandatory Reporting Rule
+**📢 ADMIN NOTIFICATION REQUIRED**: After completing any significant operation, test, or code execution, you MUST send a summary report to the admin number `221765005555` via WAHA API. This includes but is not limited to:
+
+- End-to-end testing completion
+- System feature demonstrations
+- Bug fixes and troubleshooting
+- Performance optimizations
+- Security updates
+- Database operations
+- Code deployments
+
+**Summary Format**:
+```
+📋 Gust-IA Execution Summary
+
+Operation: [Operation Name]
+Status: [Success/Partial/Failed]
+Duration: [Time taken]
+Key Results: [Main outcomes]
+Next Steps: [Follow-up actions]
+
+🙏 Gust-IA - Service Diocésain de la Catéchèse
+```
+
+**Implementation**: Use the WAHA API endpoint to send the summary:
+```bash
+curl -X POST "${WAHA_BASE_URL}/api/sendText" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer ${WAHA_API_TOKEN}" \
+  -d '{
+    "session": "default",
+    "chatId": "221765005555@c.us",
+    "text": "[summary message]"
+  }'
+```
+
+### Auto-Save Documentation Rule
+**📄 AUTO-SAVE REQUIRED**: After sending the WAHA execution summary, you MUST also save the execution details as a markdown file for documentation purposes.
+
+**Implementation**: Use the execution logger utility:
+```python
+from src.utils.execution_logger import save_execution_summary_auto, save_waha_summary_auto
+
+# Option 1: Save structured summary
+filepath = save_execution_summary_auto(
+    operation="[Operation Name]",
+    status="[Success/Partial/Failed]",
+    duration="[Time taken]",
+    key_results=["Result 1", "Result 2"],
+    next_steps=["Next step 1", "Next step 2"],
+    technical_details={"fix": "description", "impact": "high"}
+)
+
+# Option 2: Auto-save from WAHA summary text
+filepath = save_waha_summary_auto(summary_text)
+```
+
+**File Format**: `yyyy-mm-dd_glm-summary-title.md`
+- **Location**: `execution_logs/` directory
+- **Content**: Structured markdown with timestamps, results, and technical details
+- **Purpose**: Maintain audit trail and enable historical analysis
+
 ### Deployment Architecture
 - **Container Networking**: Use service names instead of IPs
 - **Health Monitoring**: Comprehensive health check endpoints
@@ -278,6 +342,7 @@ rclone copy sdb:"Annee 2024-2025/EB - "*.pdf ./
 - **Logging**: JSON-formatted logs with correlation IDs
 - **Metrics**: Request latency, success rates, error tracking
 - **Alerting**: Critical error notifications and SLA monitoring
+- **Execution Summaries**: After each significant operation or test execution, send a summary report to admin number `221765005555` via WAHA API
 
 ---
 *Last Updated: September 20, 2025*

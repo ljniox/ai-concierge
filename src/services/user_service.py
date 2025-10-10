@@ -70,7 +70,7 @@ class UserService:
             if response.data:
                 created_user = User(
                     id=response.data[0]["id"],
-                    **user_data.dict(),
+                    **user_data.model_dump() if hasattr(user_data, 'model_dump') else user_data.dict(),
                     created_at=datetime.now(),
                     updated_at=datetime.now()
                 )
@@ -256,7 +256,7 @@ class UserService:
             preferred_service = max(service_stats, key=service_stats.get) if service_stats else None
 
             return UserWithStats(
-                **user.dict(),
+                **user.model_dump() if hasattr(user, 'model_dump') else user.dict(),
                 total_sessions=total_sessions,
                 total_interactions=total_interactions,
                 last_interaction=last_interaction,

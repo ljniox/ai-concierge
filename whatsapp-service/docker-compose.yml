@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  whatsapp-service:
+    build: .
+    container_name: gust-ia-whatsapp
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - WHATSAPP_PORT=3001
+      - AI_CONCIERGE_WEBHOOK_URL=http://ai-concierge-app-1:8000/api/v1/webhook
+    volumes:
+      - ./auth:/app/auth
+      - ./logs:/app/logs
+    networks:
+      - ai-concierge_concierge-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  ai-concierge_concierge-network:
+    external: true

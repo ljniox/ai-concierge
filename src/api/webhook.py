@@ -181,10 +181,57 @@ async def handle_waha_message(message_data: Dict[str, Any], settings: Settings, 
         has_media=has_media
     )
 
+    # Handle media file storage if present
+    stored_file_info = None
+    if has_media and media and media.get("url"):
+        try:
+            from src.services.minio_storage_service import get_minio_storage
+            minio_storage = get_minio_storage()
+
+            # Generate original filename from media info
+            original_filename = media.get("filename", f"{message_type}_{message_id}")
+            if not original_filename.endswith(('.jpg', '.jpeg', '.png', '.gif', '.mp3', '.mp4', '.pdf', '.doc', '.docx')):
+                # Add appropriate extension based on media type
+                extension_map = {
+                    "image": ".jpg",
+                    "audio": ".mp3",
+                    "video": ".mp4",
+                    "document": ".pdf"
+                }
+                original_filename += extension_map.get(message_type, ".file")
+
+            # Store file in MinIO
+            stored_file_info = minio_storage.upload_file_from_url(
+                url=media["url"],
+                original_filename=original_filename,
+                content_type=media.get("mimetype"),
+                metadata={
+                    "message_id": message_id,
+                    "phone_number": from_number,
+                    "session": session_name,
+                    "message_type": message_type,
+                    "source": "whatsapp_webhook"
+                }
+            )
+
+            logger.info("media_file_stored",
+                       object_name=stored_file_info["object_name"],
+                       public_url=stored_file_info["public_url"],
+                       size=stored_file_info["file_size"])
+
+        except Exception as e:
+            logger.error("media_storage_failed",
+                        message_id=message_id,
+                        media_url=media.get("url"),
+                        error=str(e))
+
     # Try to process with interaction service if available
     try:
         from src.services.interaction_service import InteractionService
         interaction_service = InteractionService()
+
+        # Use stored file URL if available, otherwise use original URL
+        media_url = stored_file_info["public_url"] if stored_file_info else (media.get("url") if has_media else None)
 
         # Create message in the format expected by the interaction service
         message_payload = {
@@ -194,11 +241,11 @@ async def handle_waha_message(message_data: Dict[str, Any], settings: Settings, 
                 "type": message_type,
                 "timestamp": timestamp,
                 "text": {"body": message_content} if message_type == "text" else None,
-                "audio": None if message_type != "audio" else {"url": media.get("url")} if has_media else None,
-                "image": None if message_type != "image" else {"url": media.get("url")} if has_media else None,
-                "video": None if message_type != "video" else {"url": media.get("url")} if has_media else None,
-                "document": None if message_type != "document" else {"url": media.get("url")} if has_media else None,
-                "media": media if has_media else None
+                "audio": None if message_type != "audio" else {"url": media_url} if has_media else None,
+                "image": None if message_type != "image" else {"url": media_url} if has_media else None,
+                "video": None if message_type != "video" else {"url": media_url} if has_media else None,
+                "document": None if message_type != "document" else {"url": media_url} if has_media else None,
+                "media": {**media, "url": media_url} if has_media else None
             }
         }
 
@@ -218,6 +265,7 @@ async def handle_waha_message(message_data: Dict[str, Any], settings: Settings, 
             "message_type": message_type,
             "message_content": message_content,
             "timestamp": timestamp,
+            "stored_file": stored_file_info,
             "interaction_result": result
         }
 
@@ -235,6 +283,7 @@ async def handle_waha_message(message_data: Dict[str, Any], settings: Settings, 
             "timestamp": timestamp,
             "has_media": has_media,
             "media_url": media.get("url") if has_media else None,
+            "stored_file": stored_file_info,
             "note": "WAHA message received but interaction processing failed"
         }
 

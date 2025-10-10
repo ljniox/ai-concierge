@@ -9,13 +9,18 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import structlog
 import uvicorn
+import asyncio
 
 from src.api.health import health_router
 from src.api.webhook import webhook_router
 from src.api.orchestrate import orchestrate_router
 from src.api.sessions import sessions_router
 from src.api.admin import admin_router
+from src.api.temporary_pages import router as temporary_pages_router
+from src.api.file_management import router as file_management_router
+from src.api.telegram import telegram_router
 from src.services.interaction_service import InteractionService
+from src.services.cleanup_service import start_cleanup_service, stop_cleanup_service
 
 # Configure structured logging
 structlog.configure(
@@ -43,11 +48,16 @@ async def lifespan(app: FastAPI):
     # Initialize services on startup
     interaction_service = InteractionService()
     await interaction_service.initialize_redis()
+
+    # Start cleanup service in background
+    cleanup_task = asyncio.create_task(start_cleanup_service())
+
     logger.info("services_initialized")
-    
+
     yield
-    
+
     # Cleanup on shutdown
+    await stop_cleanup_service()
     logger.info("application_shutdown")
 
 app = FastAPI(
@@ -103,6 +113,13 @@ app.include_router(webhook_router, prefix="/api/v1", tags=["webhook"])
 app.include_router(orchestrate_router, prefix="/api/v1", tags=["orchestration"])
 app.include_router(sessions_router, prefix="/api/v1", tags=["sessions"])
 app.include_router(admin_router, prefix="/api/v1", tags=["admin"])
+app.include_router(telegram_router, prefix="/api/v1", tags=["telegram"])
+app.include_router(temporary_pages_router, tags=["temporary-pages"])
+
+# Include temporary pages view endpoints without API prefix
+from src.api.temporary_pages import view_router
+app.include_router(view_router)
+app.include_router(file_management_router, prefix="/api/v1/files", tags=["file-management"])
 
 @app.get("/")
 async def root():
