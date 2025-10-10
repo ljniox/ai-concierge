@@ -12,7 +12,7 @@ from src.models.user import User
 from src.services.user_service import UserService
 from src.services.session_service import SessionService
 from src.services.redis_service import RedisService
-from src.services.whatsapp_service import WhatsAppService
+from src.services.waha_service import WAHAService
 from src.services.claude_service import ClaudeService, ServiceType
 from src.services.response_formatter import ResponseFormatter
 from src.services.profile_service import ProfileService
@@ -31,10 +31,7 @@ class InteractionService:
         self.user_service = UserService()
         self.session_service = SessionService()
         self.redis_service = RedisService()
-        self.whatsapp_service = WhatsAppService(
-            base_url=os.getenv('WHATSAPP_API_URL', 'http://whatsapp-service:3001'),
-            instance_name=os.getenv('WHATSAPP_SERVICE_NAME', 'gust-ia')
-        )
+        self.whatsapp_service = WAHAService()
         self.claude_service = ClaudeService()
         self.response_formatter = ResponseFormatter()
         self.profile_service = ProfileService()
@@ -1169,7 +1166,7 @@ class InteractionService:
             # Check individual services
             services = [
                 ("redis", self.redis_service.ping()),
-                ("whatsapp", self.whatsapp_service.is_connected()),
+                ("whatsapp", self.whatsapp_service.check_session_status()),
                 ("claude", self.claude_service.health_check())
             ]
 
@@ -1178,6 +1175,10 @@ class InteractionService:
                     if service_name == "claude":
                         result = await health_check
                         health_status["services"][service_name] = "healthy" if result.get("healthy") else "unhealthy"
+                    elif service_name == "whatsapp":
+                        result = await health_check
+                        # WAHA check_session_status returns dict with 'status' key
+                        health_status["services"][service_name] = "healthy" if result.get("status") not in ["error", None] else "unhealthy"
                     else:
                         is_healthy = await health_check
                         health_status["services"][service_name] = "healthy" if is_healthy else "unhealthy"
