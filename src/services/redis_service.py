@@ -1,62 +1,437 @@
 """
 Redis caching service for session management and performance optimization
+
+Enhanced with synchronous support for the automatic account creation system.
 """
 
 import json
 import pickle
-from typing import Optional, Any, List, Dict
+import os
+from typing import Optional, Any, List, Dict, Union
 from datetime import datetime, timedelta
+from urllib.parse import urlparse
 import redis.asyncio as redis
+import redis
 from src.utils.config import get_settings
-import structlog
+from src.utils.logging import get_logger
+from src.utils.exceptions import CacheError, CacheConnectionError
 
-logger = structlog.get_logger()
+logger = get_logger(__name__)
 
 
-class RedisService:
-    """Service for Redis caching operations"""
+class RedisConfig:
+    """Redis configuration management for account creation system."""
 
     def __init__(self):
         self.settings = get_settings()
+
+        # Extract connection details from REDIS_URL if available
+        redis_url = os.getenv("REDIS_URL", self.settings.redis_url if hasattr(self.settings, 'redis_url') else None)
+
+        if redis_url:
+            parsed = urlparse(redis_url)
+            self.redis_host = parsed.hostname or "localhost"
+            self.redis_port = parsed.port or 6379
+            self.redis_password = parsed.password or os.getenv("REDIS_PASSWORD")
+            self.redis_db = int(parsed.path[1:]) if parsed.path and len(parsed.path) > 1 else 0
+        else:
+            self.redis_host = getattr(self.settings, 'redis_host', 'localhost')
+            self.redis_port = getattr(self.settings, 'redis_port', 6379)
+            self.redis_password = getattr(self.settings, 'redis_password', None) or os.getenv("REDIS_PASSWORD")
+            self.redis_db = getattr(self.settings, 'redis_db', 0)
+
+        # Cache TTL settings (seconds)
+        self.session_ttl = int(os.getenv("REDIS_SESSION_TTL", "3600"))  # 1 hour
+        self.rate_limit_ttl = int(os.getenv("REDIS_RATE_LIMIT_TTL", "300"))  # 5 minutes
+        self.verification_code_ttl = int(os.getenv("REDIS_VERIFICATION_CODE_TTL", "600"))  # 10 minutes
+        self.default_ttl = int(os.getenv("REDIS_DEFAULT_TTL", "1800"))  # 30 minutes
+        self.redis_timeout = int(os.getenv("REDIS_TIMEOUT", "5"))
+        self.redis_max_connections = int(os.getenv("REDIS_MAX_CONNECTIONS", "20"))
+
+
+class RedisService:
+    """Service for Redis caching operations with both async and sync support"""
+
+    def __init__(self, config: Optional[RedisConfig] = None):
+        self.config = config or RedisConfig()
+        self.settings = get_settings()
         self.redis: Optional[redis.Redis] = None
+        self.sync_redis: Optional[redis.Redis] = None
+        self._initialized = False
         # Don't initialize Redis connection during __init__ to avoid startup issues
 
     async def initialize(self):
-        """Initialize Redis connection"""
+        """Initialize Redis connections (both async and sync)"""
+        if self._initialized:
+            return
+
         try:
-            # Try to use REDIS_URL if available, otherwise use individual settings
-            if self.settings.redis_url:
+            # Initialize async Redis client
+            redis_url = os.getenv("REDIS_URL", getattr(self.settings, 'redis_url', None))
+            if redis_url:
                 self.redis = redis.from_url(
-                    self.settings.redis_url,
+                    redis_url,
                     decode_responses=False,
-                    socket_connect_timeout=5,
-                    socket_timeout=5,
+                    socket_connect_timeout=self.config.redis_timeout,
+                    socket_timeout=self.config.redis_timeout,
                     retry_on_timeout=True
                 )
             else:
                 self.redis = redis.Redis(
-                    host=self.settings.redis_host,
-                    port=self.settings.redis_port,
-                    password=self.settings.redis_password,
-                    db=self.settings.redis_db,
-                    decode_responses=False,  # Use pickle/JSON for complex objects
-                    socket_connect_timeout=5,
-                    socket_timeout=5,
+                    host=self.config.redis_host,
+                    port=self.config.redis_port,
+                    password=self.config.redis_password,
+                    db=self.config.redis_db,
+                    decode_responses=False,
+                    socket_connect_timeout=self.config.redis_timeout,
+                    socket_timeout=self.config.redis_timeout,
                     retry_on_timeout=True
                 )
-            
-            # Test connection
+
+            # Initialize sync Redis client for account creation system
+            self.sync_redis = redis.Redis(
+                host=self.config.redis_host,
+                port=self.config.redis_port,
+                password=self.config.redis_password,
+                db=self.config.redis_db,
+                decode_responses=True,
+                socket_connect_timeout=self.config.redis_timeout,
+                socket_timeout=self.config.redis_timeout,
+                retry_on_timeout=True
+            )
+
+            # Test async connection
             await self.redis.ping()
+
+            # Test sync connection
+            self.sync_redis.ping()
+
+            self._initialized = True
             logger.info(
-                "redis_client_initialized",
-                host=self.settings.redis_host or self.settings.redis_url,
-                port=self.settings.redis_port,
-                db=self.settings.redis_db
+                "redis_clients_initialized",
+                host=self.config.redis_host,
+                port=self.config.redis_port,
+                db=self.config.redis_db
             )
         except Exception as e:
             logger.error("redis_initialization_failed", error=str(e))
             logger.warning("redis_will_be_disabled_gracefully")
             self.redis = None
+            self.sync_redis = None
+            self._initialized = False
+
+    def _ensure_initialized(self) -> None:
+        """Ensure sync Redis client is initialized."""
+        if not self._initialized:
+            raise CacheConnectionError("Redis service not initialized. Call initialize() first.")
+
+    def _serialize_value(self, value: Any) -> str:
+        """Serialize value for Redis storage."""
+        try:
+            if isinstance(value, (dict, list, tuple)):
+                return json.dumps(value, default=str)
+            elif isinstance(value, (datetime,)):
+                return value.isoformat()
+            else:
+                return str(value)
+        except Exception as e:
+            logger.error("Failed to serialize value for Redis", value=value, error=str(e))
+            raise CacheError(f"Value serialization failed: {e}")
+
+    def _deserialize_value(self, value: str, target_type: Optional[type] = None) -> Any:
+        """Deserialize value from Redis storage."""
+        if value is None:
+            return None
+
+        try:
+            # Try JSON deserialization first
+            try:
+                result = json.loads(value)
+                if target_type and target_type != str:
+                    return target_type(result)
+                return result
+            except json.JSONDecodeError:
+                # If not JSON, return as string or convert to target type
+                if target_type == int:
+                    return int(value)
+                elif target_type == float:
+                    return float(value)
+                elif target_type == bool:
+                    return value.lower() in ('true', '1', 'yes', 'on')
+                else:
+                    return value
+        except Exception as e:
+            logger.error("Failed to deserialize value from Redis", value=value, error=str(e))
+            raise CacheError(f"Value deserialization failed: {e}")
+
+    # Synchronous methods for account creation system
+    def set_sync(
+        self,
+        key: str,
+        value: Any,
+        ttl: Optional[int] = None,
+        namespace: Optional[str] = None
+    ) -> bool:
+        """Set a value in Redis (synchronous)."""
+        self._ensure_initialized()
+
+        if not self.sync_redis:
+            raise CacheConnectionError("Sync Redis client not initialized")
+
+        try:
+            # Add namespace prefix if provided
+            full_key = f"{namespace}:{key}" if namespace else key
+
+            # Serialize value
+            serialized_value = self._serialize_value(value)
+
+            # Set with TTL
+            if ttl:
+                result = self.sync_redis.setex(full_key, ttl, serialized_value)
+            else:
+                result = self.sync_redis.set(full_key, serialized_value)
+
+            if result:
+                logger.debug("Cache set successful", key=full_key, ttl=ttl)
+            else:
+                logger.warning("Cache set failed", key=full_key)
+
+            return bool(result)
+
+        except Exception as e:
+            logger.error("Cache set failed", key=key, error=str(e))
+            raise CacheError(f"Cache set failed: {e}")
+
+    def get_sync(
+        self,
+        key: str,
+        default: Any = None,
+        target_type: Optional[type] = None,
+        namespace: Optional[str] = None
+    ) -> Any:
+        """Get a value from Redis (synchronous)."""
+        self._ensure_initialized()
+
+        if not self.sync_redis:
+            raise CacheConnectionError("Sync Redis client not initialized")
+
+        try:
+            # Add namespace prefix if provided
+            full_key = f"{namespace}:{key}" if namespace else key
+
+            # Get value from Redis
+            value = self.sync_redis.get(full_key)
+
+            if value is None:
+                logger.debug("Cache miss", key=full_key)
+                return default
+
+            # Deserialize value
+            result = self._deserialize_value(value, target_type)
+            logger.debug("Cache hit", key=full_key)
+            return result
+
+        except Exception as e:
+            logger.error("Cache get failed", key=key, error=str(e))
+            return default
+
+    def delete_sync(self, key: str, namespace: Optional[str] = None) -> bool:
+        """Delete a key from Redis (synchronous)."""
+        self._ensure_initialized()
+
+        if not self.sync_redis:
+            raise CacheConnectionError("Sync Redis client not initialized")
+
+        try:
+            # Add namespace prefix if provided
+            full_key = f"{namespace}:{key}" if namespace else key
+
+            # Delete key
+            result = self.sync_redis.delete(full_key)
+            return bool(result)
+
+        except Exception as e:
+            logger.error("Cache delete failed", key=key, error=str(e))
+            return False
+
+    def exists_sync(self, key: str, namespace: Optional[str] = None) -> bool:
+        """Check if a key exists in Redis (synchronous)."""
+        self._ensure_initialized()
+
+        if not self.sync_redis:
+            raise CacheConnectionError("Sync Redis client not initialized")
+
+        try:
+            # Add namespace prefix if provided
+            full_key = f"{namespace}:{key}" if namespace else key
+
+            # Check existence
+            result = self.sync_redis.exists(full_key)
+            return bool(result)
+
+        except Exception as e:
+            logger.error("Cache exists check failed", key=key, error=str(e))
+            return False
+
+    def increment_sync(
+        self,
+        key: str,
+        amount: int = 1,
+        ttl: Optional[int] = None,
+        namespace: Optional[str] = None
+    ) -> int:
+        """Increment a numeric value in Redis (synchronous)."""
+        self._ensure_initialized()
+
+        if not self.sync_redis:
+            raise CacheConnectionError("Sync Redis client not initialized")
+
+        try:
+            # Add namespace prefix if provided
+            full_key = f"{namespace}:{key}" if namespace else key
+
+            # Increment value
+            result = self.sync_redis.incrby(full_key, amount)
+
+            # Set TTL if this is a new key and TTL is specified
+            if ttl and result == amount:
+                self.sync_redis.expire(full_key, ttl)
+
+            logger.debug("Cache increment successful", key=full_key, result=result)
+            return result
+
+        except Exception as e:
+            logger.error("Cache increment failed", key=key, error=str(e))
+            raise CacheError(f"Cache increment failed: {e}")
+
+    # Account creation system specific methods
+    def set_session_data_sync(self, session_id: str, data: Dict[str, Any], ttl: Optional[int] = None) -> bool:
+        """Store session data in Redis (synchronous)."""
+        return self.set_sync(
+            key=session_id,
+            value=data,
+            ttl=ttl or self.config.session_ttl,
+            namespace="session"
+        )
+
+    def get_session_data_sync(self, session_id: str) -> Dict[str, Any]:
+        """Get session data from Redis (synchronous)."""
+        return self.get_sync(
+            key=session_id,
+            default={},
+            target_type=dict,
+            namespace="session"
+        )
+
+    def delete_session_sync(self, session_id: str) -> bool:
+        """Delete session data from Redis (synchronous)."""
+        return self.delete_sync(key=session_id, namespace="session")
+
+    def set_verification_code_sync(
+        self,
+        identifier: str,
+        code: str,
+        ttl: Optional[int] = None
+    ) -> bool:
+        """Store verification code in Redis (synchronous)."""
+        return self.set_sync(
+            key=identifier,
+            value=code,
+            ttl=ttl or self.config.verification_code_ttl,
+            namespace="verification"
+        )
+
+    def get_verification_code_sync(self, identifier: str) -> Optional[str]:
+        """Get verification code from Redis (synchronous)."""
+        return self.get_sync(
+            key=identifier,
+            namespace="verification"
+        )
+
+    def delete_verification_code_sync(self, identifier: str) -> bool:
+        """Delete verification code from Redis (synchronous)."""
+        return self.delete_sync(key=identifier, namespace="verification")
+
+    def check_rate_limit_sync(
+        self,
+        identifier: str,
+        limit: int,
+        window: int,
+        namespace: str = "rate_limit"
+    ) -> Dict[str, Any]:
+        """Check rate limit for an identifier (synchronous)."""
+        try:
+            current_count = self.increment_sync(
+                key=identifier,
+                amount=1,
+                ttl=window,
+                namespace=namespace
+            )
+
+            ttl = self.sync_redis.ttl(f"{namespace}:{identifier}")
+            is_allowed = current_count <= limit
+            reset_time = datetime.now() + timedelta(seconds=ttl) if ttl > 0 else None
+
+            return {
+                "allowed": is_allowed,
+                "limit": limit,
+                "remaining": max(0, limit - current_count),
+                "current": current_count,
+                "reset_time": reset_time.isoformat() if reset_time else None,
+                "retry_after": ttl if not is_allowed and ttl > 0 else 0
+            }
+
+        except Exception as e:
+            logger.error("Rate limit check failed", identifier=identifier, error=str(e))
+            # Allow request if rate limiting fails
+            return {
+                "allowed": True,
+                "limit": limit,
+                "remaining": limit,
+                "current": 0,
+                "reset_time": None,
+                "retry_after": 0,
+                "error": str(e)
+            }
+
+    def health_check_sync(self) -> Dict[str, Any]:
+        """Perform Redis health check (synchronous)."""
+        try:
+            if not self._initialized:
+                return {
+                    "status": "unhealthy",
+                    "error": "Redis not initialized",
+                    "timestamp": None
+                }
+
+            # Test basic operations with sync client
+            test_key = "health_check_test"
+            test_value = {"test": True, "timestamp": datetime.now().isoformat()}
+
+            # Test set and get
+            self.set_sync(test_key, test_value, ttl=10)
+            retrieved_value = self.get_sync(test_key)
+            self.delete_sync(test_key)
+
+            # Get Redis info
+            info = self.sync_redis.info() if self.sync_redis else {}
+
+            return {
+                "status": "healthy",
+                "test_passed": retrieved_value == test_value,
+                "redis_version": info.get("redis_version"),
+                "connected_clients": info.get("connected_clients"),
+                "used_memory": info.get("used_memory_human"),
+                "timestamp": datetime.now().isoformat()
+            }
+
+        except Exception as e:
+            logger.error("Redis health check failed", error=str(e))
+            return {
+                "status": "unhealthy",
+                "error": str(e),
+                "timestamp": datetime.now().isoformat()
+            }
 
     async def ping(self) -> bool:
         """Check Redis connection"""
@@ -521,7 +896,123 @@ class RedisService:
             return False
 
     async def close(self):
-        """Close Redis connection"""
+        """Close Redis connections"""
         if self.redis:
             await self.redis.close()
-            logger.info("redis_connection_closed")
+        if self.sync_redis:
+            self.sync_redis.close()
+        self._initialized = False
+        logger.info("redis_connections_closed")
+
+    def close_sync(self):
+        """Close synchronous Redis connection"""
+        if self.sync_redis:
+            self.sync_redis.close()
+        self._initialized = False
+        logger.info("sync_redis_connection_closed")
+
+
+# Global Redis service instance and convenience functions
+_redis_service: Optional[RedisService] = None
+
+
+def get_redis_service() -> RedisService:
+    """Get the global Redis service instance."""
+    global _redis_service
+    if _redis_service is None:
+        _redis_service = RedisService()
+    return _redis_service
+
+
+def initialize_redis() -> RedisService:
+    """Initialize the global Redis service."""
+    service = get_redis_service()
+    return service
+
+
+# Synchronous convenience functions for account creation system
+def cache_set_sync(
+    key: str,
+    value: Any,
+    ttl: Optional[int] = None,
+    namespace: Optional[str] = None
+) -> bool:
+    """Set a value in Redis using the global service."""
+    service = get_redis_service()
+    return service.set_sync(key, value, ttl, namespace)
+
+
+def cache_get_sync(
+    key: str,
+    default: Any = None,
+    target_type: Optional[type] = None,
+    namespace: Optional[str] = None
+) -> Any:
+    """Get a value from Redis using the global service."""
+    service = get_redis_service()
+    return service.get_sync(key, default, target_type, namespace)
+
+
+def cache_delete_sync(key: str, namespace: Optional[str] = None) -> bool:
+    """Delete a key from Redis using the global service."""
+    service = get_redis_service()
+    return service.delete_sync(key, namespace)
+
+
+def cache_exists_sync(key: str, namespace: Optional[str] = None) -> bool:
+    """Check if a key exists in Redis using the global service."""
+    service = get_redis_service()
+    return service.exists_sync(key, namespace)
+
+
+def set_session_data_sync(session_id: str, data: Dict[str, Any], ttl: Optional[int] = None) -> bool:
+    """Store session data using the global service."""
+    service = get_redis_service()
+    return service.set_session_data_sync(session_id, data, ttl)
+
+
+def get_session_data_sync(session_id: str) -> Dict[str, Any]:
+    """Get session data using the global service."""
+    service = get_redis_service()
+    return service.get_session_data_sync(session_id)
+
+
+def delete_session_sync(session_id: str) -> bool:
+    """Delete session data using the global service."""
+    service = get_redis_service()
+    return service.delete_session_sync(session_id)
+
+
+def set_verification_code_sync(identifier: str, code: str, ttl: Optional[int] = None) -> bool:
+    """Store verification code using the global service."""
+    service = get_redis_service()
+    return service.set_verification_code_sync(identifier, code, ttl)
+
+
+def get_verification_code_sync(identifier: str) -> Optional[str]:
+    """Get verification code using the global service."""
+    service = get_redis_service()
+    return service.get_verification_code_sync(identifier)
+
+
+def delete_verification_code_sync(identifier: str) -> bool:
+    """Delete verification code using the global service."""
+    service = get_redis_service()
+    return service.delete_verification_code_sync(identifier)
+
+
+def check_rate_limit_sync(
+    identifier: str,
+    limit: int,
+    window: int,
+    namespace: str = "rate_limit"
+) -> Dict[str, Any]:
+    """Check rate limit using the global service."""
+    service = get_redis_service()
+    return service.check_rate_limit_sync(identifier, limit, window, namespace)
+
+
+def check_redis_health_sync() -> Dict[str, Any]:
+    """Check Redis health using the global service."""
+    service = get_redis_service()
+    return service.health_check_sync()

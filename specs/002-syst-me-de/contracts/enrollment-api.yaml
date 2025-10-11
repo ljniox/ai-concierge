@@ -1,0 +1,1169 @@
+openapi: 3.0.3
+info:
+  title: SDB Enrollment Management API
+  description: API for multi-profile enrollment management with OCR document processing and Mobile Money payment validation
+  version: 1.0.0
+  contact:
+    name: SDB Catechism Management
+    email: secretariatdbosco@gmail.com
+
+servers:
+  - url: http://ai-concierge-app-1:8000/api/v1
+    description: Production server (Docker container)
+  - url: http://localhost:8000/api/v1
+    description: Development server
+
+tags:
+  - name: Enrollments
+    description: Enrollment creation and management (FR-001-010)
+  - name: Documents
+    description: Document upload and OCR processing (FR-002-006, FR-010)
+  - name: Payments
+    description: Payment submission and validation (FR-011-020)
+  - name: Profiles
+    description: User profile and permission management (FR-021-032)
+  - name: Temp Pages
+    description: Temporary secure pages for document collection (FR-041-045)
+
+paths:
+  # ==================== ENROLLMENTS ====================
+
+  /enrollments:
+    post:
+      tags: [Enrollments]
+      summary: Create new enrollment (FR-001, FR-007)
+      description: Initiates an enrollment for a student. Returns inscription with status "brouillon".
+      operationId: createEnrollment
+      security:
+        - parentAuth: []
+        - staffAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEnrollmentRequest'
+      responses:
+        '201':
+          description: Enrollment created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Inscription'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          description: Duplicate enrollment detected (FR-009)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "duplicate_enrollment"
+                message: "Un élève avec le même nom, prénom et date de naissance existe déjà"
+                existing_id: "550e8400-e29b-41d4-a716-446655440000"
+
+    get:
+      tags: [Enrollments]
+      summary: List enrollments with filters
+      description: Returns enrollments based on user permissions (parents see own, staff see all)
+      operationId: listEnrollments
+      security:
+        - parentAuth: []
+        - staffAuth: []
+      parameters:
+        - name: annee_catechetique
+          in: query
+          schema:
+            type: string
+            example: "2025-2026"
+        - name: statut
+          in: query
+          schema:
+            type: string
+            enum: [brouillon, en_attente_paiement, paiement_partiel, active, annulee]
+        - name: classe_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+            maximum: 200
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: List of enrollments
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  enrollments:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Inscription'
+                  total:
+                    type: integer
+                  limit:
+                    type: integer
+                  offset:
+                    type: integer
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /enrollments/{inscription_id}:
+    get:
+      tags: [Enrollments]
+      summary: Get enrollment details
+      operationId: getEnrollment
+      security:
+        - parentAuth: []
+        - staffAuth: []
+      parameters:
+        - name: inscription_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Enrollment details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InscriptionDetailed'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+    patch:
+      tags: [Enrollments]
+      summary: Update enrollment (FR-008)
+      operationId: updateEnrollment
+      security:
+        - parentAuth: []
+        - staffAuth: []
+      parameters:
+        - name: inscription_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateEnrollmentRequest'
+      responses:
+        '200':
+          description: Enrollment updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Inscription'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ==================== DOCUMENTS ====================
+
+  /enrollments/{inscription_id}/documents:
+    post:
+      tags: [Documents]
+      summary: Upload document (FR-002)
+      description: Upload birth certificate, baptism certificate, transfer attestation, or payment proof
+      operationId: uploadDocument
+      security:
+        - parentAuth: []
+        - staffAuth: []
+      parameters:
+        - name: inscription_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+                - type_document
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Document file (PDF, JPG, PNG, HEIC, max 10MB)
+                type_document:
+                  type: string
+                  enum: [extrait_naissance, extrait_bapteme, attestation_transfert, preuve_paiement]
+      responses:
+        '201':
+          description: Document uploaded, OCR processing started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        '400':
+          description: Invalid file (size > 10MB, unsupported format)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: File too large
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+    get:
+      tags: [Documents]
+      summary: List documents for enrollment
+      operationId: listDocuments
+      security:
+        - parentAuth: []
+        - staffAuth: []
+      parameters:
+        - name: inscription_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: List of documents
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Document'
+
+  /documents/{document_id}:
+    get:
+      tags: [Documents]
+      summary: Get document details and OCR results (FR-006)
+      operationId: getDocument
+      security:
+        - parentAuth: []
+        - staffAuth: []
+      parameters:
+        - name: document_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Document with OCR data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentWithOCR'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    post:
+      tags: [Documents]
+      summary: Validate OCR extracted data (FR-006)
+      description: Parent confirms or corrects OCR extracted data
+      operationId: validateOCRData
+      security:
+        - parentAuth: []
+      parameters:
+        - name: document_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - donnees_validees
+              properties:
+                donnees_validees:
+                  type: object
+                  description: User-validated data (corrected OCR results)
+                  example:
+                    nom: "DIALLO"
+                    prenom: "Amadou"
+                    date_naissance: "2015-03-12"
+                    lieu_naissance: "Dakar"
+      responses:
+        '200':
+          description: OCR data validated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  # ==================== PAYMENTS ====================
+
+  /enrollments/{inscription_id}/payments:
+    post:
+      tags: [Payments]
+      summary: Submit payment (FR-012)
+      description: Parent submits payment with proof (Mobile Money screenshot or receipt number)
+      operationId: submitPayment
+      security:
+        - parentAuth: []
+      parameters:
+        - name: inscription_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitPaymentRequest'
+      responses:
+        '201':
+          description: Payment submitted for validation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paiement'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+    get:
+      tags: [Payments]
+      summary: List payments for enrollment
+      operationId: listPayments
+      security:
+        - parentAuth: []
+        - staffAuth: []
+      parameters:
+        - name: inscription_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: List of payments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Paiement'
+
+  /payments/pending:
+    get:
+      tags: [Payments]
+      summary: Get pending payments for validation (FR-014)
+      description: Treasurer view of payments awaiting validation
+      operationId: getPendingPayments
+      security:
+        - treasurerAuth: []
+      parameters:
+        - name: mode_paiement
+          in: query
+          schema:
+            type: string
+            enum: [cash, orange_money, wave, free_money, recu_papier]
+        - name: from_date
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: to_date
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Pending payments queue
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaiementPending'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /payments/{paiement_id}/validate:
+    post:
+      tags: [Payments]
+      summary: Validate or reject payment (FR-015)
+      description: Treasurer validates or rejects payment after verification
+      operationId: validatePayment
+      security:
+        - treasurerAuth: []
+      parameters:
+        - name: paiement_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - action
+              properties:
+                action:
+                  type: string
+                  enum: [valider, rejeter]
+                motif_rejet:
+                  type: string
+                  description: Required if action=rejeter
+                  example: "Montant incorrect, transaction introuvable dans mon compte Wave"
+      responses:
+        '200':
+          description: Payment validated or rejected
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paiement'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ==================== PROFILES ====================
+
+  /profiles:
+    post:
+      tags: [Profiles]
+      summary: Create user profile (FR-021)
+      description: Super Admin creates new user profile
+      operationId: createProfile
+      security:
+        - adminAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProfileRequest'
+      responses:
+        '201':
+          description: Profile created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfilUtilisateur'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          description: Phone number already exists
+
+  /profiles/{user_id}:
+    get:
+      tags: [Profiles]
+      summary: Get profile details
+      operationId: getProfile
+      security:
+        - parentAuth: []
+        - staffAuth: []
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Profile details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfilUtilisateur'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    patch:
+      tags: [Profiles]
+      summary: Update profile (FR-031)
+      operationId: updateProfile
+      security:
+        - adminAuth: []
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProfileRequest'
+      responses:
+        '200':
+          description: Profile updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfilUtilisateur'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /auth/code-parent:
+    post:
+      tags: [Profiles]
+      summary: Authenticate with parent code (FR-032)
+      description: Validate code parent for phone numbers not in database
+      operationId: authenticateCodeParent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - telephone
+                - code_parent
+              properties:
+                telephone:
+                  type: string
+                  format: E.164
+                  example: "+221764971875"
+                code_parent:
+                  type: string
+                  pattern: '^CAT-[A-Z0-9]{4}$'
+                  example: "CAT-7K9M"
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                  user_id:
+                    type: string
+                    format: uuid
+                  role:
+                    type: string
+        '401':
+          description: Invalid code or too many attempts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                invalid_code:
+                  value:
+                    error: "invalid_code"
+                    message: "Code parent invalide"
+                rate_limited:
+                  value:
+                    error: "rate_limited"
+                    message: "Trop de tentatives. Réessayez dans 1 heure."
+
+  # ==================== TEMP PAGES ====================
+
+  /temp-pages:
+    post:
+      tags: [Temp Pages]
+      summary: Generate temporary page (FR-041)
+      description: Staff creates secure temporary URL for document collection
+      operationId: createTempPage
+      security:
+        - staffAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - utilisateur_associe_id
+                - objet
+              properties:
+                utilisateur_associe_id:
+                  type: string
+                  format: uuid
+                  description: Parent user ID
+                objet:
+                  type: string
+                  enum: [inscription, documents_complementaires, autre]
+                expiration_days:
+                  type: integer
+                  default: 7
+                  minimum: 1
+                  maximum: 30
+      responses:
+        '201':
+          description: Temporary page created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageTemporaire'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /temp-pages/{code_acces}:
+    get:
+      tags: [Temp Pages]
+      summary: Access temporary page
+      description: Public endpoint (no auth) - validates access code
+      operationId: accessTempPage
+      parameters:
+        - name: code_acces
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: '^[A-Z0-9]{8}$'
+      responses:
+        '200':
+          description: Page details and upload form
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageTemporaire'
+        '404':
+          description: Page not found or expired
+        '410':
+          description: Page already used (status=utilisee)
+
+components:
+  securitySchemes:
+    parentAuth:
+      type: http
+      scheme: bearer
+      description: JWT token for parent users (role=parent)
+    staffAuth:
+      type: http
+      scheme: bearer
+      description: JWT token for staff users (all non-parent roles)
+    treasurerAuth:
+      type: http
+      scheme: bearer
+      description: JWT token for treasurer (role=tresorier_bureau or tresorier_adjoint_bureau)
+    adminAuth:
+      type: http
+      scheme: bearer
+      description: JWT token for super admin (role=super_admin)
+
+  schemas:
+    # ==================== ENROLLMENT SCHEMAS ====================
+
+    CreateEnrollmentRequest:
+      type: object
+      required:
+        - nom_enfant
+        - prenom_enfant
+        - date_naissance
+        - lieu_naissance
+        - annee_catechetique
+        - montant_total
+      properties:
+        nom_enfant:
+          type: string
+          example: "DIALLO"
+        prenom_enfant:
+          type: string
+          example: "Amadou"
+        date_naissance:
+          type: string
+          format: date
+          example: "2015-03-12"
+        lieu_naissance:
+          type: string
+          example: "Dakar"
+        date_bapteme:
+          type: string
+          format: date
+          nullable: true
+        paroisse_bapteme:
+          type: string
+          nullable: true
+        paroisse_origine:
+          type: string
+          nullable: true
+          description: For transfers (FR-005)
+        annee_catechisme_precedente:
+          type: string
+          nullable: true
+        annee_catechetique:
+          type: string
+          example: "2025-2026"
+        niveau:
+          type: string
+          enum: [éveil, CE1, CE2, CM1, CM2, confirmation]
+          nullable: true
+        montant_total:
+          type: number
+          format: float
+          minimum: 0
+          example: 15000
+
+    UpdateEnrollmentRequest:
+      type: object
+      properties:
+        niveau:
+          type: string
+          enum: [éveil, CE1, CE2, CM1, CM2, confirmation]
+        classe_id:
+          type: string
+          format: uuid
+          nullable: true
+        statut:
+          type: string
+          enum: [brouillon, en_attente_paiement, annulee]
+          description: Only these transitions allowed for parents/staff
+
+    Inscription:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        numero_unique:
+          type: string
+          example: "CAT-2025-0001"
+        parent_id:
+          type: string
+          format: uuid
+        nom_enfant:
+          type: string
+        prenom_enfant:
+          type: string
+        date_naissance:
+          type: string
+          format: date
+        lieu_naissance:
+          type: string
+        date_bapteme:
+          type: string
+          format: date
+          nullable: true
+        paroisse_bapteme:
+          type: string
+          nullable: true
+        paroisse_origine:
+          type: string
+          nullable: true
+        annee_catechetique:
+          type: string
+        niveau:
+          type: string
+          nullable: true
+        classe_id:
+          type: string
+          format: uuid
+          nullable: true
+        statut:
+          type: string
+          enum: [brouillon, en_attente_paiement, paiement_partiel, active, annulee]
+        montant_total:
+          type: number
+        montant_paye:
+          type: number
+        solde_restant:
+          type: number
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    InscriptionDetailed:
+      allOf:
+        - $ref: '#/components/schemas/Inscription'
+        - type: object
+          properties:
+            documents:
+              type: array
+              items:
+                $ref: '#/components/schemas/Document'
+            paiements:
+              type: array
+              items:
+                $ref: '#/components/schemas/Paiement'
+            classe:
+              $ref: '#/components/schemas/Classe'
+              nullable: true
+
+    # ==================== DOCUMENT SCHEMAS ====================
+
+    Document:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        inscription_id:
+          type: string
+          format: uuid
+        type_document:
+          type: string
+          enum: [extrait_naissance, extrait_bapteme, attestation_transfert, preuve_paiement]
+        format:
+          type: string
+          enum: [pdf, jpg, png, heic]
+        taille_bytes:
+          type: integer
+        uploaded_at:
+          type: string
+          format: date-time
+        statut_ocr:
+          type: string
+          enum: [en_attente, en_cours, succes, echec, manuel]
+        confiance_ocr:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+          nullable: true
+        valide_par_parent:
+          type: boolean
+        validated_at:
+          type: string
+          format: date-time
+          nullable: true
+
+    DocumentWithOCR:
+      allOf:
+        - $ref: '#/components/schemas/Document'
+        - type: object
+          properties:
+            donnees_extraites:
+              type: object
+              description: Raw OCR extracted data
+              example:
+                nom: "DIALLO"
+                prenom: "Amadou"
+                date_naissance: "12/03/2015"
+                lieu_naissance: "Dakar"
+                confidence_scores:
+                  nom: 0.95
+                  prenom: 0.92
+                  date_naissance: 0.89
+            donnees_validees:
+              type: object
+              description: User-corrected data
+              nullable: true
+            download_url:
+              type: string
+              format: uri
+              description: Pre-signed MinIO URL (expires in 1 hour)
+
+    # ==================== PAYMENT SCHEMAS ====================
+
+    SubmitPaymentRequest:
+      type: object
+      required:
+        - montant
+        - mode_paiement
+      properties:
+        montant:
+          type: number
+          format: float
+          minimum: 0
+        mode_paiement:
+          type: string
+          enum: [cash, orange_money, wave, free_money, recu_papier]
+        reference:
+          type: string
+          description: Transaction ID (Mobile Money) or receipt number
+          example: "TX-12345678"
+        preuve_document_id:
+          type: string
+          format: uuid
+          description: Document ID of uploaded payment proof (for Mobile Money)
+
+    Paiement:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        inscription_id:
+          type: string
+          format: uuid
+        montant:
+          type: number
+        mode_paiement:
+          type: string
+          enum: [cash, orange_money, wave, free_money, recu_papier]
+        reference:
+          type: string
+          nullable: true
+        statut:
+          type: string
+          enum: [en_attente_validation, valide, rejete]
+        soumis_at:
+          type: string
+          format: date-time
+        valide_at:
+          type: string
+          format: date-time
+          nullable: true
+        validateur_id:
+          type: string
+          format: uuid
+          nullable: true
+        motif_rejet:
+          type: string
+          nullable: true
+
+    PaiementPending:
+      allOf:
+        - $ref: '#/components/schemas/Paiement'
+        - type: object
+          properties:
+            parent_nom:
+              type: string
+            parent_telephone:
+              type: string
+            inscription_numero:
+              type: string
+            preuve_document:
+              $ref: '#/components/schemas/DocumentWithOCR'
+              nullable: true
+            montant_attendu:
+              type: number
+              description: Expected amount from inscription
+            ecart:
+              type: number
+              description: Difference between paid and expected
+
+    # ==================== PROFILE SCHEMAS ====================
+
+    CreateProfileRequest:
+      type: object
+      required:
+        - nom
+        - prenom
+        - role
+        - telephone
+        - canal_prefere
+      properties:
+        nom:
+          type: string
+        prenom:
+          type: string
+        role:
+          type: string
+          enum: [super_admin, sacristain, cure, secretaire_cure, president_bureau, secretaire_bureau, secretaire_adjoint_bureau, tresorier_bureau, tresorier_adjoint_bureau, responsable_organisation_bureau, charge_relations_exterieures_bureau, charge_relations_exterieures_adjoint_bureau, catechiste, parent]
+        telephone:
+          type: string
+          format: E.164
+        email:
+          type: string
+          format: email
+          nullable: true
+        canal_prefere:
+          type: string
+          enum: [whatsapp, telegram]
+        code_parent:
+          type: string
+          description: Plain code parent (will be hashed) - required if role=parent
+          nullable: true
+
+    UpdateProfileRequest:
+      type: object
+      properties:
+        role:
+          type: string
+        actif:
+          type: boolean
+        permissions:
+          type: object
+          description: Custom permissions override
+
+    ProfilUtilisateur:
+      type: object
+      properties:
+        user_id:
+          type: string
+          format: uuid
+        nom:
+          type: string
+        prenom:
+          type: string
+        role:
+          type: string
+        telephone:
+          type: string
+        email:
+          type: string
+          nullable: true
+        canal_prefere:
+          type: string
+        actif:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        derniere_connexion:
+          type: string
+          format: date-time
+          nullable: true
+        permissions:
+          type: object
+
+    # ==================== TEMP PAGE SCHEMAS ====================
+
+    PageTemporaire:
+      type: object
+      properties:
+        page_id:
+          type: string
+          format: uuid
+        code_acces:
+          type: string
+          example: "A7KM9X3Z"
+        url_complete:
+          type: string
+          format: uri
+          example: "https://catechese.sdb.sn/temp/A7KM9X3Z"
+        utilisateur_associe_id:
+          type: string
+          format: uuid
+        objet:
+          type: string
+          enum: [inscription, documents_complementaires, autre]
+        created_at:
+          type: string
+          format: date-time
+        expires_at:
+          type: string
+          format: date-time
+        statut:
+          type: string
+          enum: [active, utilisee, expiree, revoquee]
+        documents_collectes:
+          type: array
+          items:
+            type: string
+            format: uuid
+
+    # ==================== MISC SCHEMAS ====================
+
+    Classe:
+      type: object
+      properties:
+        classe_id:
+          type: string
+          format: uuid
+        annee_catechetique:
+          type: string
+        niveau:
+          type: string
+        capacite_max:
+          type: integer
+        effectif_actuel:
+          type: integer
+        horaire:
+          type: string
+        salle:
+          type: string
+        statut:
+          type: string
+
+    Error:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
+          nullable: true
+
+  responses:
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "validation_error"
+            message: "Champs requis manquants"
+
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "unauthorized"
+            message: "Authentification requise"
+
+    Forbidden:
+      description: Insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "forbidden"
+            message: "Permissions insuffisantes"
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "not_found"
+            message: "Ressource introuvable"

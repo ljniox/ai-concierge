@@ -1,0 +1,285 @@
+# Webhook Event Schemas
+
+## WhatsApp Webhook Events
+
+### Message Event
+```yaml
+whatsapp_message:
+  type: object
+  properties:
+    object:
+      type: string
+      enum: [whatsapp]
+    entry:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          changes:
+            type: array
+            items:
+              type: object
+              properties:
+                field:
+                  type: string
+                  enum: [messages]
+                value:
+                  $ref: '#/components/schemas/WhatsAppMessagePayload'
+  required: [object, entry]
+```
+
+### WhatsApp Message Payload
+```yaml
+WhatsAppMessagePayload:
+  type: object
+  properties:
+    messaging_product:
+      type: string
+      enum: [whatsapp]
+    metadata:
+      type: object
+      properties:
+        display_phone_number:
+          type: string
+        phone_number_id:
+          type: string
+    contacts:
+      type: array
+      items:
+        type: object
+        properties:
+          profile:
+            type: object
+            properties:
+              name:
+                type: string
+          wa_id:
+            type: string
+    messages:
+      type: array
+      items:
+        type: object
+        properties:
+          from:
+            type: string
+            pattern: '^\+[1-9]\d{1,14}$'
+          id:
+            type: string
+          timestamp:
+            type: string
+          type:
+            type: string
+            enum: [text, image, document, audio, video]
+          text:
+            type: object
+            properties:
+              body:
+                type: string
+  required: [messaging_product, messages]
+```
+
+## Telegram Webhook Events
+
+### Update Event
+```yaml
+telegram_update:
+  type: object
+  properties:
+    update_id:
+      type: integer
+      minimum: 0
+    message:
+      $ref: '#/components/schemas/TelegramMessage'
+    callback_query:
+      $ref: '#/components/schemas/TelegramCallbackQuery'
+    channel_post:
+      $ref: '#/components/schemas/TelegramMessage'
+  required: [update_id]
+```
+
+### Telegram Message
+```yaml
+TelegramMessage:
+  type: object
+  properties:
+    message_id:
+      type: integer
+      minimum: 1
+    from:
+      $ref: '#/components/schemas/TelegramUser'
+    chat:
+      $ref: '#/components/schemas/TelegramChat'
+    date:
+      type: integer
+      minimum: 0
+    text:
+      type: string
+    contact:
+      $ref: '#/components/schemas/TelegramContact'
+    location:
+      $ref: '#/components/schemas/TelegramLocation'
+    document:
+      $ref: '#/components/schemas/TelegramDocument'
+    photo:
+      type: array
+      items:
+        $ref: '#/components/schemas/TelegramPhotoSize'
+  required: [message_id, from, chat, date]
+```
+
+### Telegram User
+```yaml
+TelegramUser:
+  type: object
+  properties:
+    id:
+      type: integer
+      minimum: 1
+    is_bot:
+      type: boolean
+    first_name:
+      type: string
+    last_name:
+      type: string
+    username:
+      type: string
+      pattern: '^[a-zA-Z0-9_]{5,32}$'
+    language_code:
+      type: string
+      pattern: '^[a-z]{2}(-[A-Z]{2})?$'
+  required: [id, first_name]
+```
+
+### Telegram Chat
+```yaml
+TelegramChat:
+  type: object
+  properties:
+    id:
+      type: integer
+      minimum: 1
+    type:
+      type: string
+      enum: [private, group, supergroup, channel]
+    title:
+      type: string
+    username:
+      type: string
+      pattern: '^[a-zA-Z0-9_]{5,32}$'
+    first_name:
+      type: string
+    last_name:
+      type: string
+  required: [id, type]
+```
+
+### Telegram Contact
+```yaml
+TelegramContact:
+  type: object
+  properties:
+    phone_number:
+      type: string
+      pattern: '^\+[1-9]\d{1,14}$'
+    first_name:
+      type: string
+    last_name:
+      type: string
+    user_id:
+      type: integer
+      minimum: 1
+    vcard:
+      type: string
+  required: [phone_number, first_name]
+```
+
+## Webhook Security Headers
+
+### WhatsApp Security Headers
+```yaml
+whatsapp_security_headers:
+  X-Hub-Signature-256:
+    type: string
+    pattern: '^sha256=[a-f0-9]{64}$'
+    description: HMAC-SHA256 signature of request body
+  User-Agent:
+    type: string
+    description: Facebook webhook user agent
+  Content-Type:
+    type: string
+    enum: [application/json]
+```
+
+### Telegram Security Headers
+```yaml
+telegram_security_headers:
+  X-Telegram-Bot-Api-Secret-Token:
+    type: string
+    minLength: 1
+    description: Custom secret token for Telegram webhooks
+  User-Agent:
+    type: string
+    description: Telegram webhook user agent
+  Content-Type:
+    type: string
+    enum: [application/json]
+```
+
+## Common Webhook Properties
+
+### Base Event Properties
+```yaml
+base_webhook_event:
+  type: object
+  properties:
+    event_id:
+      type: string
+      description: Unique event identifier
+    platform:
+      type: string
+      enum: [whatsapp, telegram]
+      description: Source platform
+    event_type:
+      type: string
+      enum: [message, contact, location, document, callback]
+      description: Type of event
+    timestamp:
+      type: string
+      format: date-time
+      description: Event timestamp
+    signature_verified:
+      type: boolean
+      description: Whether webhook signature was verified
+    ip_address:
+      type: string
+      format: ipv4
+      description: Source IP address
+  required: [platform, event_type, timestamp]
+```
+
+### Event Processing Metadata
+```yaml
+event_metadata:
+  type: object
+  properties:
+    processing_attempts:
+      type: integer
+      minimum: 0
+      default: 0
+    last_error:
+      type: string
+    processing_time_ms:
+      type: integer
+      minimum: 0
+    priority:
+      type: integer
+      minimum: 1
+      maximum: 10
+      default: 5
+    tags:
+      type: array
+      items:
+        type: string
+```

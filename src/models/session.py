@@ -1,11 +1,16 @@
 """
 Session data model for WhatsApp AI Concierge Service
+
+Extended to support account creation system with platform-specific session management
+for Telegram and WhatsApp integrations.
 """
 
 from datetime import datetime, timedelta
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 from enum import Enum
 from pydantic import BaseModel, Field, validator
+import json
+import uuid
 
 
 class SessionStatus(str, Enum):
@@ -188,3 +193,172 @@ def validate_session_context(context: Dict[str, Any]) -> bool:
             return False
 
     return True
+
+
+# ==============================================================================
+# Account Creation System Session Models
+# ==============================================================================
+
+class PlatformType(str, Enum):
+    """Supported messaging platforms for account creation."""
+    TELEGRAM = "telegram"
+    WHATSAPP = "whatsapp"
+
+
+class SessionType(str, Enum):
+    """Session types for account creation system."""
+    ACCOUNT_CREATION = "account_creation"
+    GENERAL_CONVERSATION = "general_conversation"
+    ROLE_MANAGEMENT = "role_management"
+    SUPPORT_REQUEST = "support_request"
+
+
+class AccountCreationSession(BaseModel):
+    """Extended session model for account creation system."""
+
+    user_id: Optional[int] = Field(None, gt=0)
+    session_id: str = Field(..., regex=r"^[a-f0-9-]{36}$")
+    platform: PlatformType = Field(...)
+    platform_user_id: str = Field(...)
+    account_creation_state: Optional[Dict[str, Any]] = Field(default_factory=dict)
+    session_type: SessionType = Field(default=SessionType.ACCOUNT_CREATION)
+    is_active: bool = Field(default=True)
+    expires_at: datetime
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+    last_activity_at: Optional[datetime] = None
+
+    @validator('session_id')
+    def generate_session_id(cls, v):
+        """Generate UUID-based session ID if not provided."""
+        if not v:
+            return str(uuid.uuid4())
+        return v
+
+    @validator('expires_at')
+    def validate_expiry(cls, v):
+        """Validate expiry date is in the future."""
+        if v <= datetime.utcnow():
+            raise ValueError('Expiry date must be in the future')
+        return v
+
+    class Config:
+        """Pydantic configuration."""
+        use_enum_values = True
+        validate_assignment = True
+        json_encoders = {
+            datetime: lambda v: v.isoformat()
+        }
+
+
+class AccountCreationState(BaseModel):
+    """State model for account creation flow."""
+
+    phone_number_provided: bool = Field(default=False)
+    phone_number: Optional[str] = None
+    phone_validated: bool = Field(default=False)
+    parent_found: bool = Field(default=False)
+    parent_data: Optional[Dict[str, Any]] = None
+    consent_obtained: bool = Field(default=False)
+    account_created: bool = Field(default=False)
+    user_id: Optional[int] = None
+    welcome_sent: bool = Field(default=False)
+    current_step: str = Field(default="initial")
+    error_message: Optional[str] = None
+    retry_count: int = Field(default=0)
+    max_retries: int = Field(default=3)
+
+    @property
+    def is_completed(self) -> bool:
+        """Check if account creation flow is completed."""
+        return self.account_created and self.welcome_sent
+
+    @property
+    def can_retry(self) -> bool:
+        """Check if flow can be retried."""
+        return self.retry_count < self.max_retries
+
+    def advance_step(self, new_step: str) -> None:
+        """Advance to next step."""
+        self.previous_step = self.current_step
+        self.current_step = new_step
+
+    def set_error(self, error_message: str) -> None:
+        """Set error state and increment retry count."""
+        self.error_message = error_message
+        self.retry_count += 1
+
+
+class SessionCreate(BaseModel):
+    """Model for creating new account creation sessions."""
+
+    platform: PlatformType = Field(...)
+    platform_user_id: str = Field(...)
+    session_type: SessionType = Field(default=SessionType.ACCOUNT_CREATION)
+    session_data: Optional[Dict[str, Any]] = Field(default_factory=dict)
+    expires_in_minutes: int = Field(default=30, ge=5, le=1440)  # 5 minutes to 24 hours
+    user_id: Optional[int] = Field(None, gt=0)
+
+
+class SessionStats(BaseModel):
+    """Session statistics for account creation system."""
+
+    total_sessions: int
+    active_sessions: int
+    expired_sessions: int
+    sessions_by_platform: Dict[str, int]
+    sessions_by_type: Dict[str, int]
+    average_session_duration_minutes: float
+    sessions_created_today: int
+    sessions_created_this_hour: int
+    successful_account_creations: int
+    failed_account_creations: int
+
+
+# Database query models for account creation sessions
+class AccountSessionQuery:
+    """Helper class for account creation session database queries."""
+
+    @staticmethod
+    def create_account_sessions_view_sql() -> str:
+        """SQL for creating view for account creation sessions."""
+        return """
+        CREATE VIEW IF NOT EXISTS account_creation_sessions AS
+        SELECT
+            s.*,
+            ua.phone_number,
+            ua.full_name,
+            ua.account_source
+        FROM user_sessions s
+        LEFT JOIN user_accounts ua ON s.user_id = ua.id
+        WHERE s.session_type = 'account_creation'
+        """
+
+    @staticmethod
+    def select_active_account_sessions_sql() -> str:
+        """SQL for selecting active account creation sessions."""
+        return """
+        SELECT s.*, ua.phone_number, ua.full_name
+        FROM user_sessions s
+        LEFT JOIN user_accounts ua ON s.user_id = ua.id
+        WHERE s.session_type = 'account_creation'
+          AND s.is_active = 1
+          AND s.expires_at > CURRENT_TIMESTAMP
+        ORDER BY s.created_at DESC
+        """
+
+    @staticmethod
+    def get_account_session_stats_sql() -> str:
+        """SQL for getting account creation session statistics."""
+        return """
+        SELECT
+            COUNT(*) as total_sessions,
+            COUNT(CASE WHEN is_active = 1 AND expires_at > CURRENT_TIMESTAMP THEN 1 END) as active_sessions,
+            COUNT(CASE WHEN is_active = 0 OR expires_at <= CURRENT_TIMESTAMP THEN 1 END) as expired_sessions,
+            platform,
+            COUNT(CASE WHEN JSON_EXTRACT(session_data, '$.account_created') = true THEN 1 END) as successful_creations,
+            COUNT(CASE WHEN JSON_EXTRACT(session_data, '$.account_created') = false THEN 1 END) as failed_creations
+        FROM user_sessions
+        WHERE session_type = 'account_creation'
+        GROUP BY platform
+        """

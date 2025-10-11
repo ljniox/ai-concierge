@@ -1,0 +1,1495 @@
+openapi: 3.0.3
+info:
+  title: Automatic Account Creation API
+  description: API for automatic account creation system supporting WhatsApp and Telegram platforms with GDPR compliance
+  version: 1.0.0
+  contact:
+    name: SDB Technical Team
+    email: tech@sdb.sn
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://api.sdb.sn/v1
+    description: Production server
+  - url: https://staging-api.sdb.sn/v1
+    description: Staging server
+  - url: http://localhost:8000/v1
+    description: Development server
+
+tags:
+  - name: Account Creation
+    description: Automatic account creation operations
+  - name: Webhooks
+    description: Incoming webhook endpoints
+  - name: User Management
+    description: User account and role management
+  - name: Sessions
+    description: Session management operations
+  - name: Audit
+    description: Audit and compliance operations
+
+paths:
+  /webhooks/whatsapp:
+    post:
+      tags:
+        - Webhooks
+      summary: Process WhatsApp webhook
+      description: Handle incoming WhatsApp messages for automatic account creation
+      operationId: processWhatsAppWebhook
+      security:
+        - WebhookAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WhatsAppWebhookPayload'
+            examples:
+              message:
+                summary: Incoming WhatsApp message
+                value:
+                  object: "whatsapp"
+                  entry:
+                    - id: "123456789"
+                      changes:
+                        - value:
+                            messaging_product: "whatsapp"
+                            metadata:
+                              display_phone_number: "221765005555"
+                              phone_number_id: "101234567890"
+                            contacts:
+                              - profile:
+                                  name: "Parent Name"
+                                wa_id: "221765005555"
+                            messages:
+                              - from: "221765005555"
+                                id: "wamid.HBgLNDY3NjUwMDU1NTU=
+                                timestamp: "1695140642"
+                                text:
+                                  body: "Bonjour"
+      responses:
+        '200':
+          description: Webhook processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /webhooks/telegram:
+    post:
+      tags:
+        - Webhooks
+      summary: Process Telegram webhook
+      description: Handle incoming Telegram messages for automatic account creation
+      operationId: processTelegramWebhook
+      security:
+        - WebhookAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TelegramWebhookPayload'
+            examples:
+              message:
+                summary: Incoming Telegram message
+                value:
+                  update_id: 123456789
+                  message:
+                    message_id: 123
+                    from:
+                      id: 987654321
+                      first_name: "Parent Name"
+                      username: "parent_username"
+                    chat:
+                      id: 987654321
+                      first_name: "Parent Name"
+                      username: "parent_username"
+                      type: "private"
+                    date: 1695140642
+                    text: "Bonjour"
+      responses:
+        '200':
+          description: Webhook processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /accounts:
+    get:
+      tags:
+        - User Management
+      summary: List user accounts
+      description: Retrieve list of user accounts with filtering and pagination
+      operationId: listUserAccounts
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: status
+          in: query
+          description: Filter by account status
+          schema:
+            type: string
+            enum: [active, inactive, suspended, deleted]
+        - name: platform
+          in: query
+          description: Filter by creation platform
+          schema:
+            type: string
+            enum: [whatsapp, telegram, manual]
+        - name: page
+          in: query
+          description: Page number for pagination
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: limit
+          in: query
+          description: Number of items per page
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 100
+      responses:
+        '200':
+          description: List of user accounts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAccountListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    post:
+      tags:
+        - User Management
+      summary: Create user account manually
+      description: Create a new user account manually (admin only)
+      operationId: createUserAccount
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserAccountRequest'
+      responses:
+        '201':
+          description: User account created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAccountResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          description: Account with phone number already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /accounts/{accountId}:
+    get:
+      tags:
+        - User Management
+      summary: Get user account details
+      description: Retrieve detailed information about a specific user account
+      operationId: getUserAccount
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: User account ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: User account details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAccountResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    put:
+      tags:
+        - User Management
+      summary: Update user account
+      description: Update user account information
+      operationId: updateUserAccount
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: User account ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserAccountRequest'
+      responses:
+        '200':
+          description: User account updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAccountResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    delete:
+      tags:
+        - User Management
+      summary: Delete user account
+      description: Delete a user account (GDPR right to be forgotten)
+      operationId: deleteUserAccount
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: User account ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: User account deleted successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /accounts/{accountId}/roles:
+    get:
+      tags:
+        - User Management
+      summary: Get user roles
+      description: Retrieve all roles assigned to a user
+      operationId: getUserRoles
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: User account ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: User roles
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRoleListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    post:
+      tags:
+        - User Management
+      summary: Assign role to user
+      description: Assign a role to a user
+      operationId: assignUserRole
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: User account ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssignRoleRequest'
+      responses:
+        '201':
+          description: Role assigned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRoleResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: Role already assigned to user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /accounts/{accountId}/roles/{roleId}:
+    delete:
+      tags:
+        - User Management
+      summary: Remove role from user
+      description: Remove a role from a user
+      operationId: removeUserRole
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: User account ID
+          schema:
+            type: string
+            format: uuid
+        - name: roleId
+          in: path
+          required: true
+          description: Role ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Role removed successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /roles:
+    get:
+      tags:
+        - User Management
+      summary: List available roles
+      description: Retrieve list of all available system roles
+      operationId: listRoles
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: is_active
+          in: query
+          description: Filter by active status
+          schema:
+            type: boolean
+        - name: is_system_role
+          in: query
+          description: Filter by system role status
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: List of roles
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /sessions:
+    get:
+      tags:
+        - Sessions
+      summary: List active sessions
+      description: Retrieve list of active user sessions
+      operationId: listSessions
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: user_id
+          in: query
+          description: Filter by user ID
+          schema:
+            type: string
+            format: uuid
+        - name: platform
+          in: query
+          description: Filter by platform
+          schema:
+            type: string
+            enum: [whatsapp, telegram]
+        - name: status
+          in: query
+          description: Filter by session status
+          schema:
+            type: string
+            enum: [active, inactive, expired, terminated]
+        - name: page
+          in: query
+          description: Page number for pagination
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: limit
+          in: query
+          description: Number of items per page
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 100
+      responses:
+        '200':
+          description: List of sessions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /sessions/{sessionId}:
+    get:
+      tags:
+        - Sessions
+      summary: Get session details
+      description: Retrieve detailed information about a specific session
+      operationId: getSession
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          description: Session ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Session details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    delete:
+      tags:
+        - Sessions
+      summary: Terminate session
+      description: Terminate a user session
+      operationId: terminateSession
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          description: Session ID
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Session terminated successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /audit/account-creation:
+    get:
+      tags:
+        - Audit
+      summary: List account creation audit logs
+      description: Retrieve audit log of account creation attempts
+      operationId: listAccountCreationAudit
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: phone_number
+          in: query
+          description: Filter by phone number
+          schema:
+            type: string
+        - name: platform
+          in: query
+          description: Filter by platform
+          schema:
+            type: string
+            enum: [whatsapp, telegram]
+        - name: status
+          in: query
+          description: Filter by creation status
+          schema:
+            type: string
+            enum: [initiated, phone_validated, parent_found, account_created, failed, duplicate]
+        - name: date_from
+          in: query
+          description: Filter by date from (ISO 8601)
+          schema:
+            type: string
+            format: date-time
+        - name: date_to
+          in: query
+          description: Filter by date to (ISO 8601)
+          schema:
+            type: string
+            format: date-time
+        - name: page
+          in: query
+          description: Page number for pagination
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: limit
+          in: query
+          description: Number of items per page
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 100
+      responses:
+        '200':
+          description: Audit log entries
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountCreationAuditListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /utils/validate-phone:
+    post:
+      tags:
+        - Utilities
+      summary: Validate phone number
+      description: Validate and normalize a phone number
+      operationId: validatePhoneNumber
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidatePhoneNumberRequest'
+      responses:
+        '200':
+          description: Phone number validation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidatePhoneNumberResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /health:
+    get:
+      tags:
+        - System
+      summary: Health check
+      description: Check system health and status
+      operationId: healthCheck
+      responses:
+        '200':
+          description: System is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthCheckResponse'
+        '503':
+          description: System is unhealthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthCheckResponse'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token for API authentication
+    WebhookAuth:
+      type: apiKey
+      in: header
+      name: X-Webhook-Signature
+      description: Webhook signature verification for platform authentication
+
+  schemas:
+    UserAccountResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: User account ID
+        phone_number:
+          type: string
+          description: Original phone number
+        normalized_phone:
+          type: string
+          description: E.164 formatted phone number
+        username:
+          type: string
+          description: Username
+        first_name:
+          type: string
+          description: First name
+        last_name:
+          type: string
+          description: Last name
+        email:
+          type: string
+          format: email
+          description: Email address
+        status:
+          type: string
+          enum: [active, inactive, suspended, deleted]
+          description: Account status
+        is_verified:
+          type: boolean
+          description: Whether account is verified
+        parent_database_id:
+          type: string
+          description: Reference to parent database record
+        consent_given:
+          type: boolean
+          description: GDPR consent status
+        consent_level:
+          type: string
+          enum: [minimal, standard, full]
+          description: GDPR consent level
+        created_via:
+          type: string
+          enum: [whatsapp, telegram, manual]
+          description: Platform used for account creation
+        platform_user_id:
+          type: string
+          description: Platform-specific user ID
+        created_at:
+          type: string
+          format: date-time
+          description: Account creation timestamp
+        updated_at:
+          type: string
+          format: date-time
+          description: Last update timestamp
+        last_login_at:
+          type: string
+          format: date-time
+          description: Last login timestamp
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserRole'
+          description: User roles
+
+    CreateUserAccountRequest:
+      type: object
+      required:
+        - phone_number
+        - consent_given
+        - consent_level
+      properties:
+        phone_number:
+          type: string
+          description: Phone number (any format)
+        username:
+          type: string
+          description: Username
+        first_name:
+          type: string
+          description: First name
+        last_name:
+          type: string
+          description: Last name
+        email:
+          type: string
+          format: email
+          description: Email address
+        parent_database_id:
+          type: string
+          description: Reference to parent database record
+        consent_given:
+          type: boolean
+          description: GDPR consent
+        consent_level:
+          type: string
+          enum: [minimal, standard, full]
+          description: GDPR consent level
+        metadata:
+          type: object
+          description: Additional metadata
+
+    UpdateUserAccountRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Username
+        first_name:
+          type: string
+          description: First name
+        last_name:
+          type: string
+          description: Last name
+        email:
+          type: string
+          format: email
+          description: Email address
+        status:
+          type: string
+          enum: [active, inactive, suspended, deleted]
+          description: Account status
+        consent_level:
+          type: string
+          enum: [minimal, standard, full]
+          description: GDPR consent level
+        metadata:
+          type: object
+          description: Additional metadata
+
+    UserAccountListResponse:
+      type: object
+      properties:
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserAccountResponse'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+
+    UserRole:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Role ID
+        name:
+          type: string
+          description: Role name
+        display_name:
+          type: string
+          description: Display name
+        description:
+          type: string
+          description: Role description
+        permissions:
+          type: array
+          items:
+            type: string
+          description: Role permissions
+        is_system_role:
+          type: boolean
+          description: Whether this is a system role
+        assigned_at:
+          type: string
+          format: date-time
+          description: Assignment timestamp
+        expires_at:
+          type: string
+          format: date-time
+          description: Role expiration timestamp
+        is_active:
+          type: boolean
+          description: Whether role assignment is active
+
+    UserRoleListResponse:
+      type: object
+      properties:
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserRole'
+
+    UserRoleResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Assignment ID
+        user_id:
+          type: string
+          format: uuid
+          description: User ID
+        role_id:
+          type: string
+          format: uuid
+          description: Role ID
+        role:
+          $ref: '#/components/schemas/UserRole'
+        assigned_at:
+          type: string
+          format: date-time
+          description: Assignment timestamp
+        assigned_by:
+          type: string
+          format: uuid
+          description: Who assigned the role
+        expires_at:
+          type: string
+          format: date-time
+          description: Role expiration timestamp
+        is_active:
+          type: boolean
+          description: Whether role assignment is active
+        metadata:
+          type: object
+          description: Assignment metadata
+
+    AssignRoleRequest:
+      type: object
+      required:
+        - role_id
+      properties:
+        role_id:
+          type: string
+          format: uuid
+          description: Role ID to assign
+        expires_at:
+          type: string
+          format: date-time
+          description: Optional expiration timestamp
+        metadata:
+          type: object
+          description: Assignment metadata
+
+    RoleListResponse:
+      type: object
+      properties:
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/Role'
+
+    Role:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Role ID
+        name:
+          type: string
+          description: Role name
+        display_name:
+          type: string
+          description: Display name
+        description:
+          type: string
+          description: Role description
+        permissions:
+          type: array
+          items:
+            type: string
+          description: Role permissions
+        is_system_role:
+          type: boolean
+          description: Whether this is a system role
+        is_active:
+          type: boolean
+          description: Whether role is active
+        created_at:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        updated_at:
+          type: string
+          format: date-time
+          description: Update timestamp
+
+    SessionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Session ID
+        user_id:
+          type: string
+          format: uuid
+          description: User ID
+        session_id:
+          type: string
+          description: Unique session identifier
+        platform:
+          type: string
+          enum: [whatsapp, telegram]
+          description: Platform
+        platform_user_id:
+          type: string
+          description: Platform user ID
+        session_type:
+          type: string
+          enum: [account_creation, general, admin]
+          description: Session type
+        status:
+          type: string
+          enum: [active, inactive, expired, terminated]
+          description: Session status
+        context:
+          type: object
+          description: Session context
+        conversation_state:
+          type: object
+          description: Conversation state
+        created_at:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        updated_at:
+          type: string
+          format: date-time
+          description: Update timestamp
+        last_activity_at:
+          type: string
+          format: date-time
+          description: Last activity timestamp
+        expires_at:
+          type: string
+          format: date-time
+          description: Expiration timestamp
+        ip_address:
+          type: string
+          description: IP address
+        trust_score:
+          type: number
+          minimum: 0
+          maximum: 1
+          description: Trust score
+        message_count:
+          type: integer
+          description: Message count
+        metadata:
+          type: object
+          description: Session metadata
+
+    SessionListResponse:
+      type: object
+      properties:
+        sessions:
+          type: array
+          items:
+            $ref: '#/components/schemas/SessionResponse'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+
+    AccountCreationAuditResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Audit ID
+        user_id:
+          type: string
+          format: uuid
+          description: User ID (null if failed)
+        session_id:
+          type: string
+          format: uuid
+          description: Session ID
+        phone_number:
+          type: string
+          description: Original phone number
+        normalized_phone:
+          type: string
+          description: Normalized phone number
+        platform:
+          type: string
+          enum: [whatsapp, telegram]
+          description: Platform
+        platform_user_id:
+          type: string
+          description: Platform user ID
+        status:
+          type: string
+          enum: [initiated, phone_validated, parent_found, account_created, failed, duplicate]
+          description: Creation status
+        result_code:
+          type: string
+          description: Result code
+        result_message:
+          type: string
+          description: Result message
+        processing_time_ms:
+          type: integer
+          description: Processing time in milliseconds
+        phone_validation_result:
+          type: object
+          description: Phone validation result
+        parent_lookup_result:
+          type: object
+          description: Parent lookup result
+        created_at:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        completed_at:
+          type: string
+          format: date-time
+          description: Completion timestamp
+        ip_address:
+          type: string
+          description: IP address
+        metadata:
+          type: object
+          description: Audit metadata
+
+    AccountCreationAuditListResponse:
+      type: object
+      properties:
+        audits:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountCreationAuditResponse'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+
+    WhatsAppWebhookPayload:
+      type: object
+      properties:
+        object:
+          type: string
+          description: WhatsApp object type
+        entry:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: Entry ID
+              changes:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    value:
+                      $ref: '#/components/schemas/WhatsAppMessage'
+
+    WhatsAppMessage:
+      type: object
+      properties:
+        messaging_product:
+          type: string
+          description: Messaging product
+        metadata:
+          type: object
+          properties:
+            display_phone_number:
+              type: string
+              description: Display phone number
+            phone_number_id:
+              type: string
+              description: Phone number ID
+        contacts:
+          type: array
+          items:
+            type: object
+            properties:
+              profile:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Contact name
+              wa_id:
+                type: string
+                description: WhatsApp ID
+        messages:
+          type: array
+          items:
+            type: object
+            properties:
+              from:
+                type: string
+                description: Sender phone number
+              id:
+                type: string
+                description: Message ID
+              timestamp:
+                type: string
+                description: Message timestamp
+              text:
+                type: object
+                properties:
+                  body:
+                    type: string
+                    description: Message text
+
+    TelegramWebhookPayload:
+      type: object
+      properties:
+        update_id:
+          type: integer
+          description: Update ID
+        message:
+          $ref: '#/components/schemas/TelegramMessage'
+
+    TelegramMessage:
+      type: object
+      properties:
+        message_id:
+          type: integer
+          description: Message ID
+        from:
+          $ref: '#/components/schemas/TelegramUser'
+        chat:
+          $ref: '#/components/schemas/TelegramChat'
+        date:
+          type: integer
+          description: Message timestamp
+        text:
+          type: string
+          description: Message text
+
+    TelegramUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: User ID
+        first_name:
+          type: string
+          description: First name
+        last_name:
+          type: string
+          description: Last name
+        username:
+          type: string
+          description: Username
+
+    TelegramChat:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Chat ID
+        first_name:
+          type: string
+          description: First name
+        last_name:
+          type: string
+          description: Last name
+        username:
+          type: string
+          description: Username
+        type:
+          type: string
+          description: Chat type
+
+    WebhookResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [received, processed, failed]
+          description: Processing status
+        message:
+          type: string
+          description: Response message
+        session_id:
+          type: string
+          description: Session ID
+        user_id:
+          type: string
+          format: uuid
+          description: User ID
+        timestamp:
+          type: string
+          format: date-time
+          description: Response timestamp
+
+    ValidatePhoneNumberRequest:
+      type: object
+      required:
+        - phone_number
+      properties:
+        phone_number:
+          type: string
+          description: Phone number to validate
+        country_code:
+          type: string
+          description: Country code (ISO 3166-1 alpha-2)
+          default: SN
+
+    ValidatePhoneNumberResponse:
+      type: object
+      properties:
+        is_valid:
+          type: boolean
+          description: Whether phone number is valid
+        normalized_phone:
+          type: string
+          description: Normalized phone number
+        country_code:
+          type: string
+          description: Country code
+        carrier:
+          type: string
+          description: Mobile carrier
+        number_type:
+          type: string
+          enum: [MOBILE, FIXED_LINE, TOLL_FREE, PREMIUM, VOIP]
+          description: Number type
+        formats:
+          type: object
+          properties:
+            e164:
+              type: string
+              description: E.164 format
+            international:
+              type: string
+              description: International format
+            national:
+              type: string
+              description: National format
+            masked:
+              type: string
+              description: Masked format
+        error_code:
+          type: string
+          description: Error code (if invalid)
+        error_message:
+          type: string
+          description: Error message (if invalid)
+        suggestions:
+          type: array
+          items:
+            type: string
+          description: Suggestions for common mistakes
+
+    HealthCheckResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [healthy, unhealthy]
+          description: System status
+        timestamp:
+          type: string
+          format: date-time
+          description: Check timestamp
+        version:
+          type: string
+          description: API version
+        checks:
+          type: object
+          properties:
+            database:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [healthy, unhealthy]
+                response_time_ms:
+                  type: integer
+                message:
+                  type: string
+            redis:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [healthy, unhealthy]
+                response_time_ms:
+                  type: integer
+                message:
+                  type: string
+            webhook_security:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [healthy, unhealthy]
+                message:
+                  type: string
+
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page
+        limit:
+          type: integer
+          description: Items per page
+        total:
+          type: integer
+          description: Total items
+        total_pages:
+          type: integer
+          description: Total pages
+        has_next:
+          type: boolean
+          description: Whether there are more pages
+        has_prev:
+          type: boolean
+          description: Whether there are previous pages
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type
+        message:
+          type: string
+          description: Error message
+        code:
+          type: string
+          description: Error code
+        details:
+          type: object
+          description: Additional error details
+        timestamp:
+          type: string
+          format: date-time
+          description: Error timestamp
+
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    RateLimited:
+      description: Too many requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'

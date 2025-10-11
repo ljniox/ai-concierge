@@ -1,0 +1,105 @@
+{
+  "overall_status": "needs_attention",
+  "duration_seconds": 1.180415,
+  "test_results": {
+    "proxy_routing": {
+      "status": "success",
+      "results": [
+        {
+          "endpoint": "/health",
+          "status": "success",
+          "response_status": 200
+        },
+        {
+          "endpoint": "/",
+          "status": "success",
+          "response_status": 200
+        },
+        {
+          "endpoint": "/stats",
+          "status": "success",
+          "response_status": 200
+        },
+        {
+          "endpoint": "/features",
+          "status": "success",
+          "response_status": 200
+        }
+      ]
+    },
+    "webhook_delivery": {
+      "status": "success",
+      "response": {
+        "status": "success",
+        "processed": true,
+        "update_id": 1760185491,
+        "result": {
+          "status": "processed"
+        }
+      }
+    },
+    "api_endpoints": {
+      "status": "partial",
+      "results": [
+        {
+          "endpoint": "/api/v1/payments",
+          "status": "failed",
+          "response_status": 404
+        },
+        {
+          "endpoint": "/api/v1/workflow",
+          "status": "failed",
+          "response_status": 404
+        },
+        {
+          "endpoint": "/api/v1/enrollments",
+          "status": "failed",
+          "response_status": 403
+        },
+        {
+          "endpoint": "/api/v1/documents",
+          "status": "failed",
+          "response_status": 404
+        },
+        {
+          "endpoint": "/api/v1/telegram",
+          "status": "failed",
+          "response_status": 404
+        }
+      ]
+    },
+    "telegram_config": {
+      "status": "success",
+      "webhook_url": "https://cate.sdb-dkr.ovh/api/v1/telegram/webhook",
+      "pending_count": 0,
+      "last_error": null
+    },
+    "message_processing": {
+      "status": "success",
+      "results": [
+        {
+          "command": "start",
+          "status": "success"
+        },
+        {
+          "command": "aide",
+          "status": "success"
+        },
+        {
+          "command": "statut",
+          "status": "success"
+        },
+        {
+          "command": "inscrire",
+          "status": "success"
+        },
+        {
+          "command": "information",
+          "status": "success"
+        }
+      ]
+    }
+  },
+  "production_ready": false,
+  "timestamp": "2025-10-11T12:24:52.930895"
+}

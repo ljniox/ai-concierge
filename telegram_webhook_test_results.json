@@ -1,0 +1,232 @@
+{
+  "overall_status": "success",
+  "duration_seconds": 7.79565,
+  "test_results": {
+    "connectivity": {
+      "status": "success",
+      "response": {
+        "status": "success",
+        "processed": true,
+        "update_id": 1760184849,
+        "result": {
+          "status": "processed"
+        }
+      }
+    },
+    "workflow": {
+      "status": "success",
+      "results": [
+        {
+          "step": "start",
+          "description": "Start the enrollment process",
+          "status": "success",
+          "response": {
+            "status": "success",
+            "processed": true,
+            "update_id": 1760184850,
+            "result": {
+              "status": "processed"
+            }
+          }
+        },
+        {
+          "step": "aide",
+          "description": "Request help information",
+          "status": "success",
+          "response": {
+            "status": "success",
+            "processed": true,
+            "update_id": 1760184850,
+            "result": {
+              "status": "processed"
+            }
+          }
+        },
+        {
+          "step": "statut",
+          "description": "Check system status",
+          "status": "success",
+          "response": {
+            "status": "success",
+            "processed": true,
+            "update_id": 1760184851,
+            "result": {
+              "status": "processed"
+            }
+          }
+        },
+        {
+          "step": "inscrire",
+          "description": "Begin enrollment",
+          "status": "success",
+          "response": {
+            "status": "success",
+            "processed": true,
+            "update_id": 1760184851,
+            "result": {
+              "status": "processed"
+            }
+          }
+        },
+        {
+          "step": "information",
+          "description": "Get more information",
+          "status": "success",
+          "response": {
+            "status": "success",
+            "processed": true,
+            "update_id": 1760184852,
+            "result": {
+              "status": "processed"
+            }
+          }
+        },
+        {
+          "step": "contact",
+          "description": "Request human contact",
+          "status": "success",
+          "response": {
+            "status": "success",
+            "processed": true,
+            "update_id": 1760184852,
+            "result": {
+              "status": "processed"
+            }
+          }
+        }
+      ],
+      "success_rate": 100.0
+    },
+    "endpoints": {
+      "status": "success",
+      "results": [
+        {
+          "command": "sante",
+          "description": "Health check",
+          "status": "success",
+          "response": {
+            "status": "success",
+            "processed": true,
+            "update_id": 1760184853,
+            "result": {
+              "status": "processed"
+            }
+          }
+        },
+        {
+          "command": "statistiques",
+          "description": "System statistics",
+          "status": "success",
+          "response": {
+            "status": "success",
+            "processed": true,
+            "update_id": 1760184853,
+            "result": {
+              "status": "processed"
+            }
+          }
+        },
+        {
+          "command": "fonctionnalit\u00e9s",
+          "description": "System features",
+          "status": "success",
+          "response": {
+            "status": "success",
+            "processed": true,
+            "update_id": 1760184854,
+            "result": {
+              "status": "processed"
+            }
+          }
+        },
+        {
+          "command": "api",
+          "description": "API information",
+          "status": "success",
+          "response": {
+            "status": "success",
+            "processed": true,
+            "update_id": 1760184854,
+            "result": {
+              "status": "processed"
+            }
+          }
+        },
+        {
+          "command": "version",
+          "description": "Version information",
+          "status": "success",
+          "response": {
+            "status": "success",
+            "processed": true,
+            "update_id": 1760184854,
+            "result": {
+              "status": "processed"
+            }
+          }
+        }
+      ],
+      "success_rate": 100.0
+    },
+    "error_handling": {
+      "status": "success",
+      "results": [
+        {
+          "input": "invalid_command_xyz",
+          "description": "Unknown command",
+          "status": "handled",
+          "response": {
+            "status": "success",
+            "processed": true,
+            "update_id": 1760184855,
+            "result": {
+              "status": "processed"
+            }
+          }
+        },
+        {
+          "input": "",
+          "description": "Empty message",
+          "status": "handled",
+          "response": {
+            "status": "success",
+            "processed": true,
+            "update_id": 1760184856,
+            "result": {
+              "status": "processed"
+            }
+          }
+        },
+        {
+          "input": "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890",
+          "description": "Very long message",
+          "status": "handled",
+          "response": {
+            "status": "success",
+            "processed": true,
+            "update_id": 1760184856,
+            "result": {
+              "status": "processed"
+            }
+          }
+        },
+        {
+          "input": "/start with extra args",
+          "description": "Command with arguments",
+          "status": "handled",
+          "response": {
+            "status": "success",
+            "processed": true,
+            "update_id": 1760184856,
+            "result": {
+              "status": "processed"
+            }
+          }
+        }
+      ],
+      "handling_rate": 100.0
+    }
+  },
+  "webhook_url": "https://gust-ia-enrollment.loca.lt/api/v1/telegram/webhook",
+  "timestamp": "2025-10-11T12:14:17.377389+00:00"
+}

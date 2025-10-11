@@ -38,10 +38,15 @@ class WAHAService:
 
     def _build_url(self, endpoint: str) -> str:
         """Build full URL for WAHA API endpoint"""
-        # For WAHA, the correct URL pattern is: {base_url}/api/{endpoint}
-        # The session ID is passed in the request body, not the URL
+        # For WAHA, the correct URL pattern depends on the endpoint type
         endpoint = endpoint.lstrip('/')
-        return f"{self.base_url}/api/{endpoint}"
+
+        # Session management endpoints use /api/sessions/{session_id}/{endpoint}
+        if endpoint in ['start', 'stop', 'restart', 'status', 'qr']:
+            return f"{self.base_url}/api/sessions/{self.session_id}/{endpoint}"
+        # Message sending endpoints use /api/{endpoint}
+        else:
+            return f"{self.base_url}/api/{endpoint}"
 
     def _get_headers(self) -> Dict[str, str]:
         """Get request headers with authentication"""
@@ -58,7 +63,8 @@ class WAHAService:
             Session status information
         """
         try:
-            url = self._build_url('/status')
+            # For checking session status, we use the sessions endpoint directly
+            url = f"{self.base_url}/api/sessions/{self.session_id}"
             response = await self.http_client.get(url, headers=self._get_headers())
             response.raise_for_status()
             status = response.json()
@@ -79,8 +85,9 @@ class WAHAService:
             url = self._build_url('/start')
             response = await self.http_client.post(url, headers=self._get_headers())
             response.raise_for_status()
-            logger.info("waha_session_started")
-            return True
+            result = response.json()
+            logger.info("waha_session_started", status=result.get('status'))
+            return result.get('status') in ['STARTING', 'WORKING']
         except Exception as e:
             logger.error("waha_session_start_failed", error=str(e))
             return False
@@ -96,8 +103,9 @@ class WAHAService:
             url = self._build_url('/stop')
             response = await self.http_client.post(url, headers=self._get_headers())
             response.raise_for_status()
-            logger.info("waha_session_stopped")
-            return True
+            result = response.json()
+            logger.info("waha_session_stopped", status=result.get('status'))
+            return result.get('status') in ['STOPPING', 'STOPPED']
         except Exception as e:
             logger.error("waha_session_stop_failed", error=str(e))
             return False
@@ -113,8 +121,9 @@ class WAHAService:
             url = self._build_url('/restart')
             response = await self.http_client.post(url, headers=self._get_headers())
             response.raise_for_status()
-            logger.info("waha_session_restarted")
-            return True
+            result = response.json()
+            logger.info("waha_session_restarted", status=result.get('status'))
+            return result.get('status') in ['STARTING', 'WORKING']
         except Exception as e:
             logger.error("waha_session_restart_failed", error=str(e))
             return False
